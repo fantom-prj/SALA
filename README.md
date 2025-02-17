@@ -1,5 +1,5 @@
 # SALA
-<img align="left" width="430" src="figs/SALA.png">
+<div style="text-align:center"><img src="/fig/SALA.png" width="500"></div>
 
 The transcript Start-site Aware Long-read Assembler (SALA) was developed for de novo assembling long-read into transcript and gene models, considering support from confident transcription start site.
 
@@ -39,7 +39,7 @@ chmod 755 -R ./code/
 chmod 755 -R ./resources/bin/
 ```
 
-This package itself do not require installation. Essential binary files for Linux platform are included in ./resources/bin (for SALA) and ./code/SCAFEv1.0.1/resources (for SCAFE). If other platform is used, the binary files need to be replaced by the ones from your system. Alternative bin set for Mac OS can be dowloaded here.
+This package itself does not require installation. Essential binary files for Linux platform are included in ./resources/bin (for SALA) and ./code/SCAFEv1.0.1/resources (for SCAFE). If other platform is used, the binary files need to be replaced by the ones from your system. Alternative bin set for Mac OS can be downloaded here.
 
 # <a name="how_to_run"></a>How to run
 ## <a name="transcript_model"></a>Assembling into transcript models
