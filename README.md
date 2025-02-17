@@ -1,5 +1,5 @@
 # SALA
-<img align="left" width="450" src="figs/SALA.png">
+<img align="left" width="430" src="figs/SALA.png">
 
 The transcript Start-site Aware Long-read Assembler (SALA) was developed for de novo assembling long-read into transcript and gene models, considering support from confident transcription start site.
 
@@ -136,18 +136,18 @@ Usage: Rscript SALA.count_matrix.R <SALA_directory> <output_directory> <ref.tran
 This step intersects reference transcript models’ 3' ends with SALA 3' end clusters, reference 5' ends with SALA 5' end clusters, and SCAFE-defined confident 5' end clusters with SALA 5' end clusters. It also annotates the promoter types of SCAFE tCREs by intersecting them with GENCODE SCREEN cCREs (The ENCODE Project Consortium et al. 2020) and converts SALA transcripts into an exon BED file. Additionally, an optional coding potential analysis using CPAT (Wang et al. 2013) will be performed if a directory for storing CPAT results is provided. CPAT must be installed separately before running this script and can be obtained from: https://github.com/liguowang/cpat. The script gathers all collected information into both a raw log table and a filtered log table. This step requires R and several R packages, including "Biostrings", "GenomicRanges", "Rsamtools", "data.table", "dplyr", "magrittr", and "tidyr". If these packages are not available, the script will attempt to install them automatically. If installation fails, manual installation will be required.
 
 Overall, this step will do the followings:
-•	Intersect 5’ ends and 3’ ends from reference transcript model to SALA 5’ end and 3’ end clusters
-•	Intersect ENCODE defined promoter-type to SCAFE confident tCREs
-•	Internal priming prediction, and filtering of internal primed novel transcript models
-•	Add initial gene ID  
-•	Incorporate full read count per transcript model
-•	Add transcript length and exon number
-•	Annotate 3’ end clusters
-•	Annotate 5’ end clusters
-•	Define promoter-type per transcript model
-•	If CPAT path is provided, CPAT coding potential prediction is performed and incorporate into the output table
-•	Export raw table with above details
-•	Filter to final table according to the parameters input, and export
+1. Intersect 5’ ends and 3’ ends from reference transcript model to SALA 5’ end and 3’ end clusters
+2. Intersect ENCODE defined promoter-type to SCAFE confident tCREs
+3. Internal priming prediction, and filtering of internal primed novel transcript models
+4. Add initial gene ID  
+5. Incorporate full read count per transcript model
+6. Add transcript length and exon number
+7. Annotate 3’ end clusters
+8. Annotate 5’ end clusters
+9. Define promoter-type per transcript model
+10. If CPAT path is provided, CPAT coding potential prediction is performed and incorporate into the output table
+11. Export raw table with above details
+12. Filter to final table according to the parameters input, and export
 
 ```
 Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <fasta_file> <read.per.rep_ref.novel.Tx> <read.per.rep_non-ref.novel.Tx> <isoform_ratio> <require.5'.confidence> <SALA_gene_path> <sample_file> <SCAFE_directory> <CPAT_path(optional)>
@@ -245,18 +245,18 @@ n5_support                      a collection of support by Reference 5' end and 
 ORF                         1   length of the best ORF by CPAT
 Coding_prob                 1   coding probability of the best ORF by CPAT, 0 if no ORF was found
 CPAT_class                  1   coding or non-coding, cutoff: Coding_prob < 0.364
-T4_gene_ID              1		final gene ID according to table 4 transcript model
-T4_gene_name            1		final gene name according to table 4 transcript model
-T4_gene_novelty         1		updated gene novelty
-Ref_transcriptClass     1		transcript class inherited from Reference
-Ref_transcriptClass2    1		simplified transcript gene class showing only "protein_coding", "lncRNA" and "others" (NA for novel transcript)
-Ref_geneClass           1		gene class inherited from Reference
-Ref_geneClass2          1		simplified gene class showing only "protein_coding", "lncRNA" and "others" (NA for novel gene)  
+T4_gene_ID              1       final gene ID according to table 4 transcript model
+T4_gene_name            1       final gene name according to table 4 transcript model
+T4_gene_novelty         1       updated gene novelty
+Ref_transcriptClass     1       transcript class inherited from Reference
+Ref_transcriptClass2    1       simplified transcript gene class showing only "protein_coding", "lncRNA" and "others" (NA for novel transcript)
+Ref_geneClass           1       gene class inherited from Reference
+Ref_geneClass2          1       simplified gene class showing only "protein_coding", "lncRNA" and "others" (NA for novel gene)  
 Novel_transcriptClass   1   1   class for novel transcript: "lncRNA"(>200bp), "ncRNA"(<=200bp) and "others" (potentially coding by CPAT)
 overall_T_ratio         1   1   ratio of transcript model per gene, according to full-length count (pan-cell-types)
 Novel_geneClass         1   1   class for novel gene: "lncRNA"(>50% weighed number of transcript is grouped as non-coding & weighed average transcript length >200bp), "ncRNA"(>50% weighed number of transcript is grouped as non-coding & weighed average transcript length <=200bp) and "others"
-Ref_gene_adjust         1		if the 5' and 3' ends of Reference gene are adjusted 
-Ref_transcript_adjust   1		if the 5' and 3' ends of Reference transcript are adjusted 
+Ref_gene_adjust         1       if the 5' and 3' ends of Reference gene are adjusted 
+Ref_transcript_adjust   1       if the 5' and 3' ends of Reference transcript are adjusted 
 ```
 
 # <a name="SALA_cite"></a>Citing SALA
