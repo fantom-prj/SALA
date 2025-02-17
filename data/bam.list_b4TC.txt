@@ -1,0 +1,6 @@
+iPSC_rep1_run1	./data/bam_before_transcriptClean/iPSC_rep1_run1_subset.sorted.bam
+iPSC_rep2_run1	./data/bam_before_transcriptClean/iPSC_rep2_run1_subset.sorted.bam
+NSC_rep1_run1	./data/bam_before_transcriptClean/NSC_rep1_run1_subset.sorted.bam
+NSC_rep2_run1	./data/bam_before_transcriptClean/NSC_rep2_run1_subset.sorted.bam
+Neuron_rep1_run1	./data/bam_before_transcriptClean/Neuron_rep1_run1_subset.sorted.bam
+Neuron_rep2_run1	./data/bam_before_transcriptClean/Neuron_rep2_run1_subset.sorted.bam

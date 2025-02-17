@@ -1,0 +1,6 @@
+i11	iPSC_rep1_run1	./data/bam/iPSC_rep1_run1_subset.sorted.bam
+i21	iPSC_rep2_run1	./data/bam/iPSC_rep2_run1_subset.sorted.bam
+s11	NSC_rep1_run1	./data/bam/NSC_rep1_run1_subset.sorted.bam
+s21	NSC_rep2_run1	./data/bam/NSC_rep2_run1_subset.sorted.bam
+n11	Neuron_rep1_run1	./data/bam/Neuron_rep1_run1_subset.sorted.bam
+n21	Neuron_rep2_run1	./data/bam/Neuron_rep2_run1_subset.sorted.bam

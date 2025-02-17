@@ -1,0 +1,6 @@
+iPSC_rep1_run1	./demo_output_local/scafe/bam_to_ctss/iPSC_rep1_run1/bed/iPSC_rep1_run1.collapse.ctss.bed.gz	./demo_output_local/scafe/bam_to_ctss/iPSC_rep1_run1/bed/iPSC_rep1_run1.unencoded_G.collapse.ctss.bed.gz
+iPSC_rep2_run1	./demo_output_local/scafe/bam_to_ctss/iPSC_rep2_run1/bed/iPSC_rep2_run1.collapse.ctss.bed.gz	./demo_output_local/scafe/bam_to_ctss/iPSC_rep2_run1/bed/iPSC_rep2_run1.unencoded_G.collapse.ctss.bed.gz
+NSC_rep1_run1	./demo_output_local/scafe/bam_to_ctss/NSC_rep1_run1/bed/NSC_rep1_run1.collapse.ctss.bed.gz	./demo_output_local/scafe/bam_to_ctss/NSC_rep1_run1/bed/NSC_rep1_run1.unencoded_G.collapse.ctss.bed.gz
+NSC_rep2_run1	./demo_output_local/scafe/bam_to_ctss/NSC_rep2_run1/bed/NSC_rep2_run1.collapse.ctss.bed.gz	./demo_output_local/scafe/bam_to_ctss/NSC_rep2_run1/bed/NSC_rep2_run1.unencoded_G.collapse.ctss.bed.gz
+Neuron_rep1_run1	./demo_output_local/scafe/bam_to_ctss/Neuron_rep1_run1/bed/Neuron_rep1_run1.collapse.ctss.bed.gz	./demo_output_local/scafe/bam_to_ctss/Neuron_rep1_run1/bed/Neuron_rep1_run1.unencoded_G.collapse.ctss.bed.gz
+Neuron_rep2_run1	./demo_output_local/scafe/bam_to_ctss/Neuron_rep2_run1/bed/Neuron_rep2_run1.collapse.ctss.bed.gz	./demo_output_local/scafe/bam_to_ctss/Neuron_rep2_run1/bed/Neuron_rep2_run1.unencoded_G.collapse.ctss.bed.gz
