@@ -1,7 +1,7 @@
 # SALA
 <div style="text-align:center"><img src="figs/SALA.png" width="500"></div>
 
-The transcript Start-site Aware Long-read Assembler (SALA) was developed for de novo assembling long-read into transcript and gene models, considering support from confident transcription start site.
+The transcript Start-site Aware Long-read Assembler (SALA) is developed for de novo assembling long-read into transcript and gene models, considering support from confident transcription start site. SALA incorporates confident TSS clusters de novo identified from the long-read data or pre-defined confident TSS clusters.
 
 ## Table of contents
 * [Installation](#installation)
@@ -152,19 +152,19 @@ Overall, this step will do the followings:
 ```
 Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <fasta_file> <read.per.rep_ref.novel.Tx> <read.per.rep_non-ref.novel.Tx> <isoform_ratio> <require.5'.confidence> <SALA_gene_path> <sample_file> <SCAFE_directory> <CPAT_path(optional)>
 
-	--SALA_directory                <required>	path of the folder of SALA transcript annotation output
-	--out_prefix                    <required>	output files prefix
-	--resource_directory            <required>	path of the resources folder of SALA
-	--ref_directory                 <required>	path of the folder containing the infomation of reference transcriptome
-	--fasta_file                    <required>	genome fasta file
-	--read.per.rep_ref.novel.Tx     <required>	number of reads per replicate from a sample for novel isoform of known gene
-	--read.per.rep_non-ref.novel.Tx <required>	number of reads per replicate from a sample for novel transcript of novel gene
-	--isoform_ratio                 <required>	the ratio of a novel isoform across all the transcript in a gene, according to the full length read count
-	--require.5'.confidence         <required>	if Yes, all the novel transcripts are required to have their 5’ ends located inside confident TSS clusters
-	--SALA_gene_path                <required>	path of the folder of SALA gene annotation output
-	--sample_file                   <required>	txt file for the input library: column1, library prefix; column2, sample ID, column3, sampleID with replicate ID
-	--SCAFE_directory               <required>	path of the folder of SCAFE output
-	--CPAT_path                     <optional>	path of the folder expected for CPAT result
+	SALA_directory                <required>	path of the folder of SALA transcript annotation output
+	out_prefix                    <required>	output files prefix
+	resource_directory            <required>	path of the resources folder of SALA
+	ref_directory                 <required>	path of the folder containing the infomation of reference transcriptome
+	fasta_file                    <required>	genome fasta file
+	read.per.rep_ref.novel.Tx     <required>	number of reads per replicate from a sample for novel isoform of known gene
+	read.per.rep_non-ref.novel.Tx <required>	number of reads per replicate from a sample for novel transcript of novel gene
+	isoform_ratio                 <required>	the ratio of a novel isoform across all the transcript in a gene, according to the full length read count
+	require.5'.confidence         <required>	if Yes, all the novel transcripts are required to have their 5’ ends located inside confident TSS clusters
+	SALA_gene_path                <required>	path of the folder of SALA gene annotation output
+	sample_file                   <required>	txt file for the input library: column1, library prefix; column2, sample ID, column3, sampleID with replicate ID
+	SCAFE_directory               <required>	path of the folder of SCAFE output
+	CPAT_path                     <optional>	path of the folder expected for CPAT result
 ```
 
 ## <a name="final_gene_model"></a>Getting final gene model
@@ -175,13 +175,13 @@ In the final gene annotation step, after applying custom filtering, gene annotat
 This script updates the filtered transcript models with the finalized gene annotation from the previous section. It extracts the transcript class and gene class from the reference transcriptome and annotates novel transcript and gene classes if CPAT coding potential results were provided previously. Finally, it generates two GTF files from the filtered transcript models: (1) table4.All_Ref.gtf.gz, which includes filtered novel transcripts and genes along with all transcripts and genes from the reference transcriptome, and (2) table4.Detected_Ref.gtf.gz, which includes filtered novel transcripts and genes along with only the detected transcripts and genes from the reference transcriptome.
 
 ```
-Usage: Rscript SALA.gene_gtf_annotation.R <SALA_directory> <out_prefix> <resource_directory> <ref_info> <ref_gene_bed> <ref_transcript_bed> <ref_gtf> <SALA_gene_path>
+Usage: Rscript SALA.gene_gtf_annotation.R <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <SALA_gene_path>
 
-	--SALA_directory         <required>	path of the folder of SALA transcript annotation output
-	--out_prefix             <required>	output files prefix
-	--resource_directory     <required>	path of the resources folder of SALA
-	--ref_directory          <required>	path of the folder containing the infomation of reference transcriptome
-	--SALA_gene_path         <required>	path of the folder of SALA final gene annotation output
+	SALA_directory         <required>	path of the folder of SALA transcript annotation output
+	out_prefix             <required>	output files prefix
+	resource_directory     <required>	path of the resources folder of SALA
+	ref_directory          <required>	path of the folder containing the infomation of reference transcriptome
+	SALA_gene_path         <required>	path of the folder of SALA final gene annotation output
 ```
 
 # <a name="SALA_result"></a>Working with the SALA results
@@ -220,9 +220,9 @@ NSC_rep1                        number of reads with full-length match with this
 NSC_rep2                        number of reads with full-length match with this model
 Neuron_rep1                     number of reads with full-length match with this model
 Neuron_rep2                     number of reads with full-length match with this model
-iPSC                            number of reads with full-length match with this model; sum of the 2 replicates
-NSC                             number of reads with full-length match with this model; sum of the 2 replicates
-Neuron                          number of reads with full-length match with this model; sum of the 2 replicates
+iPSC                            number of reads with full-length match with this model; sum of the provided replicates
+NSC                             number of reads with full-length match with this model; sum of the provided replicates
+Neuron                          number of reads with full-length match with this model; sum of the provided replicates
 isoform_filter                  permissive or standard, according to the read count filter per replicate for novel isoform of reference genes
 novel_gene_Tx_filter            permissive or standard, according to the read count filter per replicate for novel transcript of novel genes
 ref_source                      "non_detectable_ref", "fulllength_ref", "partial_ref" or "novel_transcript"
@@ -248,9 +248,9 @@ CPAT_class                  1   coding or non-coding, cutoff: Coding_prob < 0.36
 T4_gene_ID              1       final gene ID according to table 4 transcript model
 T4_gene_name            1       final gene name according to table 4 transcript model
 T4_gene_novelty         1       updated gene novelty
-Ref_transcriptClass     1       transcript class inherited from Reference
+Ref_transcriptClass     1       transcript class inherited from Reference (NA for novel transcript)
 Ref_transcriptClass2    1       simplified transcript gene class showing only "protein_coding", "lncRNA" and "others" (NA for novel transcript)
-Ref_geneClass           1       gene class inherited from Reference
+Ref_geneClass           1       gene class inherited from Reference (NA for novel gene)
 Ref_geneClass2          1       simplified gene class showing only "protein_coding", "lncRNA" and "others" (NA for novel gene)  
 Novel_transcriptClass   1   1   class for novel transcript: "lncRNA"(>200bp), "ncRNA"(<=200bp) and "others" (potentially coding by CPAT)
 overall_T_ratio         1   1   ratio of transcript model per gene, according to full-length count (pan-cell-types)
