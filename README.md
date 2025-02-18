@@ -58,7 +58,7 @@ chmod 755 -R ./code/
 chmod 755 -R ./resources/bin/
 ```
 
-This package itself does not require installation. Essential binary files for Linux platform are included in ./resources/bin (for SALA) and ./code/SCAFEv1.0.1/resources (for SCAFE). If other platform is used, the binary files need to be replaced by the ones from your system. Alternative bin set for Mac OS can be downloaded here.
+This package itself does not require installation. Essential binary files for Linux platform are included in ./resources/bin (for SALA) and ./code/SCAFEv1.0.1/resources (for SCAFE). If other platform is used, the binary files need to be replaced by the ones from your system. Alternative bin set for Mac OS can be downloaded [here](https://drive.google.com/file/d/1Uv7La6KUWT4NX30YpJidFafNQRyOVPu5/view?usp=drive_link).
 
 # <a name="how_to_run"></a>How to run
 ## <a name="transcript_model"></a>Assembling into transcript models
