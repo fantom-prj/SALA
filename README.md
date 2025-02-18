@@ -4,6 +4,7 @@
 The transcript Start-site Aware Long-read Assembler (SALA) is developed for de novo assembling long-read into transcript and gene models, considering support from confident transcription start site. SALA incorporates confident TSS clusters de novo identified from the long-read data or pre-defined confident TSS clusters.
 
 ## Table of contents
+* [Dependencies](#depend)
 * [Installation](#installation)
 * [Running SALA](#how_to_run)
   * [Assembling into transcript models](#transcript_model)
@@ -16,6 +17,24 @@ The transcript Start-site Aware Long-read Assembler (SALA) is developed for de n
 * [Citing SALA](#SALA_cite)
 * [Contribution](#contribution)
 
+
+# <a name="depend"></a>Dependencies
+
+## SALA requires the following tools to run
+* Perl (tested with v5.26.2, installed from https://www.perl.org/get.html)
+* R (tested with v4.0.4, installed from: https://cran.r-project.org/)
+* paraclu (Frith et al. 2008) (located at ./resources/bin/paraclu/paraclu)
+* samtools (Danecek et al. 2021) (tested with v1.11 , located at ./resources/bin/samtools/samtools)
+* bedtools (Quinlan and Hall 2010) (tested with v2.30.0 , located at ./resources/bin/bedtools/bedtools)
+* tabix (Li 2011) (tested with v1.15.1 , located at ./resources/bin/tabix/tabix)
+* bgzip (Li 2011) (tested with v1.15.1 , located at ./resources/bin/bgzip/bgzip)
+* bedGraphToBigWig (Yao et al. 2017) (tested with version 2.8, located at ./resources/bin/bedGraphToBigWig/bedGraphToBigWig)
+
+## The followings tools are recommended to install
+* TranscriptClean (Wyman and Mortazavi 2019) (tested with v2.0.3, installed from https://github.com/mortazavilab/TranscriptClean)
+* SCAFE (Moody et al. 2022) (tested with v1.0.1, located at ./code/SCAFEv1.0.1/scripts)
+* bambu (Chen et al. 2023) (tested with v3.2.4, installed from https://github.com/GoekeLab/bambu)
+* bedparse (Leonardi 2019) (tested with v0.2.3, installed from https://github.com/tleonardi/bedparse). 
 
 # <a name="installation"></a>Installation
 To obtain SALA:
