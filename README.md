@@ -16,6 +16,7 @@ The transcript Start-site Aware Long-read Assembler (SALA) is developed for de n
 * [Working with the SALA results](#SALA_result)
 * [Citing SALA](#SALA_cite)
 * [Contribution](#contribution)
+* [References](#ref)
 
 
 # <a name="depend"></a>Dependencies
@@ -23,6 +24,7 @@ The transcript Start-site Aware Long-read Assembler (SALA) is developed for de n
 ## SALA requires the following tools to run
 * Perl (tested with v5.26.2, installed from https://www.perl.org/get.html)
 * R (tested with v4.0.4, installed from: https://cran.r-project.org/)
+* SCAFE (Moody et al. 2022) (tested with v1.0.1, located at ./code/SCAFEv1.0.1/scripts)
 * paraclu (Frith et al. 2008) (located at ./resources/bin/paraclu/paraclu)
 * samtools (Danecek et al. 2021) (tested with v1.11 , located at ./resources/bin/samtools/samtools)
 * bedtools (Quinlan and Hall 2010) (tested with v2.30.0 , located at ./resources/bin/bedtools/bedtools)
@@ -32,7 +34,6 @@ The transcript Start-site Aware Long-read Assembler (SALA) is developed for de n
 
 ## The followings tools are recommended to install
 * TranscriptClean (Wyman and Mortazavi 2019) (tested with v2.0.3, installed from https://github.com/mortazavilab/TranscriptClean)
-* SCAFE (Moody et al. 2022) (tested with v1.0.1, located at ./code/SCAFEv1.0.1/scripts)
 * bambu (Chen et al. 2023) (tested with v3.2.4, installed from https://github.com/GoekeLab/bambu)
 * bedparse (Leonardi 2019) (tested with v0.2.3, installed from https://github.com/tleonardi/bedparse). 
 
@@ -47,7 +48,7 @@ cd /my/path/to/install/
 git clone https://github.com/fantom-prj/SALA
 cd SALA
 
-#--- export SALA scripts dir to PATH for system-wide call of SCAFE commands 
+#--- export SALA scripts dir to PATH for system-wide call of SALA commands 
 echo "export PATH=\$PATH:$(pwd)/code/SCAFEv1.0.1/scripts" >>~/.bashrc
 echo "export PATH=\$PATH:$(pwd)/code/SALA" >>~/.bashrc
 echo "export PATH=\$PATH:$(pwd)/code/others" >>~/.bashrc
@@ -61,6 +62,8 @@ chmod 755 -R ./resources/bin/
 This package itself does not require installation. Essential binary files for Linux platform are included in ./resources/bin (for SALA) and ./code/SCAFEv1.0.1/resources/bin (for SCAFE). If other platform is used, the binary files need to be replaced by the ones from your system. Alternative bin set for Mac OS can be downloaded [here](https://drive.google.com/drive/folders/13SqjSH0eGSH5xnKH4RE43yXtIinvCZet?usp=drive_link). Please replace the downloaded bin folder with the bin folder for SALA and SCAFE.
 
 # <a name="how_to_run"></a>How to run
+Please refer to the [wiki page](https://github.com/fantom-prj/SALA/wiki) to run a demo
+
 ## <a name="transcript_model"></a>Assembling into transcript models
 This tool assigns long-read sequencing data (as query) to a set of reference transcripts (e.g. GENCODE) using a 5' end centric approach. Several reference transcript annotation sets are available [here](https://drive.google.com/drive/folders/1CJS5tb4mlfYvQMX4W5ZAXwjC5woMhJF0?usp=drive_link). This code will take a set of user-defined confident 5' end clusters (or de novo defined by SCAFE clustering) and 3' end clusters (or de novo defined by clustering) and assign the query reads to the reference transcripts with the following step:
 1. A query read is classified as complete if both of its 5' and 3' end overlap a confident 5' and 3' end cluster, otherwise as incomplete.
@@ -294,6 +297,20 @@ Major contribution for SALA development:
 3. Testing SALA: Callum Parr, Camilla Ugolini, Valeria Ranzani 
 
 
+# <a name="ref"></a>References
+* Chen Y, Sim A, Wan YK, Yeo K, Lee JJX, Ling MH, Love MI, Göke J. 2023. Context-aware transcript quantification from long-read RNA-seq data with Bambu. Nat Methods 20: 1187–1195.
+* Danecek P, Bonfield JK, Liddle J, Marshall J, Ohan V, Pollard MO, Whitwham A, Keane T, McCarthy SA, Davies RM, et al. 2021. Twelve years of SAMtools and BCFtools. GigaScience 10: giab008.
+* Frith MC, Valen E, Krogh A, Hayashizaki Y, Carninci P, Sandelin A. 2008. A code for transcription initiation in mammalian genomes. Genome Res 18: 1–12.
+* Hon C-C, Ramilowski JA, Harshbarger J, Bertin N, Rackham OJL, Gough J, Denisenko E, Schmeier S, Poulsen TM, Severin J, et al. 2017. An atlas of human long non-coding RNAs with accurate 5’ ends. Nature 543: 199–204.
+* Leonardi T. 2019. Bedparse: feature extraction from BED files. J Open Source Softw 4: 1228.
+* Li H. 2011. Tabix: fast retrieval of sequence features from generic TAB-delimited files. Bioinformatics 27: 718–719.
+* Moody J, Kouno T, Chang J-C, Ando Y, Carninci P, Shin JW, Hon C-C. 2022. SCAFE: a software suite for analysis of transcribed cis-regulatory elements in single cells. Bioinforma Oxf Engl 38: 5126–5128.
+* Quinlan AR, Hall IM. 2010. BEDTools: a flexible suite of utilities for comparing genomic features. Bioinforma Oxf Engl 26: 841–842.
+* The ENCODE Project Consortium, Abascal F, Acosta R, Addleman NJ, Adrian J, Afzal V, Ai R, Aken B, Akiyama JA, Jammal OA, et al. 2020. Expanded encyclopaedias of DNA elements in the human and mouse genomes. Nature 583: 699–710.
+* Wang L, Park HJ, Dasari S, Wang S, Kocher J-P, Li W. 2013. CPAT: Coding-Potential Assessment Tool using an alignment-free logistic regression model. Nucleic Acids Res 41: e74–e74.
+* Wyman D, Mortazavi A. 2019. TranscriptClean: variant-aware correction of indels, mismatches and splice junctions in long-read transcripts. Bioinforma Oxf Engl 35: 340–342.
+* Yao L, Wang H, Song Y, Sui G. 2017. BioQueue: a novel pipeline framework to accelerate bioinformatics analysis. Bioinforma Oxf Engl 33: 3286–3288.
+* Yip CW, Parr C, Takahashi H, Yasuzawa K, Valentine M, Nishiyori-Sueki H, Ugolini C, Ranzani V, Murata M, Kato M, et al. 2024. CFC-seq: identification of full-length capped RNAs unveil enhancer-derived transcription. http://biorxiv.org/lookup/doi/10.1101/2024.10.31.620483 (Accessed November 2, 2024).
 
 
 
