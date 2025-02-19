@@ -58,11 +58,11 @@ chmod 755 -R ./code/
 chmod 755 -R ./resources/bin/
 ```
 
-This package itself does not require installation. Essential binary files for Linux platform are included in ./resources/bin (for SALA) and ./code/SCAFEv1.0.1/resources (for SCAFE). If other platform is used, the binary files need to be replaced by the ones from your system. Alternative bin set for Mac OS can be downloaded [here](https://drive.google.com/drive/folders/13SqjSH0eGSH5xnKH4RE43yXtIinvCZet?usp=drive_link).
+This package itself does not require installation. Essential binary files for Linux platform are included in ./resources/bin (for SALA) and ./code/SCAFEv1.0.1/resources/bin (for SCAFE). If other platform is used, the binary files need to be replaced by the ones from your system. Alternative bin set for Mac OS can be downloaded [here](https://drive.google.com/drive/folders/13SqjSH0eGSH5xnKH4RE43yXtIinvCZet?usp=drive_link). Please replace the downloaded bin folder with the bin folder for SALA and SCAFE.
 
 # <a name="how_to_run"></a>How to run
 ## <a name="transcript_model"></a>Assembling into transcript models
-This tool assigns long-read sequencing data (as query) to a set of reference transcripts (e.g. GENCODE) using a 5' end centric approach. Several reference transcript annotation sets are available [here](https://drive.google.com/drive/folders/1CJS5tb4mlfYvQMX4W5ZAXwjC5woMhJF0?usp=drive_link). This code will take a set of user-defined of confident 5' end clusters (or de novo defined by clustering) and 3' end clusters (or de novo defined by clustering) and assign the query reads to the reference transcripts with the following step:
+This tool assigns long-read sequencing data (as query) to a set of reference transcripts (e.g. GENCODE) using a 5' end centric approach. Several reference transcript annotation sets are available [here](https://drive.google.com/drive/folders/1CJS5tb4mlfYvQMX4W5ZAXwjC5woMhJF0?usp=drive_link). This code will take a set of user-defined confident 5' end clusters (or de novo defined by SCAFE clustering) and 3' end clusters (or de novo defined by clustering) and assign the query reads to the reference transcripts with the following step:
 1. A query read is classified as complete if both of its 5' and 3' end overlap a confident 5' and 3' end cluster, otherwise as incomplete.
 2. An incomplete read without a confident 5' cluster will be flagged.
 3. A complete query read will be assigned to a reference transcript if it shares the same 1) 5' end cluster, 2) 3' end cluster and 3) internal splicing structures (i.e. same splicing junctions or both unspliced).
@@ -181,7 +181,7 @@ Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> 
 	isoform_ratio                 <required>	the ratio of a novel isoform across all the transcript in a gene, according to the full length read count
 	require.5'.confidence         <required>	if Yes, all the novel transcripts are required to have their 5’ ends located inside confident TSS clusters
 	SALA_gene_path                <required>	path of the folder of SALA gene annotation output
-	sample_file                   <required>	txt file for the input library: column1, library prefix; column2, sample ID, column3, sampleID with replicate ID
+	sample_file                   <required>	txt file for the input library: column1, library prefix; column2, sample ID; column3, sampleID with replicate ID
 	SCAFE_directory               <required>	path of the folder of SCAFE output
 	CPAT_path                     <optional>	path of the folder expected for CPAT result
 ```
