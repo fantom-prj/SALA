@@ -1,0 +1,20 @@
+=================
+File descriptions
+=================
+bed file of the final tssCluster (filtering by min_cluster_count and min_summit_count and nt_count). Score column refers to number of read in the paraclu input signal
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neuron_series_demo.CTES.s3_n3_c5.tssCluster.bed.gz was created from running,
+
+2025-02-15 18:41
+/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.cluster
+--overwrite=yes
+--cluster_ctss_bed_path=./demo_output_local/input/CTES_clusters/end3_bed_bigwig/Neuron_series_demo.end3.bed
+--count_ctss_bed_path=./demo_output_local/input/CTES_clusters/end3_bed_bigwig/Neuron_series_demo.end3.bed
+--min_summit_count=3
+--min_nt_count=3
+--min_cluster_count=5
+--outputPrefix=Neuron_series_demo.CTES.s3_n3_c5
+--outDir=./demo_output_local/input/CTES_clusters/scafe/cluster
+

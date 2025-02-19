@@ -1,0 +1,40 @@
+directory                   name                                             description                                                                                                                                                                       
+=========                   ====                                             ===========                                                                                                                                                                       
+/Neuron_series_demo/bed/    Neuron_series_demo.CRE.annot.bed.gz              It contains ranges of all CRE, with CRE name (i.e. gene annotation) at 4th column                                                                                                 
+/Neuron_series_demo/bed/    Neuron_series_demo.CRE.coord.bed.gz              It contains ranges of all CRE, with CRE ID at 4th column                                                                                                                          
+/Neuron_series_demo/bed/    Neuron_series_demo.cluster.annot.bed.gz          It contains ranges of all cluster, with cluster name (i.e. gene annotation) at 4th column                                                                                         
+/Neuron_series_demo/bed/    Neuron_series_demo.cluster.coord.bed.gz          It contains ranges of all cluster, with cluster ID at 4th column                                                                                                                  
+/Neuron_series_demo/bed/    Neuron_series_demo.gene.addon.bed.gz             It contains ranges of addon gene, with gene name | gene ID at 4th column                                                                                                          
+/Neuron_series_demo/bed/    Neuron_series_demo.gene.reference.bed.gz         It contains ranges of reference gene, with gene name | gene ID at 4th column                                                                                                      
+/Neuron_series_demo/bed/    Neuron_series_demo.gene_promoter.annot.bed.gz    It contains ranges of all CRE that are gene promoters, with CRE name (i.e. gene annotation) at 4th column. Annotated gene promoters are green and unannotated promoters are grey  
+/Neuron_series_demo/bed/    Neuron_series_demo.gene_promoter.coord.bed.gz    It contains ranges of all gene_promoter, with gene_promoter ID at 4th column                                                                                                      
+/Neuron_series_demo/bed/    Neuron_series_demo.locus.annot.bed.gz            It contains ranges of all CRE locus, with CRE locus name at 4th column                                                                                                            
+/Neuron_series_demo/bed/    Neuron_series_demo.locus.coord.bed.gz            It contains ranges of all locus, with locus ID at 4th column                                                                                                                      
+/Neuron_series_demo/bed/    Neuron_series_demo.transcript.addon.bed.gz       It contains ranges of addon transcript, with gene name | transcript ID at 4th column                                                                                              
+/Neuron_series_demo/bed/    Neuron_series_demo.transcript.reference.bed.gz   It contains ranges of reference transcript, with gene name | transcript ID at 4th column                                                                                          
+/Neuron_series_demo/gtf/    Neuron_series_demo.gtf.gz                        It contains all transcripts, including the addon transcripts                                                                                                                      
+/Neuron_series_demo/log/    Neuron_series_demo.CRE.info.tsv.gz               cis-regulatory element CRE annotation, one-row-per CRE, with infomation of its associated genes and clusters                                                                      
+/Neuron_series_demo/log/    Neuron_series_demo.ID_mapping.info.tsv.gz        1-to-1 mapping between IDs of genes, transcripts and TSS clusters                                                                                                                 
+/Neuron_series_demo/log/    Neuron_series_demo.cluster.info.tsv.gz           TSS cluster centric annotation, one-row-per TSS cluster, with infomation of its associated genes                                                                                  
+/Neuron_series_demo/log/    Neuron_series_demo.gene.info.tsv.gz              Gene centric annotation, one-row-per gene, with its annotation and its associated TSS clusters and transcripts                                                                    
+/Neuron_series_demo/log/    Neuron_series_demo.gene_promoter.info.tsv.gz     list of annotated and unannotated gene promoters as pairs of CREID and geneID                                                                                                     
+/Neuron_series_demo/log/    Neuron_series_demo.locus.info.tsv.gz             CRE locus (groups of CREs), one-row-per locus, with infomation of its CRE and activity                                                                                            
+/Neuron_series_demo/log/    Neuron_series_demo.transcript.info.tsv.gz        transcript centric annotation, one-row-per gene, with its gene annotation and its associated TSS clusters                                                                         
+/Neuron_series_demo/plot/   optimize.distal.locus.hyperactive_count.pdf      Plot of UMI/read counts for all distal CRE loci ranked in ascending order, a tangent line is used to define the cutoff a hyperactive                                              
+/Neuron_series_demo/plot/   optimize.distal_CRE.distal_stitch_distance.pdf   Plot of the closest distance of a distal CRE to another, ranked in ascending order, a tangent line is used to define the cutoff for stitching within a distal CRE locus           
+/Neuron_series_demo/plot/   optimize.proximal.locus.hyperactive_count.pdf    Plot of UMI/read counts for all proximal CRE loci ranked in ascending order, a tangent line is used to define the cutoff a hyperactive                                            
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The above files were generated by running,
+
+2025-02-15 16:08
+/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.annotate
+--overwrite=yes
+--tssCluster_bed_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/bed/Neuron_series_demo.tssCluster.default.filtered.bed.gz
+--tssCluster_info_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/log/Neuron_series_demo.tssCluster.log.tsv
+--min_CRE_count=3
+--genome=hg38.gencode_v39
+--outputPrefix=Neuron_series_demo
+--outDir=./demo_output_local/scafe/aggregate/run_full/out/annotate
+

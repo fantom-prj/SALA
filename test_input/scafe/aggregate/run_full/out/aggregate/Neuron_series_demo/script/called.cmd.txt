@@ -1,0 +1,7 @@
+2025-02-15 16:07
+/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.aggregate
+--lib_list_path=./data/SCAFE.step2.CTSS.list.txt
+--max_thread=5
+--genome=hg38.gencode_v39
+--outputPrefix=Neuron_series_demo
+--outDir=./demo_output_local/scafe/aggregate/run_full/out/aggregate

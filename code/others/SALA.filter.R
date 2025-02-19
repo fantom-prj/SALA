@@ -49,8 +49,20 @@ suppressPackageStartupMessages(library(tidyr))
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) < 12) {
-  stop("Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <fasta_file> <read.per.rep_ref.novel.Tx> <read.per.rep_non-ref.novel.Tx> <require.5'.confidence> <SALA_gene_path> <sample_file> <SCAFE_directory> <isoform_ratio> <CPAT_path(optional)>")
-}
+  stop("Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <fasta_file> <read.per.rep_ref.novel.Tx> <read.per.rep_non-ref.novel.Tx> <require.5'.confidence> <SALA_gene_path> <sample_file> <SCAFE_directory> <isoform_ratio> <CPAT_path(optional)>\n\n",
+    "SALA_directory                <required>	path of the folder of SALA transcript annotation output\n",
+	"out_prefix                    <required>	output files prefix\n",
+	"resource_directory            <required>	path of the resources folder of SALA\n",
+	"ref_directory                 <required>	path of the folder containing the infomation of reference transcriptome\n",
+	"fasta_file                    <required>	genome fasta file\n",
+	"read.per.rep_ref.novel.Tx     <required>	number of reads per replicate from a sample for novel isoform of known gene\n",
+	"read.per.rep_non-ref.novel.Tx <required>	number of reads per replicate from a sample for novel transcript of novel gene\n",
+	"isoform_ratio                 <required>	the ratio of a novel isoform across all the transcript in a gene, according to the full length read count\n",
+	"require.5'.confidence         <required>	if Yes, all the novel transcripts are required to have their 5’ ends located inside confident TSS clusters\n",
+	"SALA_gene_path                <required>	path of the folder of SALA gene annotation output\n",
+	"sample_file                   <required>	txt file for the input library: column1, library prefix; column2, sample ID; column3, sampleID with replicate ID\n",
+	"SCAFE_directory               <required>	path of the folder of SCAFE output\n",
+	"CPAT_path                     <optional>	path of the folder expected for CPAT result")}
 
 # Assign arguments to variables
 SALA_directory <- args[1]

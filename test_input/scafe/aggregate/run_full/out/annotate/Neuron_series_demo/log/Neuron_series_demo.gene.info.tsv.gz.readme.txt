@@ -1,0 +1,40 @@
+=================
+File descriptions
+=================
+Gene centric annotation, one-row-per gene, with its annotation and its associated TSS clusters and transcripts
+
+
+===================
+Column descriptions
+===================
+
+column         description
+------         -----------
+geneID         [unique ID] Identifier of the gene. Mainly inherited from the "gene ID" field in GENCODE or FANTOM CAT, plus "addon" genes from groups of unannotated TSS clusters [ADDG#########].
+geneClass      [string] Class of the gene. if anno was from genecode, it refers to the biotype of the genes from genecode. if anno was from FANTOM CAT, it refers to the gene classes of the genes in FANTOM CAT.
+geneName       [string] Name of the gene. Mainly inherited from the "gene name" field in GENCODE, , plus "addon" genes from unannotated TSS clusters [ADDG#########].
+trnscpt_num    [non-zero positive integer] Num of transcripts associated with the gene.
+cluster_num    [non-zero positive integer] Num of TSS clusters associated with the gene.
+CRE_num        self-explanatory
+end5_hit_num   [integer] num of TSS cluster hit on 5'end of its associated transcripts
+exon_hit_num   [integer] num of TSS cluster hit on exon of its associated transcripts
+addon_hit_num  [integer] num of TSS cluster addon for its associated transcripts
+trnscptIDStr   [string] ID of transcripts associated with the gene, ";" delimited.
+clusterIDStr   [string] ID of cluster associated with the gene, ";" delimited.
+CREIDStr       self-explanatory
+codingClass    [coding, noncoding, pseudogene, others or unknown] assigned based on predefined coding status of geneClass
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neuron_series_demo.gene.info.tsv.gz was created from running,
+
+2025-02-15 16:08
+/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.annotate
+--overwrite=yes
+--tssCluster_bed_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/bed/Neuron_series_demo.tssCluster.default.filtered.bed.gz
+--tssCluster_info_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/log/Neuron_series_demo.tssCluster.log.tsv
+--min_CRE_count=3
+--genome=hg38.gencode_v39
+--outputPrefix=Neuron_series_demo
+--outDir=./demo_output_local/scafe/aggregate/run_full/out/annotate
+

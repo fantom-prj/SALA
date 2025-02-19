@@ -1,0 +1,52 @@
+=================
+File descriptions
+=================
+cis-regulatory element CRE annotation, one-row-per CRE, with infomation of its associated genes and clusters
+
+
+===================
+Column descriptions
+===================
+
+column                description
+------                -----------
+CREID                 [unique ID] Identifier of the CRE.
+CREName               [string] Name of the CRE, in format of [r][rank]@[geneNameX],[r][rank]@[geneNameY]
+typeStr               [string] the type of its cluster, annotated as gene tss or not
+score                 [integer] score in the input cluster bed file. #UMI for single cell and #read for bulk
+geneNum               [string] number of gene associated with the CRE
+clusterIDStr          self-explanatory
+trnscptIDStr          [string] ID of transcripts associated with its cluster, ";" delimited.
+geneIDStr             [string] Identifier of gene associated with its cluster, ";" delimited. Mainly inherited from the "gene ID" field in GENCODE or FANTOM CAT, plus "addon" genes from groups of unannotated TSS clusters [ADDG#########].
+geneNameStr           [string] Name of gene associated with its cluster, ";" delimited. Mainly inherited from the "gene name" field in GENCODE, , plus "addon" genes from unannotated TSS clusters [ADDG#########].
+geneClassStr          [string] Class of gene associated with its cluster, ";" delimited. if anno was from genecode, it refers to the biotype of the genes from genecode. if anno was from FANTOM CAT, it refers to the gene classes of the genes in FANTOM CAT.
+codingClassStr        [string] Assigned based on predefined coding status of geneClass
+proximity             [proxmial or distal] proximity or distal to genes tss
+regionType            [end5 exon intron or intergenic] within or in the proximity of the end5, exon or intron, or else intergenic
+regionOritentation    [ns ss or as] oritentation relative to the region in regionType, sense strand, antisense strand, or non-stranded
+regionGeneID          [unique ID] ID of the gene which contributes to the annotation of the regionType
+class                 [coding, noncoding, distal and other] CRE of coding gene tss, CRE of noncoding genes tss or CRE that is distant from gene tss, or others (including CRE that is close to gene tss but not on the same strand as the gene of mixed of multiple genetypes)
+best_prob             [float] lowest prob among all ClusterID
+best_clusterID        [unique ID] ClusterID with best prob
+sumClusterRead        [integer] sum of read within its member cluster
+gene_promoter         [annotated, unannotated or none] is defined as a gene promoter, with annotated transcript (annotated), or without annotated transcripts (unannotated), or otherwise (none)
+gene_promoter_geneID  [string] is defined as the promoter of genes with these geneIDs, ";" delimited.
+locusID               [unique ID] the ID of the locus it belongs to
+locusName             [unique ID] the name of the locus it belongs to
+locus_count           [integer] the total number of reads its the CRE locus contains
+locus_hyperactive     [yes/no] the CRE locus is defined as hyperactive, or not
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neuron_series_demo.CRE.info.tsv.gz was created from running,
+
+2025-02-15 16:08
+/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.annotate
+--overwrite=yes
+--tssCluster_bed_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/bed/Neuron_series_demo.tssCluster.default.filtered.bed.gz
+--tssCluster_info_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/log/Neuron_series_demo.tssCluster.log.tsv
+--min_CRE_count=3
+--genome=hg38.gencode_v39
+--outputPrefix=Neuron_series_demo
+--outDir=./demo_output_local/scafe/aggregate/run_full/out/annotate
+

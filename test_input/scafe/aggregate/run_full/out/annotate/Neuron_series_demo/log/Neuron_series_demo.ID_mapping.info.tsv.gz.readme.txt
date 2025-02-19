@@ -1,0 +1,44 @@
+=================
+File descriptions
+=================
+1-to-1 mapping between IDs of genes, transcripts and TSS clusters
+
+
+===================
+Column descriptions
+===================
+
+column       description
+------       -----------
+clusterID    [unique ID] Identifier of the TSS cluster.
+clusterName  [string] Name of the cluster, in format of [p|e][rank]@[geneNameX],[p|e][rank]@[geneNameY]
+type         [gene_tss or unanno_tss] the TSS cluster is annotated as gene tss or not
+trnscptID    [unique ID] Identifier of the transcripts. Mainly inherited from the "transcript ID" field in GENCODE or FANTOM CAT, plus "addon" transcripts from unannotated TSS clusters [ADDT#########].
+geneID       [unique ID] Identifier of the gene. Mainly inherited from the "gene ID" field in GENCODE or FANTOM CAT, plus "addon" genes from groups of unannotated TSS clusters [ADDG#########].
+geneName     [unique ID] Name of the gene. Mainly inherited from the "gene name" field in GENCODE, , plus "addon" genes from unannotated TSS clusters [ADDG#########].
+geneClass    [string] Class of the gene. if anno was from genecode, it refers to the biotype of the genes from genecode. if anno was from FANTOM CAT, it refers to the gene classes of the genes in FANTOM CAT.
+rank         [integer] rank of the cluster within the gene
+tag_count    [integer] number of ctss tag count
+hit          [end5, exon or addon] location of clusterID "hit" on the transcript, can at 5'end, on exon, or addon. exon hit will be turned of if exon_slop_rng==-1. addon refers to dummy transcripts added to unannotated TSS clusters
+codingClass  [coding, noncoding, pseudogene, others or unknown] assigned based on predefined coding status of geneClass
+CREID        [unique ID] ID of the CRE the clusterID belongs to
+CREName      [unique ID] Name of the CRE the clusterID belongs to
+proximity    [unique ID] proximity of the locus
+locusID      [unique ID] Identifier of the locus
+locusName    [unique ID] Name of the locus
+hyperactive  [yes/no] CRE locus is defined as hyperactive, or not
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neuron_series_demo.ID_mapping.info.tsv.gz was created from running,
+
+2025-02-15 16:08
+/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.annotate
+--overwrite=yes
+--tssCluster_bed_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/bed/Neuron_series_demo.tssCluster.default.filtered.bed.gz
+--tssCluster_info_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/log/Neuron_series_demo.tssCluster.log.tsv
+--min_CRE_count=3
+--genome=hg38.gencode_v39
+--outputPrefix=Neuron_series_demo
+--outDir=./demo_output_local/scafe/aggregate/run_full/out/annotate
+

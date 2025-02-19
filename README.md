@@ -65,7 +65,7 @@ This package itself does not require installation. Essential binary files for Li
 Please refer to the [wiki page](https://github.com/fantom-prj/SALA/wiki) to run a demo
 
 ## <a name="transcript_model"></a>Assembling into transcript models
-This tool assigns long-read sequencing data (as query) to a set of reference transcripts (e.g. GENCODE) using a 5' end centric approach. Several reference transcript annotation sets are available [here](https://drive.google.com/drive/folders/1CJS5tb4mlfYvQMX4W5ZAXwjC5woMhJF0?usp=drive_link). This code will take a set of user-defined confident 5' end clusters (or de novo defined by SCAFE clustering) and 3' end clusters (or de novo defined by clustering) and assign the query reads to the reference transcripts with the following step:
+This tool assigns long-read sequencing data (as query) to a set of reference transcripts (e.g. GENCODE) using a 5' end centric approach. Several reference transcript annotation sets are available: [GENCODE_V39](https://drive.google.com/file/d/1yO0nRF9DteAyNedXkxhuOBJbdBqV-vwG/view?usp=drive_link), [GENCODE_V47](https://drive.google.com/file/d/1uN1ZKIwzdwArqF3GrTKnEAzi6g63c4fz/view?usp=drive_link), [GENCODE_VM25](https://drive.google.com/file/d/1Orrmafb8dYbp-tKA6_NOoZHOGvAUNSMK/view?usp=drive_link), [GENCODE_VM36](https://drive.google.com/file/d/1O5cSQCJmgVPwsuOMbFv1zaDaVYcw8saH/view?usp=drive_link). This code will take a set of user-defined confident 5' end clusters (or de novo defined by SCAFE clustering) and 3' end clusters (or de novo defined by clustering) and assign the query reads to the reference transcripts with the following step:
 1. A query read is classified as complete if both of its 5' and 3' end overlap a confident 5' and 3' end cluster, otherwise as incomplete.
 2. An incomplete read without a confident 5' cluster will be flagged.
 3. A complete query read will be assigned to a reference transcript if it shares the same 1) 5' end cluster, 2) 3' end cluster and 3) internal splicing structures (i.e. same splicing junctions or both unspliced).
@@ -128,6 +128,47 @@ Usage: end5_guided_assembler_v1.1.pl [options] --qry_bed_bgz --ref_bed_bgz --out
    --bgzip_bin                  (optional) [path]    path to the binary of bgzip, if not provided, "bgzip" will be called
 
 ```
+Test run:
+```
+cd /your/SALA/directory/
+
+./code/SALA/end5_guided_assembler.pl \
+--qry_bed_bgz=./test_input/input/bam_to_bed/combined.bed.bgz \
+--ref_bed_bgz=./resources/GENCODE_V39/transcript.bed.bgz \
+--out_dir=./test_input/sala/transcript \
+--chrom_size_path=./resources/chrom.sizes.tsv \
+--chrom_fasta_path=./resources/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta \
+--conf_end5_bed_bgz=./test_input/scafe/aggregate/run_full/out/annotate/Neuron_series_demo/bed/Neuron_series_demo.cluster.coord.bed.bgz \
+--conf_end3_bed_bgz=./test_input/input/CTES_clusters/scafe/cluster/Neuron_series_demo.CTES.s3_n3_c5/bed/Neuron_series_demo.CTES.s3_n3_c5.tssCluster.bed.bgz \
+--signal_end5_bed_bgz=./test_input/scafe/aggregate/run_full/out/aggregate/Neuron_series_demo/bed/Neuron_series_demo.aggregate.collapse.ctss.bed.bgz \
+--signal_end3_bed_bgz=./test_input/input/CTES_clusters/scafe/cluster/Neuron_series_demo.CTES.s3_n3_c5/bed/Neuron_series_demo.CTES.s3_n3_c5.tssCluster.bed.bgz \
+--out_prefix=Neuron_series_demo \
+--novel_model_prefix=ONTT \
+--min_output_qry_count=1 \
+--conf_end3_merge_flank=150 \
+--conf_end5_merge_flank=75 \
+--conf_end3_add_ref=yes \
+--conf_end5_add_ref=yes \
+--min_exon_length=1 \
+--min_transcript_length=15 \
+--doubtful_end_avoid_summit=yes \
+--print_trnscrptID=no \
+--trnscpt_set_end_priority=summit:commonest:longest \
+--doubtful_end_merge_dist=150 \
+--doubtful_end_avoid_summit=yes \
+--min_summit_dist_split=50 \
+--retain_no_qry_ref_bound_set=no \
+--min_size_split=100 \
+--min_frac_split=0.2 \
+--max_thread=1 \
+--conf_junction_bed=./resources/GENCODE_V39/junction.bed,./test_input/input/junction_extractor/pool/Neuron_series_demo.hi_qual.junct.bed \
+--min_qry_score=0 \
+--bedtools_bin=./resources/bin/bedtools/bedtools \
+--tabix_bin=./resources/bin/tabix/tabix \
+--bgzip_bin=./resources/bin/bgzip/bgzip
+
+```
+
 ## <a name="gene_group"></a>Grouping into initial gene models
 This tool annotates the 5'end-guided assembler models as genes. The following script uses the parameter --disable_ref_chain_bound_gene_anno=yes, which prevents recursive gene region extension when unfiltered transcriptional noise is present in the permissive transcript model output. At this stage, the tool assigns preliminary Gene IDs to all transcript models, which will be used in the filtering step.
 
@@ -207,7 +248,7 @@ Usage: Rscript SALA.gene_gtf_annotation.R <SALA_directory> <out_prefix> <resourc
 ```
 
 # <a name="SALA_result"></a>Working with the SALA results
-Major output from SALA include the log tables for each transcript model and their annotation, and GTF files including the final novel transcripts. 
+Major output from SALA includes the log tables for each transcript model and their annotation, and GTF files including the final novel transcripts. 
 
 Column description of the log table:
 ```

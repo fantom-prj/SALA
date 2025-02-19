@@ -41,13 +41,12 @@ suppressPackageStartupMessages(library(stringr))
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) < 8) {
-  stop("Usage: Rscript SALA.gene_gtf_annotation <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <SALA_gene_path>\n
-  	\n
-  	SALA_directory         <required>	path of the folder of SALA transcript annotation output\n
-	out_prefix             <required>	output files prefix\n
-	resource_directory     <required>	path of the resources folder of SALA\n
-	ref_directory          <required>	path of the folder containing the infomation of reference transcriptome\n
-	SALA_gene_path         <required>	path of the folder of SALA final gene annotation output")
+  stop("Usage: Rscript SALA.gene_gtf_annotation <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <SALA_gene_path>\n\n",
+  	"SALA_directory         <required>	path of the folder of SALA transcript annotation output\n",
+	"out_prefix             <required>	output files prefix\n",
+	"resource_directory     <required>	path of the resources folder of SALA\n",
+	"ref_directory          <required>	path of the folder containing the infomation of reference transcriptome\n",
+	"SALA_gene_path         <required>	path of the folder of SALA final gene annotation output")
 }
 
 # Assign arguments to variables

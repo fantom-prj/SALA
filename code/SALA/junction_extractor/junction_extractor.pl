@@ -27,7 +27,7 @@ use AutoLoader qw/AUTOLOAD/;
  Description:
 
  Usage:
-   junction_extractor_v1.1.pl [options] --in_bam --chrom_size_path --chrom_fasta_path --out_prefix --out_dir
+   junction_extractor.pl [options] --in_bam --chrom_size_path --chrom_fasta_path --out_prefix --out_dir
    
    --in_bam                    <required> [path]    bam file of the alignemnt  
    --out_dir                   <required> [path]    output directory
@@ -54,7 +54,7 @@ use AutoLoader qw/AUTOLOAD/;
 
 =head1 VERSION
 
-1.1   -debut
+1.0   -debut
 =cut
 #<\doc>
 #====================================================================================================================================================#

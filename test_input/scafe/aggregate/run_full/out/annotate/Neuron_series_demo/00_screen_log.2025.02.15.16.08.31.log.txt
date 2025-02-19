@@ -1,0 +1,119 @@
+
+=========================================================================
+[2025-02-15 16:08] starts running ...... 
+=========================================================================
+
+[2025-02-15 16:08] Checking all SCAFE executables
+[2025-02-15 16:08] Checking: bedtools version: 2.29.2
+[2025-02-15 16:08] Checking: samtools version: Version: 1.10
+[2025-02-15 16:08] Checking: paraclu found.
+[2025-02-15 16:08] Checking: paraclu-cut found.
+[2025-02-15 16:08] Checking: bedGraphToBigWig version: 4
+[2025-02-15 16:08] Checking: bigWigAverageOverBed version: 0.5.6-dev
+[2025-02-15 16:08] Checking: Rscript version: 4.4.0
+[2025-02-15 16:08] optimize_tangent_R found.
+[2025-02-15 16:08] Reading transcript bed
+[2025-02-15 16:08] Reading transcript info
+[2025-02-15 16:08] 244939 transcripts reads
+[2025-02-15 16:08] Reading gene info
+[2025-02-15 16:08] 61533 genes reads
+[2025-02-15 16:08] adding annotated gene loci information
+[2025-02-15 16:08] Printing transcript end5 bed
+[2025-02-15 16:08] 249 clusters read
+[2025-02-15 16:08] Reading tssCluster info
+[2025-02-15 16:08] generating extended cluster
+[2025-02-15 16:08] Intersecting cluster and transcript end5
+[2025-02-15 16:08] assigning region to cluster
+[2025-02-15 16:08] Getting cluster at end5 ss
+[2025-02-15 16:08] Getting cluster at end5 as
+[2025-02-15 16:08] Getting cluster at exon ss
+[2025-02-15 16:08] Getting cluster at exon as
+[2025-02-15 16:08] Getting cluster at intron ss
+[2025-02-15 16:08] Getting cluster at intron as
+[2025-02-15 16:08] Adding intergenic region type
+[2025-02-15 16:08] defining stranded CRE
+[2025-02-15 16:08] counting stranded CRE
+[2025-02-15 16:08] defining gene promoters
+[2025-02-15 16:08] 6 CRE is defined as unannotated alternative promoter
+[2025-02-15 16:08] Extending promoter proximity by 500 nt
+[2025-02-15 16:08] Merging overlaping non promoter CRE
+[2025-02-15 16:08] Assigning CRE proximity
+[2025-02-15 16:08] Removing non-promoter CRE with < 3
+[2025-02-15 16:08] 0 CRE removed and 147 CREs retained
+[2025-02-15 16:08] creating addon transcripts and genes
+[2025-02-15 16:08] summerizing gene information
+[2025-02-15 16:08] removing gene with no 5'end support
+[2025-02-15 16:08] 61466 gene removed
+[2025-02-15 16:08] removing transcript with no 5'end support
+[2025-02-15 16:08] 244702 transcript removed
+[2025-02-15 16:08] defining proximal loci
+[2025-02-15 16:08] stitching proximal CREs at 2000 nt
+[2025-02-15 16:08] getting proximal hyperactive locus cutoff
+[2025-02-15 16:08] hyperactive_cutoff for proximal locus = 1289 
+[2025-02-15 16:08] num of hyperactive proximal locus = 12
+[2025-02-15 16:08] defining distal loci
+[2025-02-15 16:08] getting optimized stitch distance
+[2025-02-15 16:08] optimized distal_stitch_distance = 6871 
+[2025-02-15 16:08] stitching distal CREs at 6871  nt
+[2025-02-15 16:08] getting distal hyperactive locus cutoff
+[2025-02-15 16:08] hyperactive_cutoff for distal locus = 42 
+[2025-02-15 16:08] num of hyperactive distal locus = 0
+[2025-02-15 16:08] printing locus bed
+[2025-02-15 16:08] printing gene_promoter bed
+[2025-02-15 16:08] printing cluster bed
+[2025-02-15 16:08] printing CRE bed
+[2025-02-15 16:08] printing addon gene transcript bed
+[2025-02-15 16:08] printing reference gene transcript bed
+[2025-02-15 16:09] Printing gene info
+[2025-02-15 16:09] --- cluster class count statistics ---
+[2025-02-15 16:09] cluster  class: coding = 115 [46.185%]
+[2025-02-15 16:09] cluster  class: other = 66 [26.506%]
+[2025-02-15 16:09] cluster  class: distal = 36 [14.458%]
+[2025-02-15 16:09] cluster  class: noncoding = 32 [12.851%]
+[2025-02-15 16:09] --- cluster codingClassStr count statistics ---
+[2025-02-15 16:09] cluster  codingClassStr: coding = 115 [46.185%]
+[2025-02-15 16:09] cluster  codingClassStr: unknown = 72 [28.916%]
+[2025-02-15 16:09] cluster  codingClassStr: noncoding = 32 [12.851%]
+[2025-02-15 16:09] cluster  codingClassStr:  = 26 [10.442%]
+[2025-02-15 16:09] cluster  codingClassStr: pseudogene = 3 [1.205%]
+[2025-02-15 16:09] cluster  codingClassStr: others = 1 [0.402%]
+[2025-02-15 16:09] --- cluster proximity count statistics ---
+[2025-02-15 16:09] cluster  proximity: proximal = 213 [85.542%]
+[2025-02-15 16:09] cluster  proximity: distal = 36 [14.458%]
+[2025-02-15 16:09] --- cluster regionType count statistics ---
+[2025-02-15 16:09] cluster  regionType: end5 = 198 [79.518%]
+[2025-02-15 16:09] cluster  regionType: intron = 32 [12.851%]
+[2025-02-15 16:09] cluster  regionType: exon = 11 [4.418%]
+[2025-02-15 16:09] cluster  regionType: intergenic = 8 [3.213%]
+[2025-02-15 16:09] Printing gene info
+[2025-02-15 16:09] Printing ID mapping table log files
+[2025-02-15 16:09] Printing ID mapping info
+[2025-02-15 16:09] Printing transcript info
+[2025-02-15 16:09] Printing CRE info
+[2025-02-15 16:09] --- CRE class count statistics ---
+[2025-02-15 16:09] CRE class: coding = 56 [38.095%]
+[2025-02-15 16:09] CRE class: other = 34 [23.129%]
+[2025-02-15 16:09] CRE class: distal = 33 [22.449%]
+[2025-02-15 16:09] CRE class: noncoding = 24 [16.327%]
+[2025-02-15 16:09] --- CRE codingClassStr count statistics ---
+[2025-02-15 16:09] CRE codingClassStr: unknown = 63 [42.857%]
+[2025-02-15 16:09] CRE codingClassStr: coding = 56 [38.095%]
+[2025-02-15 16:09] CRE codingClassStr: noncoding = 24 [16.327%]
+[2025-02-15 16:09] CRE codingClassStr: pseudogene = 3 [2.041%]
+[2025-02-15 16:09] CRE codingClassStr: others = 1 [0.680%]
+[2025-02-15 16:09] --- CRE proximity count statistics ---
+[2025-02-15 16:09] CRE proximity: proximal = 114 [77.551%]
+[2025-02-15 16:09] CRE proximity: distal = 33 [22.449%]
+[2025-02-15 16:09] --- CRE regionType count statistics ---
+[2025-02-15 16:09] CRE regionType: end5 = 104 [70.748%]
+[2025-02-15 16:09] CRE regionType: intron = 28 [19.048%]
+[2025-02-15 16:09] CRE regionType: intergenic = 8 [5.442%]
+[2025-02-15 16:09] CRE regionType: exon = 7 [4.762%]
+[2025-02-15 16:09] Printing CRE info
+[2025-02-15 16:09] Printing gene promoter info
+[2025-02-15 16:09] removing tmp_bed_dir
+
+=========================================================================
+[2025-02-15 16:09] finished running .......
+=========================================================================
+

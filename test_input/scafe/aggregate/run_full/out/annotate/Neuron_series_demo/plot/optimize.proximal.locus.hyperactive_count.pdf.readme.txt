@@ -1,0 +1,19 @@
+=================
+File descriptions
+=================
+Plot of UMI/read counts for all proximal CRE loci ranked in ascending order, a tangent line is used to define the cutoff a hyperactive
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+optimize.proximal.locus.hyperactive_count.pdf was created from running,
+
+2025-02-15 16:08
+/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.annotate
+--overwrite=yes
+--tssCluster_bed_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/bed/Neuron_series_demo.tssCluster.default.filtered.bed.gz
+--tssCluster_info_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/log/Neuron_series_demo.tssCluster.log.tsv
+--min_CRE_count=3
+--genome=hg38.gencode_v39
+--outputPrefix=Neuron_series_demo
+--outDir=./demo_output_local/scafe/aggregate/run_full/out/annotate
+

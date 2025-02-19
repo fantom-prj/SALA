@@ -1,0 +1,35 @@
+=================
+File descriptions
+=================
+list of annotated and unannotated gene promoters as pairs of CREID and geneID
+
+
+===================
+Column descriptions
+===================
+
+column                 description
+------                 -----------
+CREID                  [unique ID] Identifier of the CRE.
+geneID                 [unique ID] ID of the gene which the CRE is defined as its alternative promoter
+geneName               [string] gene symbol
+total_exp_frac         [fraction] the fraction of expression amount (UMI in single cell/read in bulk) of this CRE in the total expression amount of annotated alternative promoters
+gene_strand_read_frac  [fraction] the fraction of expression amount (UMI in single cell/read in bulk) of this CRE on the gene strand in the total expression amount of both strands
+sumClusterRead         [integer] sum of read within its member cluster
+status                 [annotated or unannotated] annotated, CRE that is assigned to annotated transcripts (in reference annotation) of the gene, or unannotated otherwise
+loc                    [string] locus, in format of chromosome:start-end
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neuron_series_demo.gene_promoter.info.tsv.gz was created from running,
+
+2025-02-15 16:08
+/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.annotate
+--overwrite=yes
+--tssCluster_bed_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/bed/Neuron_series_demo.tssCluster.default.filtered.bed.gz
+--tssCluster_info_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/log/Neuron_series_demo.tssCluster.log.tsv
+--min_CRE_count=3
+--genome=hg38.gencode_v39
+--outputPrefix=Neuron_series_demo
+--outDir=./demo_output_local/scafe/aggregate/run_full/out/annotate
+

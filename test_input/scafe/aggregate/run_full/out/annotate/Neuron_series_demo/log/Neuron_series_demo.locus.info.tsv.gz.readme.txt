@@ -1,0 +1,42 @@
+=================
+File descriptions
+=================
+CRE locus (groups of CREs), one-row-per locus, with infomation of its CRE and activity
+
+
+===================
+Column descriptions
+===================
+
+column       description
+------       -----------
+locusID      [unique ID] Identifier of the locus
+locusStr     [string] Locus string in format of chrom:start-end
+locusName    [unique ID] Name of the locus
+proximity    [unique ID] proximity of the locus
+chrom        [string] ID of chromosome
+start        [integer] start of the locus
+end          [integer] end of the locus
+size         [integer] size of the locus in base pair
+CREnum       [string] Number of CRE associated with the locus
+total_count  [integer] Sum of read counts of all its CRE
+top_count    [integer] Read counts of the highest expressed CRE
+top_frac     [fraction] Top-fraction is defined as the expression amount (read/UMI) on the highest expressed distal CRE in the expression amount of all distal CRE (i.e. top_count/total_count)
+spreadness   [float] Spreadness is defined as "num-of-CRE/top-fraction". Num-of-CRE refers to the number of CRE within the CRE locus. Top-fraction is defined in top_frac above. default = 4, equivalent to Num-of-CRE=3 and Top-fraction = 0.75, i.e. 3/0.75 = 4
+hyperactive  [yes/no] Defined as hyperactive, or not
+CREID_str    [string] ID of CRE associated with the locus, ";" delimited.
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neuron_series_demo.locus.info.tsv.gz was created from running,
+
+2025-02-15 16:08
+/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.annotate
+--overwrite=yes
+--tssCluster_bed_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/bed/Neuron_series_demo.tssCluster.default.filtered.bed.gz
+--tssCluster_info_path=./demo_output_local/scafe/aggregate/run_full/out/filter/Neuron_series_demo/log/Neuron_series_demo.tssCluster.log.tsv
+--min_CRE_count=3
+--genome=hg38.gencode_v39
+--outputPrefix=Neuron_series_demo
+--outDir=./demo_output_local/scafe/aggregate/run_full/out/annotate
+

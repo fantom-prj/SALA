@@ -49,7 +49,7 @@ use AutoLoader qw/AUTOLOAD/;
   11. The 3'end incomplete transcript models will be adjusted to the furtherest 3'end of its query reads.
 
  Usage:
-   end5_guided_assembler_v1.1.pl [options] --qry_bed_bgz --ref_bed_bgz --out_dir
+   end5_guided_assembler.pl [options] --qry_bed_bgz --ref_bed_bgz --out_dir
    
    --qry_bed_bgz                <required> [path]    bed 12 of the ONT CAGE reads, 4th column must be read ID and in bgz format, 
                                                      for multiple query bed, user can supply a list of path in plain text format, one line one path
@@ -106,7 +106,7 @@ use AutoLoader qw/AUTOLOAD/;
 
 =head1 VERSION
 
-1.1   -debut
+1.0   -debut
 =cut
 #<\doc>
 #====================================================================================================================================================#
