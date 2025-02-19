@@ -661,14 +661,11 @@ sub checkAllExecutable {
 	}
 
 	{
-		my $stdOut = `$bigWigAverageOverBed_bin --version 2>&1`;
-		if ($stdOut =~ m/bigwigaverageoverbed\s+v?\s*([\d\.]+(?:-[a-zA-Z0-9]+)?)\b/) {
-    		&reportAndLogStatus("Checking: bigWigAverageOverBed version: $1", 0, "\n");
-		} 
-		elsif (`$bigWigAverageOverBed_bin 2>&1` =~ m/bigwigaverageoverbed\s+v?\s*([\d\.]+(?:-[a-zA-Z0-9]+)?)\b/) {
-    		&reportAndLogStatus("Checking: bigWigAverageOverBed version: $1", 0, "\n");
+		my $stdOut = `$bigWigAverageOverBed_bin 2>&1`;
+		if ($stdOut =~ m/bigWigAverageOverBed v(\S+)/) {
+			&reportAndLogStatus("Checking: bigWigAverageOverBed version: $1", 0, "\n");#->2284
 		} else {
-    		die "Error: bigWigAverageOverBed is not installed properly or not in PATH. Quitting.\n";
+			die "bigWigAverageOverBed is not installed properly. Quitting.\n";
 		}
 	}
 
