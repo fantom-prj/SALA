@@ -130,6 +130,10 @@ Usage: end5_guided_assembler_v1.1.pl [options] --qry_bed_bgz --ref_bed_bgz --out
 ```
 Test run:
 ```
+cd /your/SALA/directory/resources
+wget https://www.encodeproject.org/files/GRCh38_no_alt_analysis_set_GCA_000001405.15/@@download/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz
+gunzip GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz
+
 cd /your/SALA/directory/
 
 ./code/SALA/end5_guided_assembler.pl \
