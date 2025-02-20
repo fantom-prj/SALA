@@ -1,0 +1,27 @@
+
+=========================================================================
+[2025-02-21 01:11] starts running ...... 
+=========================================================================
+
+[2025-02-21 01:11] Checking all SCAFE executables
+[2025-02-21 01:11] Checking: tabix version: 1.15.1
+[2025-02-21 01:11] Checking: bgzip version: 1.15.1
+[2025-02-21 01:11] Checking: bedtools version: 2.30.0
+[2025-02-21 01:11] Checking: samtools version: Version: 1.15.1
+[2025-02-21 01:11] Checking: paraclu found.
+[2025-02-21 01:11] Checking: paraclu-cut found.
+[2025-02-21 01:11] Checking: bedGraphToBigWig version: 2.8
+[2025-02-21 01:11] Checking: bigWigAverageOverBed version: 2
+[2025-02-21 01:11] Parsing paraclu input
+[2025-02-21 01:11] cluster_count = 0.11234 millions
+[2025-02-21 01:11] Running paraclu
+[2025-02-21 01:11] Parsing paraclu output
+[2025-02-21 01:11] getting summit position
+[2025-02-21 01:11] printing final cluster bed and log
+[2025-02-21 01:11] 243 tssClusters retained
+[2025-02-21 01:11] 354 tssClusters discarded
+
+=========================================================================
+[2025-02-21 01:11] finished running .......
+=========================================================================
+

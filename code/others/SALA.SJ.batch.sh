@@ -10,10 +10,10 @@ while IFS=$'\t' read -r SAMPLE_ID BAM_PATH; do
     OUT_DIR="./demo_output_local/input/junction_extractor/output"
     
     # Run the junction_extractor Perl script with the specified parameters
-    ./code/SALA/junction_extractor/junction_extractor_v0.1.pl \
+    ./code/SALA/junction_extractor/junction_extractor.pl \
     --in_bam="$BAM_PATH" \
     --chrom_size_path=./resources/chrom.sizes.tsv \
-    --chrom_fasta_path=./resources/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz \
+    --chrom_fasta_path=./resources/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta \
     --out_prefix="$OUT_PREFIX" \
     --out_dir="$OUT_DIR" \
     --max_thread=1 \

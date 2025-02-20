@@ -40,7 +40,7 @@ suppressPackageStartupMessages(library(stringr))
 # Parse command-line arguments
 args <- commandArgs(trailingOnly = TRUE)
 
-if (length(args) < 8) {
+if (length(args) < 5) {
   stop("Usage: Rscript SALA.gene_gtf_annotation <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <SALA_gene_path>\n\n",
   	"SALA_directory         <required>	path of the folder of SALA transcript annotation output\n",
 	"out_prefix             <required>	output files prefix\n",
@@ -60,7 +60,8 @@ SALA_gene_path <- args[5]
 path1 <- paste0(SALA_directory, "/bed/")
 path2 <- paste0(SALA_directory, "/log/")
 path3 <- paste0(SALA_directory, "/tmp/")
-ref_gene_bed <- paste0(ref,"/gene.bed")
+ref_in <- paste0(ref,"/transcript_to_gene.tsv")
+ref_gene_bed <- paste0(ref,"/gene.bed.gz")
 ref_transcript_bed <- paste0(ref,"/transcript.bed.bgz")
 ref_gtf <- paste0(ref,"/gencode.v39.annotation.gtf.gz")
 SALA_gene_info <- paste0(SALA_gene_path,"/log/",out_prefix,".model.info.tsv.gz")
@@ -70,7 +71,7 @@ print("Start running...")
 
 #=====
 #add gene model
-ref_info <- fread(ref, header = FALSE, stringsAsFactors = FALSE)
+ref_info <- fread(ref_in, header = FALSE, stringsAsFactors = FALSE)
 transcript_info_final <- read.delim(paste0(path2,out_prefix,".table4_filtered.noIP.All_Ref.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
 t4gene <- read.delim(SALA_gene_info, header=T, stringsAsFactors = F, check.names = F)
 colnames(t4gene)[c(7,8)] <- c("T4_gene_ID","T4_gene_name")

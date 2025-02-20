@@ -38,9 +38,7 @@ SALA_directory <- args[1]
 output_directory <- args[2]
 ref <- args[3]
 
-SALA_directory="/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/demo_output_local/sala/transcript/Neuron_series_demo"
-output_directory="/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/demo_output_local/sala/transcript/Neuron_series_demo/log"
-ref="/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/resources/GENCODE_V39/transcript_to_gene.tsv"
+
 #SALA_directory="/analysisdata/fantom6/Interactome/ONT.CAGE.satellite/dorado_run/git_folder/demo_output_local/sala/transcript/Neuron_series_demo"
 #output_directory="/analysisdata/fantom6/Interactome/ONT.CAGE.satellite/dorado_run/git_folder/demo_output_local/sala/transcript/Neuron_series_demo/log"
 #ref="/analysisdata/fantom6/Interactome/ONT.CAGE.satellite/dorado_run/git_folder/resources/GENCODE_V39/transcript_to_gene.tsv"

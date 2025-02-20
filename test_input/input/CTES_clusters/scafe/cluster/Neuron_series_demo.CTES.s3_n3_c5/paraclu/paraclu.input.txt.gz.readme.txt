@@ -7,8 +7,8 @@ Input for paraclu
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 paraclu.input.txt.gz was created from running,
 
-2025-02-15 18:41
-/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.cluster
+2025-02-21 01:11
+/home/yip/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.cluster
 --overwrite=yes
 --cluster_ctss_bed_path=./demo_output_local/input/CTES_clusters/end3_bed_bigwig/Neuron_series_demo.end3.bed
 --count_ctss_bed_path=./demo_output_local/input/CTES_clusters/end3_bed_bigwig/Neuron_series_demo.end3.bed

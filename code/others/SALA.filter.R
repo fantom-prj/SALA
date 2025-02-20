@@ -72,11 +72,12 @@ ref_directory <- args[4]
 fasta_file <- args[5]
 read_per_rep_isoform <- args[6]
 read_per_rep_novel <- args[7]
-n5_confid <- args[8]
-SALA_gene_path <- args[9]
-sample_info <- args[10]
-SCAFE_directory <- args[11]
-isoform_ratio <- args[12]
+isoform_ratio <- args[8]
+n5_confid <- args[9]
+SALA_gene_path <- args[10]
+sample_info <- args[11]
+SCAFE_directory <- args[12]
+
 #cpat_path <- args[13]
 
 #path

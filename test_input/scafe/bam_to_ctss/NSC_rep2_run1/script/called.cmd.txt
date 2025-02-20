@@ -1,0 +1,10 @@
+2025-02-21 00:46
+/home/yip/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.bk.bam_to_ctss
+--TSS_mode=softclip
+--bamPath=./data/bam/NSC_rep2_run1_subset.sorted.bam
+--unencoded_G_upstrm_nt=3
+--max_thread=1
+--genome=hg38.gencode_v39
+--max_softclip_length=3
+--outputPrefix=NSC_rep2_run1
+--outDir=./demo_output_local/scafe/bam_to_ctss

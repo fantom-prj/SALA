@@ -1,0 +1,2 @@
+total_read_num	passed_read_num
+23251	16723
