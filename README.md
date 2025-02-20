@@ -187,7 +187,29 @@ Usage: assemble_gene_annotator_v0.1.pl [options] --qry_bed_bgz --ref_bed_bgz --o
     --tabix_bin                 (optional) [path]    path to the binary of tabix, if not provided, "tabix" will be called
     --bgzip_bin                 (optional) [path]    path to the binary of bgzip, if not provided, "bgzip" will be called
 ```
+Test run
+```
+cd /your/SALA/directory/
 
+perl ./code/SALA/assemble_gene_annotator.pl \
+--chrom_size_path=./resources/chrom.sizes.tsv \
+--model_bed_bgz=./test_input/sala/transcript/Neuron_series_demo/bed/Neuron_series_demo.model.bed.bgz \
+--model_info_gz=./test_input/sala/transcript/Neuron_series_demo/log/Neuron_series_demo.model.info.tsv.gz \
+--revert_ref_model_bed_bgz=./resources/GENCODE_V39/transcript.bed.bgz \
+--ref_model_gene_link=./resources/GENCODE_V39/transcript_to_gene.tsv \
+--novel_gene_prefix=IN1G \
+--disable_ref_chain_bound_gene_anno=yes \
+--min_ref_exon_overlap_pct=10 \
+--exon_overlap_dist=-1 \
+--locus_merge_dist=100000 \
+--exclude_t_type=retained_intron \
+--out_prefix=Neuron_series_demo \
+--out_dir=./test_input/sala/gene/table0_gene \
+--max_thread=1 \
+--bedtools_bin=./resources/bin/bedtools/bedtools \
+--tabix_bin=./resources/bin/tabix/tabix \
+--bgzip_bin=./resources/bin/bgzip/bgzip
+```
 ## <a name="transcript_count"></a>Count matrix per transcript model
 This tool parse the information from end5_guided_assembler to generate a count matrix per library across all transcript models.
 
