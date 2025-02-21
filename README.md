@@ -239,7 +239,7 @@ Overall, this step will do the followings:
 12. Filter to final table according to the parameters input, and export
 
 ```
-Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <fasta_file> <read.per.rep_ref.novel.Tx> <read.per.rep_non-ref.novel.Tx> <isoform_ratio> <require.5'.confidence> <SALA_gene_path> <sample_file> <SCAFE_directory> <CPAT_path(optional)>
+Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <fasta_file> <read.per.rep_ref.novel.Tx> <read.per.rep_non-ref.novel.Tx> <isoform_ratio> <require.5'.confidence> <SALA_gene_path> <sample_file> <SCAFE_directory> <genonme> <CPAT_path(optional)>
 
 	SALA_directory                <required>	path of the folder of SALA transcript annotation output
 	out_prefix                    <required>	output files prefix
@@ -253,6 +253,7 @@ Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> 
 	SALA_gene_path                <required>	path of the folder of SALA gene annotation output
 	sample_file                   <required>	txt file for the input library: column1, library prefix; column2, sample ID; column3, sampleID with replicate ID
 	SCAFE_directory               <required>	path of the folder of SCAFE output
+	genome                        <required>    genome name: hg38, mm10, mm39 or NA, control promoter typing
 	CPAT_path                     <optional>	path of the folder expected for CPAT result
 ```
 
@@ -328,7 +329,7 @@ n3_support                      a collection of support by Reference 3' end, end
 n5_string                       ID of end5 cluster
 TSScluster                      the SCAFE defined TSS cluster linked to the end5 cluster
 CREID                           the ID of the tCRE linked to the TSS cluster
-promoter_type                   promoter-like, enhancer-like, CFCT-alone or unclassed defined from SCREEN
+promoter_type                   promoter-like, enhancer-like, CFCT-alone or unclassed defined from SCREEN (only if genome = hg38, mm10 or mm39)
 n5_Reference                    Yes if end5 cluster intersect with any Reference 5' end
 n5_support                      a collection of support by Reference 5' end and SCAFE cluster
 ORF                         1   length of the best ORF by CPAT
