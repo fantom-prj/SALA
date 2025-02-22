@@ -77,8 +77,8 @@ isoform_ratio <- args[8]
 n5_confid <- args[9]
 SALA_gene_path <- args[10]
 sample_info <- args[11]
-genome <- args[12]
-SCAFE_directory <- args[13]
+SCAFE_directory <- args[12]
+genome <- args[13]
 
 #cpat_path <- args[14]
 
@@ -135,9 +135,9 @@ system(paste0(bedtools_bin, " getfasta -s -nameOnly -split -fi ", fasta_file, " 
 #===========
 # Load reference genome (FASTA file)
 #indexFa(fasta_file)
-genome <- FaFile(fasta_file_gunzip)
-open(genome)
-chrom_sizes <- seqlengths(genome)
+genome_seq <- FaFile(fasta_file_gunzip)
+open(genome_seq)
+chrom_sizes <- seqlengths(genome_seq)
 chrom_table <- data.frame(Chromosome = names(chrom_sizes), Length = as.numeric(chrom_sizes))
 
 print("Internal priming prediction")
@@ -162,7 +162,7 @@ write.table(t0bed12a3, gzfile(paste0(path1,out_prefix,".model.n3.n101.bed6.bed.g
 gr <- GRanges(seqnames = t0bed12a3$V1, ranges = IRanges(start = t0bed12a3$V2+1, end = t0bed12a3$V3), strand = t0bed12a3$V6)
 names(gr) <- t0bed12a3$V4
 # Extract sequences
-extracted_seqs <- getSeq(genome, gr)
+extracted_seqs <- getSeq(genome_seq, gr)
 
 extracted_df <- data.frame(TES_ID = names(gr), sequence = as.character(extracted_seqs))
 extracted_df <- left_join(extracted_df, t0bed12a3[,c(4,5)], by=c("TES_ID"="V4"), copy=F)
