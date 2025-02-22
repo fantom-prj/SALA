@@ -379,7 +379,7 @@ Major contribution for SALA development:
 * Wang L, Park HJ, Dasari S, Wang S, Kocher J-P, Li W. 2013. CPAT: Coding-Potential Assessment Tool using an alignment-free logistic regression model. Nucleic Acids Res 41: e74–e74.
 * Wyman D, Mortazavi A. 2019. TranscriptClean: variant-aware correction of indels, mismatches and splice junctions in long-read transcripts. Bioinforma Oxf Engl 35: 340–342.
 * Yao L, Wang H, Song Y, Sui G. 2017. BioQueue: a novel pipeline framework to accelerate bioinformatics analysis. Bioinforma Oxf Engl 33: 3286–3288.
-* Yip CW, Parr C, Takahashi H, Yasuzawa K, Valentine M, Nishiyori-Sueki H, Ugolini C, Ranzani V, Murata M, Kato M, et al. 2024. CFC-seq: identification of full-length capped RNAs unveil enhancer-derived transcription. http://biorxiv.org/lookup/doi/10.1101/2024.10.31.620483 (Accessed November 2, 2024).
+* Yip CW, Parr C, Takahashi H, Yasuzawa K, Valentine M, Nishiyori-Sueki H, Ugolini C, Ranzani V, Murata M, Kato M, et al. 2024. CFC-seq: identification of full-length capped RNAs unveil enhancer-derived transcription. BioRvix DOI:doi/10.1101/2024.10.31.620483.
 
 
 
