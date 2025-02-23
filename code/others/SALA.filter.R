@@ -141,7 +141,7 @@ system(paste0(bedtools_bin, " getfasta -s -nameOnly -split -fi ", fasta_file, " 
 #===========
 # Load reference genome (FASTA file)
 #indexFa(fasta_file)
-genome_seq <- FaFile(fasta_file_gunzip)
+genome_seq <- FaFile(fasta_file)
 open(genome_seq)
 chrom_sizes <- seqlengths(genome_seq)
 chrom_table <- data.frame(Chromosome = names(chrom_sizes), Length = as.numeric(chrom_sizes))
