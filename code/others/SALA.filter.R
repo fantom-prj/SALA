@@ -61,7 +61,7 @@ if (length(args) < 12) {
 	"require.5'.confidence         <required>	if Yes, all the novel transcripts are required to have their 5’ ends located inside confident TSS clusters\n",
 	"SALA_gene_path                <required>	path of the folder of SALA gene annotation output\n",
 	"sample_file                   <required>	txt file for the input library: column1, library prefix; column2, sample ID; column3, sampleID with replicate ID\n",
-	"SCAFE_directory               <required>	path of the folder of SCAFE output\n",
+	"SCAFE_directory               <required>	path of the folder of SCAFE output (NA if SCAFE is skipped)\n",
 	"genome                        <required>   genome name: hg38, mm10, mm39 or NA",
 	"CPAT_path                     <optional>	path of the folder expected for CPAT result")}
 
@@ -88,7 +88,6 @@ path2 <- paste0(SALA_directory, "/log/")
 path3 <- paste0(SALA_directory, "/tmp/")
 SALA_gene_info <- paste0(SALA_gene_path,"/log/",out_prefix,".model.info.tsv.gz")
 SALA_gene_bed <- paste0(SALA_gene_path,"/bed/",out_prefix,".gene.bed.bgz")
-fasta_file_gunzip <- gsub(".gz","",fasta_file)
 
 bedtools_bin <- paste0(resource_directory,"/bin/bedtools/bedtools")
 samtools_bin <- paste0(resource_directory,"/bin/samtools/samtools")
@@ -113,8 +112,9 @@ rm(table0_model, table0_model3n, table0_model5n)
 #===========
 system(paste0(bedtools_bin," bed12tobed6 -i ",path1,out_prefix,".model.bed.bgz | gzip > ", path1,out_prefix,".model.bed6.bed.gz"))
 system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end3.bed.bgz -b ",ref_directory,"/n3.bed.gz | gzip > ", path1,out_prefix,".end3.cluster.region.gencode3n.bed.gz"))
-system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".cluster.coord.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.cluster.bed.gz"))
 system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",ref_directory,"/n5.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.gencode5n.bed.gz"))
+if (SCAFE_directory != "NA"){
+system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".cluster.coord.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.cluster.bed.gz"))
 if (genome == "hg38"){
 system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-ELS.all.enhancer.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.e.bed"))
 system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-PLS.all.promoter.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.p.bed"))
@@ -129,7 +129,13 @@ system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefi
 system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-ELS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.e.bed"))
 system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-PLS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.p.bed"))
 system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.c.bed"))
-}else {print("promoter type intersection skipping due to unmatched genome")}
+}else {print("promoter type intersection skipping due to unmatched genome")}}
+
+if (SCAFE_directory == "NA"){
+if (genome == "hg38"){system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",resource_directory,"/CTSS_cluster/hg38_fair+new_CAGE_peaks_phase1and2.bed.bgz | gzip > ", path1,out_prefix,".end5.cluster.region.cluster.bed.gz"))}
+if (genome == "mm10"){system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",resource_directory,"/CTSS_cluster/mm10_fair+new_CAGE_peaks_phase1and2.bed.bgz | gzip > ", path1,out_prefix,".end5.cluster.region.cluster.bed.gz"))}
+}
+
 system(paste0(samtools_bin, " faidx ", fasta_file))
 system(paste0(bedtools_bin, " getfasta -s -nameOnly -split -fi ", fasta_file, " -bed ", path1, out_prefix, ".model.bed.bgz > ", path1, out_prefix, ".model.fasta"))
 #===========
@@ -322,10 +328,10 @@ transcript_info$n3_support[which(is.na(transcript_info$n3_support))] <- "no_supp
 transcript_info$n3_support[which(transcript_info$internal_priming == "Yes")] <- "internal_priming"
 transcript_info%>%group_by(n3_support)%>%dplyr::summarise(count=n(), .groups="drop_last")
 #===================================================================================================================
-
+if (SCAFE_directory != "NA"){
+CRE <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".CRE.info.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
 if (genome %in% c("hg38","mm10","mm39")){
 print("Perform SCAFE - SCREEN connection")
-CRE <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".CRE.info.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
 CRE.p <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.p.bed"), header=F, stringsAsFactors = F, check.names = F)
 CRE.e <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.e.bed"), header=F, stringsAsFactors = F, check.names = F)
 CRE.ctcf <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.c.bed"), header=F, stringsAsFactors = F, check.names = F)
@@ -363,20 +369,33 @@ CRE$Andersson_robust=0
 CRE$Andersson_robust[which(CRE$CREID %in% re_e)]=1
 CRE$Andersson_permissive=0
 CRE$Andersson_permissive[which(CRE$CREID %in% pe_e)]=1
-write.table(CRE, paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".CRE.info.p.e.se.tsv"), col.names=T, row.names=F, sep="\t", quote=F)}
+write.table(CRE, paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".CRE.info.p.e.se.tsv"), col.names=T, row.names=F, sep="\t", quote=F)}}
 
 #==================================================
 print("Add n5 cluster annotation & promoter-type")
 #Use cluster to cluster intersect and link to tCRE
 transcript_info$n5_string <- sapply(strsplit(transcript_info$full_set_bound_str,"_"),"[",1)
 table0_model4 <- read.delim(paste0(path1,out_prefix,".end5.cluster.region.cluster.bed.gz"), header=F, stringsAsFactors = F, check.names = F) 
+
+
+
+if (SCAFE_directory != "NA"){
 cluster <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".cluster.info.tsv.gz"),header=T, stringsAsFactors = F, check.names = F)
 table0_model4 <- left_join(table0_model4,cluster[,c(1,16)],by=c("V16"="clusterID"),copy=F)
 table0_model4a <- unique(table0_model4[,c(4,16,25)])%>%group_by(V4)%>%dplyr::summarise(TSScluster=paste(unique(V16), collapse=";"),
                                                                                     CREID=paste(unique(CREID), collapse=";"))
 
 if (genome %in% c("hg38","mm10","mm39")){
+table0_model4a <- left_join(table0_model4a,CRE[,c("CREID","promoter_type")], by="CREID",copy=F)}}
+
+if (SCAFE_directory == "NA"){
+if (genome == "hg38"){CRE=read.delim(paste0(resource_directory,"CTSS_cluster/hg38.CRE.info.p.e.se.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
 table0_model4a <- left_join(table0_model4a,CRE[,c("CREID","promoter_type")], by="CREID",copy=F)}
+if (genome == "mm10"){CRE=read.delim(paste0(resource_directory,"CTSS_cluster/mm10.CRE.info.p.e.se.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
+table0_model4a <- left_join(table0_model4a,CRE[,c("CREID","promoter_type")], by="CREID",copy=F)}
+}
+
+
 transcript_info <- left_join(transcript_info, table0_model4a, by=c("n5_string"="V4"),copy=F)
 
 table0_model5 <- read.delim(paste0(path1,out_prefix,".end5.cluster.region.gencode5n.bed.gz"), header=F, stringsAsFactors = F, check.names = F) 
