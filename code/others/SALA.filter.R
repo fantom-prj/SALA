@@ -389,9 +389,11 @@ if (genome %in% c("hg38","mm10","mm39")){
 table0_model4a <- left_join(table0_model4a,CRE[,c("CREID","promoter_type")], by="CREID",copy=F)}}
 
 if (SCAFE_directory == "NA"){
-if (genome == "hg38"){CRE=read.delim(paste0(resource_directory,"CTSS_cluster/hg38.CRE.info.p.e.se.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
+table0_model4a <- unique(table0_model4[,c(4,16,22)])%>%group_by(V4)%>%dplyr::summarise(TSScluster=paste(unique(V16), collapse=";"),
+                                                                                    CREID=paste(unique(V22), collapse=";"))
+if (genome == "hg38"){CRE=read.delim(paste0(resource_directory,"/CTSS_cluster/hg38.CRE.info.p.e.se.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
 table0_model4a <- left_join(table0_model4a,CRE[,c("CREID","promoter_type")], by="CREID",copy=F)}
-if (genome == "mm10"){CRE=read.delim(paste0(resource_directory,"CTSS_cluster/mm10.CRE.info.p.e.se.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
+if (genome == "mm10"){CRE=read.delim(paste0(resource_directory,"/CTSS_cluster/mm10.CRE.info.p.e.se.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
 table0_model4a <- left_join(table0_model4a,CRE[,c("CREID","promoter_type")], by="CREID",copy=F)}
 }
 
