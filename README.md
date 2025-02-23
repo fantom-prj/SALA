@@ -127,6 +127,7 @@ Usage: end5_guided_assembler_v1.1.pl [options] --qry_bed_bgz --ref_bed_bgz --out
    --bedtools_bin               (optional) [path]    path to the binary of bedtools, if not provided, "bedtools" will be called
    --tabix_bin                  (optional) [path]    path to the binary of tabix, if not provided, "tabix" will be called
    --bgzip_bin                  (optional) [path]    path to the binary of bgzip, if not provided, "bgzip" will be called
+   --conf_junction_bed          (optional) [path]    path to confident splicing junction bed
 
 ```
 Test run:
