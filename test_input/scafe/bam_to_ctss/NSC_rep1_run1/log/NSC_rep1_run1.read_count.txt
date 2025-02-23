@@ -1,2 +1,0 @@
-total_read_num	passed_read_num
-15291	11370

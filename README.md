@@ -253,7 +253,7 @@ Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> 
 	require.5'.confidence         <required>	if Yes, all the novel transcripts are required to have their 5’ ends located inside confident TSS clusters
 	SALA_gene_path                <required>	path of the folder of SALA gene annotation output
 	sample_file                   <required>	txt file for the input library: column1, library prefix; column2, sample ID; column3, sampleID with replicate ID
-	SCAFE_directory               <required>	path of the folder of SCAFE output
+	SCAFE_directory               <required>	path of the folder of SCAFE output (NA if SCAFE is skipped)
 	genome                        <required>    genome name: hg38, mm10, mm39 or NA, control promoter typing
 	CPAT_path                     <optional>	path of the folder expected for CPAT result
 ```

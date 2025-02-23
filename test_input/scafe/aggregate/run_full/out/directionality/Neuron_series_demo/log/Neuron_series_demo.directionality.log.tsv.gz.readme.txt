@@ -1,0 +1,38 @@
+=================
+File descriptions
+=================
+Directionality information of CREs, with count and summit information on both strands
+
+
+===================
+Column descriptions
+===================
+
+column             description
+------             -----------
+CREID              [unique ID] Identifier of the CRE
+locusStr           [string] Locus string in format of chrom:start-end
+proximity          [unique ID] proximity of the CRE
+directionality     [-1 to 1] 0 is purely unidirectional, +ve value refers to divergently bidirectional, greater value more balanced e.g. 1 refers to perfectly balanced divergently bidirectional. -ve refers to convergent
+orientation        [unidirectional, convergent or divergent] unidirectional when signal on only one strand, divergent when reverse strand signal summit is upstream of the forward strand signal summit, or convergent if opposite
+bias_strand        [+,- or .] Dorminant strand (strand with higher signal), . if equal on both strand
+fwd_count          [integer] count on the forward strand
+rev_count          [integer] count on the reverse strand
+chrom              [string] chromosome
+summit_center      [integer] midpoint of the summit on two strands, or the summit itself if there is only signal on one strand
+abs_summit_diff    [integer] absolute distance between the summit on the two strands
+oritn_summit_diff  [string] distance between the summit on the two strands, +ve if divergent and -ve if convergent
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Neuron_series_demo.directionality.log.tsv.gz was created from running,
+
+2025-02-21 01:08
+/home/yip/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.directionality
+--overwrite=yes
+--CRE_bed_path=./demo_output_local/scafe/aggregate/run_full/out/annotate/Neuron_series_demo/bed/Neuron_series_demo.CRE.coord.bed.gz
+--CRE_info_path=./demo_output_local/scafe/aggregate/run_full/out/annotate/Neuron_series_demo/log/Neuron_series_demo.CRE.info.tsv.gz
+--ctss_bed_path=./demo_output_local/scafe/aggregate/run_full/out/aggregate/Neuron_series_demo/bed/Neuron_series_demo.aggregate.collapse.ctss.bed.gz
+--outputPrefix=Neuron_series_demo
+--outDir=./demo_output_local/scafe/aggregate/run_full/out/directionality/
+

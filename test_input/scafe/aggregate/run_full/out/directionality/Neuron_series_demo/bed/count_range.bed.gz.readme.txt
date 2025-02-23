@@ -1,0 +1,18 @@
+=================
+File descriptions
+=================
+Bed file contains the regions used to count signal, based on the summits on the two strands
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+count_range.bed.gz was created from running,
+
+2025-02-21 01:08
+/home/yip/SALA/code/SCAFEv1.0.1/scripts/scafe.tool.cm.directionality
+--overwrite=yes
+--CRE_bed_path=./demo_output_local/scafe/aggregate/run_full/out/annotate/Neuron_series_demo/bed/Neuron_series_demo.CRE.coord.bed.gz
+--CRE_info_path=./demo_output_local/scafe/aggregate/run_full/out/annotate/Neuron_series_demo/log/Neuron_series_demo.CRE.info.tsv.gz
+--ctss_bed_path=./demo_output_local/scafe/aggregate/run_full/out/aggregate/Neuron_series_demo/bed/Neuron_series_demo.aggregate.collapse.ctss.bed.gz
+--outputPrefix=Neuron_series_demo
+--outDir=./demo_output_local/scafe/aggregate/run_full/out/directionality/
+
