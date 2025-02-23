@@ -375,7 +375,7 @@ table0_model4 <- left_join(table0_model4,cluster[,c(1,16)],by=c("V16"="clusterID
 table0_model4a <- unique(table0_model4[,c(4,16,25)])%>%group_by(V4)%>%dplyr::summarise(TSScluster=paste(unique(V16), collapse=";"),
                                                                                     CREID=paste(unique(CREID), collapse=";"))
 
-if (genonme %in% c("hg38","mm10","mm39")){
+if (genome %in% c("hg38","mm10","mm39")){
 table0_model4a <- left_join(table0_model4a,CRE[,c("CREID","promoter_type")], by="CREID",copy=F)}
 transcript_info <- left_join(transcript_info, table0_model4a, by=c("n5_string"="V4"),copy=F)
 
