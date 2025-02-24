@@ -1,14 +1,13 @@
 # List of required packages
-required_packages <- c(
-  "bambu"
-)
+required_packages <- "bambu"
+
 
 # Function to check and install missing packages
 install_if_missing <- function(packages) {
   missing_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
   if (length(missing_packages) > 0) {
     message("Installing missing packages: ", paste(missing_packages, collapse=", "))
-    BiocManager::install(missing_packages, ask=FALSE)
+    devtools::install_github("GoekeLab/bambu", ref = "test_split_read_classes")
   }
 }
 
@@ -17,16 +16,15 @@ if (!requireNamespace("BiocManager", quietly=TRUE)) {
   install.packages("BiocManager")
 }
 
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools", repos = "https://cloud.r-project.org", dependencies = TRUE)
+}
+
 # Install missing packages
 install_if_missing(required_packages)
 
 # load packages
 suppressPackageStartupMessages(library(bambu))
-
-bam_path <- "/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/data/SCAFE.step1.bam.list.txt"
-fa.file <- "/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/resources/for_demo/chr20_subset.fasta"
-SALA_gtf <- "/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/demo_output_local/sala/transcript/Neuron_series_demo/log/table4.Detected_Ref.gtf.gz"
-results_dir <- "/Users/yip/Library/CloudStorage/OneDrive-Personal/Documents/my_gid/SALA/demo_output_local/sala/transcript/Neuron_series_demo/bambu"
 
 #bam_path <- "/analysisdata/fantom6/Interactome/ONT.CAGE.satellite/dorado_run/git_folder/data/SCAFE.step1.bam.list.txt"
 #fa.file <- "/analysisdata/fantom6/Interactome/ONT.CAGE.satellite/dorado_run/git_folder/resources/chr17_chr18.fasta"
