@@ -23,7 +23,7 @@ The transcript Start-site Aware Long-read Assembler (SALA) is developed for de n
 
 ## SALA requires the following tools to run
 * Perl (tested with v5.26.2, installed from https://www.perl.org/get.html)
-* R (tested with v4.0.4, installed from: https://cran.r-project.org/)
+* R (tested with v4.2, installed from: https://cran.r-project.org/)
 * SCAFE (Moody et al. 2022) (tested with v1.0.1, located at ./code/SCAFEv1.0.1/scripts)
 * paraclu (Frith et al. 2008) (located at ./resources/bin/paraclu/paraclu)
 * samtools (Danecek et al. 2021) (tested with v1.11 , located at ./resources/bin/samtools/samtools)
