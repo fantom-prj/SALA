@@ -51,6 +51,8 @@ print("starting running bambu...")
 bam <- read.delim(bam_path, header = F, stringsAsFactors = F, check.names = F)
 test.bam <- bam$V3
 annotations <- prepareAnnotations(SALA_gtf)
+ID_link=unique(data.frame(cbind(mcols(annotations)$GENEID, bambu:::assignGeneIds(annotations, GRangesList())$GENEID)))
+ID_link=ID_link%>%group_by(X2)%>%dplyr::summarise(geneID=paste(X1,collapse=";"))
 mcols(annotations)$GENEID <- bambu:::assignGeneIds(annotations, GRangesList())$GENEID
 dir.create(paste0(results_dir,"/rcOut"), recursive=TRUE)
 se <- bambu(reads =  test.bam, 
@@ -64,3 +66,19 @@ writeBambuOutput(se, results_dir)
 print(paste0("finish running bambu. results located in ",results_dir))
 
 #=====
+gene_count <- read.delim(paste0(results_dir,"/counts_gene.txt"), header=T)
+transcript_count <- read.delim(paste0(results_dir,"/counts_transcript.txt"), header=T)
+transcript_CMP <- read.delim(paste0(results_dir,"/CPM_transcript.txt"), header=T)
+gene_count <- left_join(gene_count, ID_link, by=c("GENEID"="X2"), copy=F)
+transcript_count <- left_join(transcript_count, ID_link, by=c("GENEID"="X2"), copy=F)
+transcript_CMP <- left_join(transcript_CMP, ID_link, by=c("GENEID"="X2"), copy=F)
+write.table(gene_count, paste0(results_dir,"/counts_gene.txt"), col.names=T, row.names=F, sep="\t", quote=F)
+write.table(transcript_count, paste0(results_dir,"/counts_transcript.txt"), col.names=T, row.names=F, sep="\t", quote=F)
+write.table(transcript_CMP, paste0(results_dir,"/CPM_transcript.txt"), col.names=T, row.names=F, sep="\t", quote=F)
+
+
+
+
+
+
+
