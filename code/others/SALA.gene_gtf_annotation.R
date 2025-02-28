@@ -26,6 +26,7 @@ suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(magrittr))
 suppressPackageStartupMessages(library(tidyr))
 suppressPackageStartupMessages(library(stringr))
+suppressPackageStartupMessages(library(ggplot2))
 
 #SALA_directory="/analysisdata/fantom6/Interactome/ONT.CAGE.satellite/dorado_run/git_folder/demo_output_local/sala/transcript/Neuron_series_demo"
 #out_prefix="Neuron_series_demo"
@@ -153,10 +154,46 @@ transcript_info_final <- left_join(transcript_info_final,gencode_tran1[,c(4,14)]
 write.table(transcript_info_final, gzfile(paste0(path2,out_prefix,".table4_filtered.noIP.All_Ref_updated.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
 rm(gene_model,gencode_gene,transcript_model,gencode_tran)
 print(paste0(out_prefix,".table4_filtered.noIP.All_Ref_updated.tsv.gz exported to ",path2))
-print("start building gtf")
+
+#===============
+# pie chart
+transcript_info_final$promoter_type[which(transcript_info_final$promoter_type%in% c("CTCF-alone","unclassed"))] <- NA
+transcript_info_final$promoter_type[which(is.na(transcript_info_final$promoter_type))] <- "others"
+transcript_info_final$promoter_type <- gsub("-like","",transcript_info_final$promoter_type)
+piet <- transcript_info_final[which(transcript_info_final$ref_source != "non_detectable_ref"),]%>%group_by(gene_novelty, transcript_novelty, promoter_type)%>%dplyr::summarise(count=n())
+piet$transcript_novelty[which(piet$gene_novelty == "Ref" & piet$transcript_novelty == "Novel")] <- "Novel\nisoform"
+piet$transcript_novelty[which(piet$gene_novelty == "Novel" & piet$transcript_novelty == "Novel")] <- "Novel_gene\ntranscript"
+piet$transcript_novelty[which(piet$gene_novelty == "Ref" & piet$transcript_novelty == "Ref")] <- "Ref\ntranscript"
+piet$gene_novelty=paste0(piet$gene_novelty,"_gene")
+piet$gene_novelty <- factor(piet$gene_novelty, levels=c("Novel_gene","Ref_gene"))
+piet$transcript_novelty <- factor(piet$transcript_novelty, levels=c("Novel_gene\ntranscript","Novel\nisoform","Ref\ntranscript"))
+piet$promoter_type <- factor(piet$promoter_type, levels=c("enhancer","promoter","others"))
+piet$promoter_level=paste0(piet$transcript_novelty,":",piet$promoter_type)
+
+piet_t <- piet%>%group_by(transcript_novelty)%>%dplyr::summarise(count=sum(count),group="transcript")%>%mutate(ymin = c(0, cumsum(count)[-length(count)]), ymax = cumsum(count), xmin = 0.5, xmax = 1.4)%>%rename(category = transcript_novelty)
+piet_g <- piet%>%group_by(gene_novelty)%>%dplyr::summarise(count=sum(count),group="gene")%>%mutate(ymin = c(0, cumsum(count)[-length(count)]), ymax = cumsum(count), xmin = 1.41, xmax = 1.55)%>%rename(category = gene_novelty)
+piet_p <- piet%>%group_by(transcript_novelty,promoter_type)%>%dplyr::summarise(count=sum(count),group="promoter_type",.groups = "drop")%>%mutate(ymin = c(0, cumsum(count)[-length(count)]), ymax = cumsum(count), xmin = 1.55, xmax = 1.69)%>%rename(category = promoter_type)
+combine <- rbind(piet_t, piet_g, piet_p[,c(2:8)])
+combine$label <- paste0(combine$category,": ",combine$count)
+combine$label[which(combine$group == "gene")] <- paste0(combine$category[which(combine$group == "gene")])
+combine$label[which(combine$group == "promoter_type")] <- NA
+
+plot1 <- ggplot(combine) +
+  geom_rect(aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = category, alpha=group), color="white", size=0.2) +
+  scale_fill_manual(values=c("Novel_gene\ntranscript"="violet","Novel\nisoform"="orange","Ref\ntranscript"="forestgreen","Ref_gene"="forestgreen","Novel_gene"="deepskyblue1","enhancer"="black","promoter"="grey","others"="white"), breaks = c("enhancer", "promoter"))+
+  scale_alpha_manual(values=c("gene"=0.6,"transcript"=0.6, "promoter_type"=1), guide=NULL) +
+  coord_polar("y", start = 0) + 
+  theme_void() +
+  geom_text(aes(x = xmin+(xmax-xmin)/1.5-0.02, y = (ymin + ymax) / 2, label = label), color = "black", size=2.2, lineheight = 0.6) +  
+  theme(legend.position = "right", legend.key.size = unit(0.2, 'cm'), plot.title = element_text(hjust = 0.5,  color ="black"), text = element_text(size=6)) +
+  labs(title = "Detectable transcript and gene models", fill="promoter-type")
+suppressWarnings({pdf(paste0(path2,out_prefix,"detectable_transcript_content.pdf"), width = 3, height = 3)
+print(plot1)
+dev.off()})
+
 
 ###make gtf from bed12, bed6 exon, gene bed, gene info and GENCODE gtf
-
+print("start building gtf")
 gencode.gtf <- fread(ref_gtf, header=F, stringsAsFactors = F)
 table0.bed12 <- read.delim(paste0(path1,out_prefix,".model.bed.bgz"),header=F, stringsAsFactors = F, check.names = F)
 table0.bed6 <- read.delim(paste0(path1,out_prefix,".model.bed6.bed.gz"),header=F, stringsAsFactors = F, check.names = F)
