@@ -82,7 +82,7 @@ This tool assigns long-read sequencing data (as query) to a set of reference tra
 ```
 Usage: end5_guided_assembler_v1.1.pl [options] --qry_bed_bgz --ref_bed_bgz --out_dir
    
-   --qry_bed_bgz                <required> [path]    bed 12 of the ONT CAGE reads, 4th column must be read ID and in bgz format, 
+   --qry_bed_bgz                <required> [path]    bed 12 of the long-reads, 4th column must be read ID and in bgz format, 
                                                      for multiple query bed, user can supply a list of path in plain text format, one line one path
    --ref_bed_bgz                <required> [path]    bed 12 of the reference transcript models, 4th column must be transcript ID and in bgz format
    --out_dir                    <required> [path]    output directory
