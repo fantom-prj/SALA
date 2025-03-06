@@ -142,7 +142,7 @@ cd /your/SALA/directory/
 --qry_bed_bgz=./test_input/input/bam_to_bed/combined.bed.bgz \
 --ref_bed_bgz=./resources/GENCODE_V39/transcript.bed.bgz \
 --out_dir=./test_input/sala/transcript \
---chrom_size_path=./resources/chrom.sizes.tsv \
+--chrom_size_path=./resources/chrom.sizes_major.tsv \
 --chrom_fasta_path=./resources/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta \
 --conf_end5_bed_bgz=./test_input/scafe/aggregate/run_full/out/annotate/Neuron_series_demo/bed/Neuron_series_demo.cluster.coord.bed.bgz \
 --conf_end3_bed_bgz=./test_input/input/CTES_clusters/scafe/cluster/Neuron_series_demo.CTES.s3_n3_c5/bed/Neuron_series_demo.CTES.s3_n3_c5.tssCluster.bed.bgz \
