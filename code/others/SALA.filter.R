@@ -111,8 +111,8 @@ rm(table0_model, table0_model3n, table0_model5n)
 
 #===========
 system(paste0(bedtools_bin," bed12tobed6 -i ",path1,out_prefix,".model.bed.bgz | gzip > ", path1,out_prefix,".model.bed6.bed.gz"))
-system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end3.bed.bgz -b ",ref_directory,"/n3.bed.gz | gzip > ", path1,out_prefix,".end3.cluster.region.gencode3n.bed.gz"))
-system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",ref_directory,"/n5.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.gencode5n.bed.gz"))
+system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end3.bed.bgz -b ",ref_directory,"/n3.bed.gz | gzip > ", path1,out_prefix,".end3.cluster.region.ref3n.bed.gz"))
+system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",ref_directory,"/n5.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.ref5n.bed.gz"))
 if (SCAFE_directory != "NA"){
 system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".cluster.coord.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.cluster.bed.gz"))
 if (genome == "hg38"){
@@ -192,6 +192,11 @@ print("Add gene group and full-length read count")
 ref_info <- fread(paste0(ref_directory,"/transcript_to_gene.tsv"), header = FALSE, stringsAsFactors = FALSE)
 transcript_info <- fread(paste0(path2,out_prefix, ".model.info.tsv.gz"), header = TRUE, stringsAsFactors = FALSE)
 transcript_info <- data.frame(transcript_info)
+
+#keep only major chromosome
+transcript_info$chr=sapply(strsplit(transcript_info$loc,":"),"[",1)
+transcript_info=transcript_info[which(nchar(transcript_info$chr)<=5),c(1:18)]
+
 gene_info <- fread(SALA_gene_info, header=T, stringsAsFactors = F, check.names = F)
 
 colnames(gene_info)[c(7,8)]=c("IN1_gene_ID","IN1_gene_name")
@@ -304,7 +309,7 @@ transcript_info <- left_join(transcript_info, table0_model3n[c(4,9)], by=c("mode
 rm(internal_prime_sample,n3_ref,table0_model3n)
 
 #================================
-table0_model2 <- read.delim(paste0(path1,out_prefix,".end3.cluster.region.gencode3n.bed.gz"), header=F, stringsAsFactors = F, check.names = F) 
+table0_model2 <- read.delim(paste0(path1,out_prefix,".end3.cluster.region.ref3n.bed.gz"), header=F, stringsAsFactors = F, check.names = F) 
 transcript_info$n3_Reference <- "No"
 transcript_info$n3_Reference[which(transcript_info$n3_string %in% unique(table0_model2$V4))] <- "Yes"
 #transcript_info%>%group_by(n3_Reference)%>%summarise(count=n())
@@ -316,7 +321,7 @@ transcript_info$n3_support[grep("XT",transcript_info$n3_string)] <- "non_cluster
 data0 <- transcript_info[,c("model_ID","n3_Reference","n3_support")]
 data0$n3_support[which(data0$n3_support=="cluster")] <- "n3_cluster"
 data0$n3_support[which(data0$n3_support=="non_cluster")] <- NA
-data0$n3_Reference[which(data0$n3_Reference == "Yes")] <- "GENCODE"
+data0$n3_Reference[which(data0$n3_Reference == "Yes")] <- "Reference"
 data0$n3_Reference[which(data0$n3_Reference == "No")] <- NA
 data0 <- reshape2::melt(data0, id=1)
 data0 <- data0[which(!is.na(data0$value)),]
@@ -400,14 +405,14 @@ table0_model4a <- left_join(table0_model4a,CRE[,c("CREID","promoter_type")], by=
 
 transcript_info <- left_join(transcript_info, table0_model4a, by=c("n5_string"="V4"),copy=F)
 
-table0_model5 <- read.delim(paste0(path1,out_prefix,".end5.cluster.region.gencode5n.bed.gz"), header=F, stringsAsFactors = F, check.names = F) 
+table0_model5 <- read.delim(paste0(path1,out_prefix,".end5.cluster.region.ref5n.bed.gz"), header=F, stringsAsFactors = F, check.names = F) 
 transcript_info$n5_Reference <- "no"
 transcript_info$n5_Reference[which(transcript_info$n5_string %in% unique(table0_model5$V4))] <- "yes"
 #transcript_info%>%group_by(n5_Reference,promoter_type)%>%summarise(count=n())
 
 data1 <- transcript_info[,c("model_ID","CREID","n5_Reference")]
 data1$CREID[!is.na(data1$CREID)] <- "SCAFE"
-data1$n5_Reference[which(data1$n5_Reference == "yes")] <- "GENCODE"
+data1$n5_Reference[which(data1$n5_Reference == "yes")] <- "Reference"
 data1$n5_Reference[which(data1$n5_Reference == "no")] <- NA
 data1 <- reshape2::melt(data1, id=1)
 data1 <- data1[which(!is.na(data1$value)),]
@@ -422,10 +427,15 @@ transcript_info%>%group_by(n5_support)%>%dplyr::summarise(count=n(), .groups="dr
 if (length(args) >= 14 && nchar(args[14]) > 0) {
   cpat_path <- args[14]
   
-  print("Running CPAT...")
-  if (!dir.exists(cpat_path)) {dir.create(cpat_path)}
-  system(paste0("cpat -x ",resource_directory,"/CPAT/Human_Hexamer.tsv -d ",resource_directory,"/CPAT/Human_logitModel.RData  --top-orf=5 -g ",path1,out_prefix,".model.fasta -o ", cpat_path, "/output --log-file ", cpat_path, "/CPAT_run_info.log >/dev/null 2>&1"))
-  print("CPAT finished")
+  if (!file.exists(paste0(cpat_path,"/output.ORF_prob.best.tsv"))) {
+    print("Running CPAT...")
+    if (!dir.exists(cpat_path)) {dir.create(cpat_path)}
+    system(paste0("cpat -x ",resource_directory,"/CPAT/Human_Hexamer.tsv -d ",resource_directory,"/CPAT/Human_logitModel.RData  --top-orf=5 -g ",path1,out_prefix,".model.fasta -o ", cpat_path, "/output --log-file ", cpat_path, "/CPAT_run_info.log >/dev/null 2>&1"))
+    print("CPAT finished")
+  } else {
+    message("CPAT result already exists. Skip running CPAT.")
+  }
+  
   CPAT <- read.delim(paste0(cpat_path,"/output.ORF_prob.best.tsv"), header=T, stringsAsFactors=F, check.names=F)
   CPAT$seq_ID <- sapply(strsplit(CPAT$seq_ID, "\\("), "[", 1)
   transcript_info <- left_join(transcript_info, CPAT[, c(1, 8, 11)], by=c("model_ID"="seq_ID"), copy=F)
