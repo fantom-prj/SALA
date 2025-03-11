@@ -364,7 +364,7 @@ Major contribution for SALA development:
 
 1. Main: Chung-Chau Hon, Chi Wai Yip
 2. Modification of bambu: Andre Darah Sim, Ying Chen, Jonathan Göke
-3. Testing SALA: Callum Parr, Camilla Ugolini, Valeria Ranzani 
+3. Testing SALA: Hiromi Nishiyori-Sueki, Callum Parr, Camilla Ugolini, Valeria Ranzani 
 
 
 # <a name="ref"></a>References
