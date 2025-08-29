@@ -221,11 +221,11 @@ num <- ncol(read_info3)
 if (nrow(sample_info1b>0)){
   need <- unique(sample_info1b$sample_rep)
   for (i in 1:length(need)){
-    label <- sample_info1b$library_prefix[which(sample_info1b$sample_ID == need[i])]
+    label <- sample_info1b$library_prefix[which(sample_info1b$sample_rep == need[i])]
     read_info3$new <- rowSums(read_info3[,which(colnames(read_info3) %in% label)])
     colnames(read_info3)[num+i] <- need[i]}}
 
-label1 <- c(colnames(read_info3)[1],sample_info1$sample_rep)
+label1 <- c(colnames(read_info3)[1],unique(sample_info1$sample_rep))
 read_info3 <- read_info3[,label1]
 
 #add read count per sample
