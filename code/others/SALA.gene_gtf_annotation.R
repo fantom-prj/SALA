@@ -196,6 +196,7 @@ dev.off()})
 ###make gtf from bed12, bed6 exon, gene bed, gene info and GENCODE gtf
 print("start building gtf")
 gencode.gtf <- fread(ref_gtf, header=F, stringsAsFactors = F)
+gencode.gtf <- gencode.gtf[which(nchar(gencode.gtf$V1)<=5),]
 table0.bed12 <- read.delim(paste0(path1,out_prefix,".model.bed.bgz"),header=F, stringsAsFactors = F, check.names = F)
 table0.bed6 <- read.delim(paste0(path1,out_prefix,".model.bed6.bed.gz"),header=F, stringsAsFactors = F, check.names = F)
 table4.genebed <- read.delim(SALA_gene_bed, header=F, stringsAsFactors = F, check.names = F)
