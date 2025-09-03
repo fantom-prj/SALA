@@ -210,6 +210,8 @@ gencode.gtf.e <- gencode.gtf[which(gencode.gtf$V3 == "exon"),]
 gencode.gtf.g$gene_ID <- str_match(gencode.gtf.g$V9, 'gene_id "([^"]+)"')[,2]
 gencode.gtf.g$gene_type <- str_match(gencode.gtf.g$V9, 'gene_type "([^"]+)"')[,2]
 gencode.gtf.g$gene_name <- str_match(gencode.gtf.g$V9, 'gene_name "([^"]+)"')[,2]
+gencode.gtf.g <- gencode.gtf.g[which(gencode.gtf.g$gene_ID %in% unique(transcript_info_final$T4_gene_ID)),]
+
 gencode.gtf.ga <- gencode.gtf.g[-which(gencode.gtf.g$gene_ID %in% unique(transcript_info1bb$T4_gene_ID)),] 
 gencode.gtf.ga <- gencode.gtf.ga[,c(1:8,10:12)] #component1
 gencode.gtf.ga$V2 <- "Reference"
@@ -243,6 +245,8 @@ gencode.gtf.t$transcript_ID <- str_match(gencode.gtf.t$V9, 'transcript_id "([^"]
 gencode.gtf.t$gene_ID <- str_match(gencode.gtf.t$V9, 'gene_id "([^"]+)"')[,2]
 gencode.gtf.t$transcript_type <- str_match(gencode.gtf.t$V9, 'transcript_type "([^"]+)"')[,2]
 gencode.gtf.t$transcript_name <- str_match(gencode.gtf.t$V9, 'transcript_name "([^"]+)"')[,2]
+gencode.gtf.t <- gencode.gtf.t[which(gencode.gtf.t$transcript_ID %in% unique(transcript_info_final$model_ID)),]
+
 gencode.gtf.ta <- gencode.gtf.t[-which(gencode.gtf.t$transcript_ID %in% transcript_info1aa$model_ID),] 
 gencode.gtf.ta <- gencode.gtf.ta[,c(1:8,10:13)] #component1
 gencode.gtf.ta$V2 <- "Reference"
@@ -277,6 +281,8 @@ table4.bed12$V9 <- paste0("gene_id \"",table4.bed12$gene_ID,"\"; transcript_id \
 gencode.gtf.e$transcript_ID <- str_match(gencode.gtf.e$V9, 'transcript_id "([^"]+)"')[,2]
 gencode.gtf.e$exon_number <- str_match(gencode.gtf.e$V9, 'exon_number ([^"]+);')[,2]
 gencode.gtf.e$exon_id <- str_match(gencode.gtf.e$V9, 'exon_id "([^"]+)"')[,2]
+gencode.gtf.e <- gencode.gtf.e[which(gencode.gtf.e$transcript_ID %in% unique(transcript_info_final$model_ID)),]
+
 gencode.gtf.ea <- gencode.gtf.e[-which(gencode.gtf.e$transcript_ID %in% transcript_info1aa$model_ID),]  
 gencode.gtf.ea <- gencode.gtf.ea[,c(1:8,10:11)] #component1
 gencode.gtf.ea$exon_number <- as.character(gencode.gtf.ea$exon_number)
