@@ -357,6 +357,40 @@ print(paste0("table4.Detected_Ref.gtf.gz exported to ",path2))
 #==========================================================================================
 
 
+#============================================================
+#detectable alone - exclude partial
+transcript_info_final1 <- transcript_info_final[which(transcript_info_final$ref_source %in% c("fulllength_ref","novel_transcript")),]
+t4transcript <- unique(transcript_info_final1$model_ID)
+t4gene <- unique(transcript_info_final1$T4_gene_ID)
+
+#===split the gtf into transcript_info4 and revise gene range for all (all contain all ENSG and ENST)===
+gtf <- final
+gtf.gene <- final[which(final$V3=="gene"),]
+gtf.nogene <- final[which(final$V3!="gene"),]
+gtf.gene$gene_ID <- str_match(gtf.gene$V9, 'gene_id "([^"]+)"')[,2]
+gtf.nogene$transcript_ID <- str_match(gtf.nogene$V9, 'transcript_id "([^"]+)"')[,2]
+gtf.t <- gtf.nogene[which(gtf.nogene$V3=="transcript"),]
+gtf.gene4 <- gtf.gene[which(gtf.gene$gene_ID %in% t4gene),]
+gtf.nogene4 <- gtf.nogene[which(gtf.nogene$transcript_ID %in% t4transcript),]
+
+#revise gene region start end
+gtf.t$gene_ID <- str_match(gtf.t$V9, 'gene_id "([^"]+)"')[,2]
+gtf.t <- gtf.t[,c(4,5,10,11)]
+gtf.t4 <- gtf.t[which(gtf.t$transcript_ID %in% t4transcript),]
+gtf.g4 <- gtf.t4%>%group_by(gene_ID)%>%dplyr::summarise(gene_start=min(V4), gene_end=max(V5))
+
+gtf.gene4 <- left_join(gtf.gene4,gtf.g4,by="gene_ID", copy=F)
+gtf.gene4 <- gtf.gene4[,c(1:3,11,12,6:9)]
+colnames(gtf.gene4) <- colnames(gtf.nogene4)[c(1:9)]
+
+gtf4 <- rbind(gtf.gene4,gtf.nogene4[,c(1:9)])
+write.table(gtf4[order(gtf4$V1,gtf4$V4),],gzfile(paste0(path2,"table4.Detected_Fulllength_Ref.gtf.gz")), col.names=F, row.names=F, sep="\t", quote=F)
+
+print(paste0("table4.Detected_Fulllength_Ref.gtf.gz exported to ",path2))
+#==========================================================================================
+#validate the gtf
+#gzip -d -c table4.Detected_Fulllength_Ref.gtf.gz | bedparse gtf2bed | gzip > table4.Detected_Fulllength_Ref.bed12.bed.gz
+#==========================================================================================
 
 
 

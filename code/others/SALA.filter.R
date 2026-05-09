@@ -42,14 +42,15 @@ suppressPackageStartupMessages(library(tidyr))
 #sample_info="/analysisdata/fantom6/Interactome/ONT.CAGE.satellite/dorado_run/git_folder/demo_output_local/input/sample.txt"
 #SCAFE_directory="/analysisdata/fantom6/Interactome/ONT.CAGE.satellite/dorado_run/git_folder/demo_output_local/scafe/aggregate/run_full/out"
 #isoform_ratio=0.1
+#keep_internal_prime="No"
 #cpat_path="/analysisdata/fantom6/Interactome/ONT.CAGE.satellite/dorado_run/git_folder/demo_output_local/sala/transcript/Neuron_series_demo/cpat"
 #===========
 
 # Parse command-line arguments
 args <- commandArgs(trailingOnly = TRUE)
 
-if (length(args) < 12) {
-  stop("Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <fasta_file> <read.per.rep_ref.novel.Tx> <read.per.rep_non-ref.novel.Tx> <require.5'.confidence> <SALA_gene_path> <sample_file> <SCAFE_directory> <isoform_ratio> <genome> <CPAT_path(optional)>\n\n",
+if (length(args) < 14) {
+  stop("Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <fasta_file> <read.per.rep_ref.novel.Tx> <read.per.rep_non-ref.novel.Tx> <require.5'.confidence> <SALA_gene_path> <sample_file> <SCAFE_directory> <isoform_ratio> <genome> <keep_internal_prime> <CPAT_path(optional)>\n\n",
     "SALA_directory                <required>	path of the folder of SALA transcript annotation output\n",
 	"out_prefix                    <required>	output files prefix\n",
 	"resource_directory            <required>	path of the resources folder of SALA\n",
@@ -63,6 +64,7 @@ if (length(args) < 12) {
 	"sample_file                   <required>	txt file for the input library: column1, library prefix; column2, sample ID; column3, sampleID with replicate ID\n",
 	"SCAFE_directory               <required>	path of the folder of SCAFE output (NA if SCAFE is skipped)\n",
 	"genome                        <required>   genome name: hg38, mm10, mm39 or NA",
+	"keep_internal_prime           <required>   Yes or No (designed by poly-dT internal priming potential, set Yes if poly-dT priming is not used)",
 	"CPAT_path                     <optional>	path of the folder expected for CPAT result")}
 
 # Assign arguments to variables
@@ -79,8 +81,8 @@ SALA_gene_path <- args[10]
 sample_info <- args[11]
 SCAFE_directory <- args[12]
 genome <- args[13]
-
-#cpat_path <- args[14]
+keep_internal_prime <- args[14]
+#cpat_path <- args[15]
 
 #path
 path1 <- paste0(SALA_directory, "/bed/")
@@ -89,10 +91,10 @@ path3 <- paste0(SALA_directory, "/tmp/")
 SALA_gene_info <- paste0(SALA_gene_path,"/log/",out_prefix,".model.info.tsv.gz")
 SALA_gene_bed <- paste0(SALA_gene_path,"/bed/",out_prefix,".gene.bed.bgz")
 
-bedtools_bin <- paste0(resource_directory,"/bin/bedtools/bedtools")
-samtools_bin <- paste0(resource_directory,"/bin/samtools/samtools")
-tabix_bin <- paste0(resource_directory,"/bin/tabix/tabix")
-bgzip_bin <- paste0(resource_directory,"/bin/bgzip/bgzip")
+bedtools_bin <- "/usr/bin/bedtools"
+samtools_bin <- "/usr/bin/samtools"
+tabix_bin <- "/usr/bin/tabix"
+bgzip_bin <- "/usr/bin/bgzip"
 
 #===========
 #prepare 3'end and 5' end bed6 bed file from transcript models
@@ -110,25 +112,29 @@ write.table(table0_model3n[order(table0_model3n$V1,table0_model3n$V2),c(1:6)],gz
 rm(table0_model, table0_model3n, table0_model5n)
 
 #===========
+files=list.files(path=SCAFE_directory, pattern="CRE.coord.bed.gz", recursive=T)
+out_prefix2=sapply(strsplit(files[1],"\\/"),"[",2)
+
 system(paste0(bedtools_bin," bed12tobed6 -i ",path1,out_prefix,".model.bed.bgz | gzip > ", path1,out_prefix,".model.bed6.bed.gz"))
 system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end3.bed.bgz -b ",ref_directory,"/n3.bed.gz | gzip > ", path1,out_prefix,".end3.cluster.region.ref3n.bed.gz"))
 system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",ref_directory,"/n5.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.ref5n.bed.gz"))
 if (SCAFE_directory != "NA"){
-system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".cluster.coord.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.cluster.bed.gz"))
+system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".cluster.coord.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.cluster.bed.gz"))
+
 if (genome == "hg38"){
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-ELS.all.enhancer.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.e.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-PLS.all.promoter.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.p.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.c.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/F5_enhancer/hg38_robust_enhancers.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.andersson.robust.e.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/F5_enhancer/hg38_permissive_enhancers.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.andersson.permissive.e.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-ELS.all.enhancer.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.e.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-PLS.all.promoter.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.p.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.c.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/F5_enhancer/hg38_robust_enhancers.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.andersson.robust.e.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/F5_enhancer/hg38_permissive_enhancers.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.andersson.permissive.e.bed"))
 }else if (genome == "mm10"){
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-ELS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.e.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-PLS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.p.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.c.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-ELS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.e.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-PLS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.p.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.c.bed"))
 }else if (genome == "mm39"){
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-ELS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.e.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-PLS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.p.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.c.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-ELS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.e.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-PLS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.p.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.c.bed"))
 }else {print("promoter type intersection skipping due to unmatched genome")}}
 
 if (SCAFE_directory == "NA"){
@@ -185,8 +191,48 @@ with_IP=100-(sum(extracted_df$TES_count[which(extracted_df$internal_prime == "no
 print(paste0("% of transcript model with potential internal priming: ", signif(with_IP,3),"%"))
 extracted_df=extracted_df[,c(1:3,105:108)]
 write.table(extracted_df,gzfile(paste0(path2,"potential_internal_prime_TES.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
-rm(extracted_df)
-rm(t0bed12, t0bed12a3)
+rm(t0bed12)
+
+#====================
+# PAS search
+print("PAS search")
+gr <- GRanges(seqnames = t0bed12a3$V1, ranges = IRanges(start = t0bed12a3$V2+1, end = t0bed12a3$V3), strand = t0bed12a3$V6)
+names(gr) <- t0bed12a3$V4
+# Extract sequences
+extracted_seqs <- getSeq(genome_seq, gr)
+
+extracted_df <- data.frame(TES_ID = names(gr), sequence = as.character(extracted_seqs))
+extracted_df <- left_join(extracted_df, t0bed12a3[,c(4,5)], by=c("TES_ID"="V4"), copy=F)
+colnames(extracted_df)[3] <- "TES_count"
+# take window from -41 to -5 (-35 to -5 refer to the last nt of PAS motif)
+extracted_df$sequence <- substr(extracted_df$sequence, 10, 46)
+
+motifs <- c("AATAAA", "ATTAAA", "TATAAA", "AGTAAA", "AATATA", "CATAAA", "GATAAA", "AAAAAA", "TTTAAA", "ACTAAA", "AATACA", "AATAGA", "AAGAAA", "AATAAG", "AATAAT", "AATGAA", "AATTAA", "ATTATA")
+motifs_score <- c(7.792203, 6.470447, 5.084153, 4.861009, 4.336938, 3.985540, 3.985540, 3.921002, 3.762397, 3.474715, 3.238326, 3.238326, 3.227855, 3.207235, 3.207235, 3.207235, 3.207235, 3.015182)
+motif_df <- data.frame(motifs = motifs, score = motifs_score, stringsAsFactors = FALSE)
+
+df_long <- do.call(rbind, lapply(motif_df$motifs, function(motif) {
+  hits <- gregexpr(motif, extracted_df$sequence, fixed = TRUE)
+  
+  data.frame(
+    TES_ID = extracted_df$TES_ID,
+    sequence = extracted_df$sequence,
+    motifs = motif,
+    start = sapply(hits, function(x) if (x[1] == -1) NA else x[1])
+  )
+}))
+df_long <- left_join(df_long, motif_df, by="motifs",copy=F)
+df_long <- df_long[which(!is.na(df_long$start)),]
+df_long1 <- df_long%>%group_by(TES_ID)%>%slice_max(score)
+df_long1 <- df_long1%>%group_by(TES_ID)%>%slice_min(abs(15-start))
+df_long1 <- df_long1%>%group_by(TES_ID)%>%slice_max(start)
+
+df_long1$PAS_3pos <- df_long1$start-42+5
+colnames(df_long1)[c(3,5)] <- c("PAS", "PAS_score")
+write.table(df_long1[,c(1,3,5,6)],gzfile(paste0(path2,"PAS_TES.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
+
+rm(extracted_df, t0bed12a3)
+
 #====================
 print("Add gene group and full-length read count")
 ref_info <- fread(paste0(ref_directory,"/transcript_to_gene.tsv"), header = FALSE, stringsAsFactors = FALSE)
@@ -332,14 +378,22 @@ transcript_info <- left_join(transcript_info, data01, by="model_ID", copy=F)
 transcript_info$n3_support[which(is.na(transcript_info$n3_support))] <- "no_support"
 transcript_info$n3_support[which(transcript_info$internal_priming == "Yes")] <- "internal_priming"
 transcript_info%>%group_by(n3_support)%>%dplyr::summarise(count=n(), .groups="drop_last")
+
+table0_model3n <- read.delim(paste0(path1,out_prefix,".model.3n.bed.gz"), header=F, stringsAsFactors = F, check.names = F)
+table0_model3n$TES <- paste0(table0_model3n$V1,"_",table0_model3n$V2,"_",table0_model3n$V3,"_",table0_model3n$V6)
+table0_model3n <- left_join(table0_model3n,df_long1[,c("TES_ID","PAS","PAS_score","PAS_3pos")], by=c("TES"="TES_ID"),copy=F)
+transcript_info <- left_join(transcript_info, table0_model3n[,c("V4","TES","PAS","PAS_score","PAS_3pos")], by=c("model_ID" = "V4"), copy=F)
+
+rm(table0_model3n, df_long1)
+
 #===================================================================================================================
 if (SCAFE_directory != "NA"){
-CRE <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".CRE.info.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
+CRE <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/log/",out_prefix2,".CRE.info.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
 if (genome %in% c("hg38","mm10","mm39")){
 print("Perform SCAFE - SCREEN connection")
-CRE.p <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.p.bed"), header=F, stringsAsFactors = F, check.names = F)
-CRE.e <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.e.bed"), header=F, stringsAsFactors = F, check.names = F)
-CRE.ctcf <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.c.bed"), header=F, stringsAsFactors = F, check.names = F)
+CRE.p <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.p.bed"), header=F, stringsAsFactors = F, check.names = F)
+CRE.e <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.e.bed"), header=F, stringsAsFactors = F, check.names = F)
+CRE.ctcf <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.c.bed"), header=F, stringsAsFactors = F, check.names = F)
 
 CREp=unique(CRE.p$V4[which(CRE.p$V19 ==0)])
 CREe=unique(CRE.e$V4[which(CRE.e$V19 ==0)])
@@ -358,23 +412,23 @@ CRE$promoter_type[which(CRE$enhancer ==1)]="enhancer-like"
 CRE$promoter_type[which(CRE$promoter ==1)]="promoter-like"
 
 ###sample-specific bi-directional enhancer###
-CREdir=read.delim(paste0(SCAFE_directory,"/directionality/",out_prefix,"/log/",out_prefix,".directionality.log.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
+CREdir=read.delim(paste0(SCAFE_directory,"/directionality/",out_prefix2,"/log/",out_prefix2,".directionality.log.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
 CREdir$fwd_rev_count=CREdir$fwd_count+CREdir$rev_count
 CREdir$orientation[which(abs(CREdir$directionality)<=0.2)]="unidirectional"
 CREdir$orientation[which(CREdir$orientation == "divergent")]="bidirectional"
 CRE=left_join(CRE,CREdir[,c(1,4,5,7,8,13,10)],by="CREID",copy=F)
-write.table(CRE, paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".CRE.info.p.e.se.tsv"), col.names=T, row.names=F, sep="\t", quote=F)}
+write.table(CRE, paste0(SCAFE_directory,"/annotate/",out_prefix2,"/log/",out_prefix2,".CRE.info.p.e.se.tsv"), col.names=T, row.names=F, sep="\t", quote=F)}
 
 if (genome == "hg38"){
-re=read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.andersson.robust.e.bed"), header=F, stringsAsFactors = F, check.names = F)
-pe=read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.andersson.permissive.e.bed"), header=F, stringsAsFactors = F, check.names = F)
+re=read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.andersson.robust.e.bed"), header=F, stringsAsFactors = F, check.names = F)
+pe=read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.andersson.permissive.e.bed"), header=F, stringsAsFactors = F, check.names = F)
 re_e=unique(re$V4[which(re$V25 ==0)])
 pe_e=unique(pe$V4[which(pe$V25 ==0)])
 CRE$Andersson_robust=0
 CRE$Andersson_robust[which(CRE$CREID %in% re_e)]=1
 CRE$Andersson_permissive=0
 CRE$Andersson_permissive[which(CRE$CREID %in% pe_e)]=1
-write.table(CRE, paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".CRE.info.p.e.se.tsv"), col.names=T, row.names=F, sep="\t", quote=F)}}
+write.table(CRE, paste0(SCAFE_directory,"/annotate/",out_prefix2,"/log/",out_prefix2,".CRE.info.p.e.se.tsv"), col.names=T, row.names=F, sep="\t", quote=F)}}
 
 #==================================================
 print("Add n5 cluster annotation & promoter-type")
@@ -385,7 +439,7 @@ table0_model4 <- read.delim(paste0(path1,out_prefix,".end5.cluster.region.cluste
 
 
 if (SCAFE_directory != "NA"){
-cluster <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".cluster.info.tsv.gz"),header=T, stringsAsFactors = F, check.names = F)
+cluster <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/log/",out_prefix2,".cluster.info.tsv.gz"),header=T, stringsAsFactors = F, check.names = F)
 table0_model4 <- left_join(table0_model4,cluster[,c(1,16)],by=c("V16"="clusterID"),copy=F)
 table0_model4a <- unique(table0_model4[,c(4,16,25)])%>%group_by(V4)%>%dplyr::summarise(TSScluster=paste(unique(V16), collapse=";"),
                                                                                     CREID=paste(unique(CREID), collapse=";"))
@@ -424,8 +478,8 @@ transcript_info%>%group_by(n5_support)%>%dplyr::summarise(count=n(), .groups="dr
 
 #==================
 #coding potential by CPAT
-if (length(args) >= 14 && nchar(args[14]) > 0) {
-  cpat_path <- args[14]
+if (length(args) >= 15 && nchar(args[15]) > 0) {
+  cpat_path <- args[15]
   
   if (!file.exists(paste0(cpat_path,"/output.ORF_prob.best.tsv"))) {
     print("Running CPAT...")
@@ -452,7 +506,13 @@ if (length(args) >= 14 && nchar(args[14]) > 0) {
 write.table(transcript_info, gzfile(paste0(path2,out_prefix,".table0_raw.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
 print(paste0(out_prefix,".table0_raw.tsv.gz exported to ",path2))
 #remove internal priming
-transcript_info1 <- transcript_info[-which(transcript_info$n3_support == "internal_priming" & transcript_info$ref_source == "novel_transcript"),]
+if (keep_internal_prime == "No") {
+  transcript_info1 <- transcript_info[-which(transcript_info$n3_support == "internal_priming" & transcript_info$ref_source == "novel_transcript"),]
+  print("potential internal primed transcrpts are removed")
+} else {
+  transcript_info1=transcript_info
+  print("potential internal primed transcrpts are kept")
+}
 
 #n5_confid 
 if (n5_confid=="Yes"){transcript_info1=transcript_info1[which(transcript_info1$n5_support != "no_support"),]}
@@ -463,9 +523,14 @@ transcript_info_finala=transcript_info1[which(transcript_info1$ref_source!="nove
 transcript_info_finalb=transcript_info1[which(transcript_info1$isoform_filter=="standard" & transcript_info1$max_T_ratio >= as.numeric(isoform_ratio) & transcript_info1$gene_novelty == "Ref" & transcript_info1$ref_source == "novel_transcript"),]
 transcript_info_finalc=transcript_info1[which(transcript_info1$novel_gene_Tx_filter=="standard" & transcript_info1$gene_novelty == "Novel"),]
 transcript_info_final=rbind(transcript_info_finala,transcript_info_finalb,transcript_info_finalc)
-write.table(transcript_info_final, gzfile(paste0(path2,out_prefix,".table4_filtered.noIP.All_Ref.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
 
-print(paste0(out_prefix,".table4_filtered.noIP.All_Ref.tsv.gz exported to ",path2))
+if (keep_internal_prime == "No") {
+  write.table(transcript_info_final, gzfile(paste0(path2,out_prefix,".table4_filtered.noIP.All_Ref.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
+  print(paste0(out_prefix,".table4_filtered.noIP.All_Ref.tsv.gz exported to ",path2))
+} else {
+  write.table(transcript_info_final, gzfile(paste0(path2,out_prefix,".table4_filtered.All_Ref.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
+  print(paste0(out_prefix,".table4_filtered.All_Ref.tsv.gz exported to ",path2))
+}
 
 #bed12 for filtered table
 table0.bed12=read.delim(paste0(path1,out_prefix,".model.bed.bgz"), header=F, stringsAsFactors = F, check.names = F)
