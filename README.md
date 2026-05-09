@@ -230,15 +230,16 @@ Overall, this step will do the followings:
 1. Intersect 5’ ends and 3’ ends from reference transcript model to SALA 5’ end and 3’ end clusters
 2. Intersect ENCODE defined promoter-type to SCAFE confident tCREs
 3. Internal priming prediction, and filtering of internal primed novel transcript models
-4. Add initial gene ID  
-5. Incorporate full read count per transcript model
-6. Add transcript length and exon number
-7. Annotate 3’ end clusters
-8. Annotate 5’ end clusters
-9. Define promoter-type per transcript model
-10. If CPAT path is provided, CPAT coding potential prediction is performed and incorporate into the output table
-11. Export raw table with above details
-12. Filter to final table according to the parameters input, and export
+4. Perform PAS motif serach from the transcription end site of all the transcript models.
+5. Add initial gene ID  
+6. Incorporate full read count per transcript model
+7. Add transcript length and exon number
+8. Annotate 3’ end clusters, including internal priming prediction, PAS motif search and ref 3' end intersect
+9. Annotate 5’ end clusters, including confident tCREs, promoter-typing from ENCODE SCREEN cCRE
+10. Define promoter-type per transcript model
+11. If CPAT path is provided, CPAT coding potential prediction is performed and incorporate into the output table
+12. Export raw table with above details
+13. Filter to final table according to the parameters input, and export
 
 ```
 Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> <ref_directory> <fasta_file> <read.per.rep_ref.novel.Tx> <read.per.rep_non-ref.novel.Tx> <isoform_ratio> <require.5'.confidence> <SALA_gene_path> <sample_file> <SCAFE_directory> <genonme> <CPAT_path(optional)>
