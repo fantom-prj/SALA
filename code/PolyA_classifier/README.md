@@ -2,7 +2,7 @@
 
 Authors: Rodrigo Pracana, Carlos Alfonso-Gonzalez, Ivano Legnini
 
-In order to call bona fide 3’ ends for the transcripts detected by CFC-seq, we use a random forest classifier. We give an example that can be ran with the datasets available [here](../../resources/PolyA_classifier/). Specifically, we use a training set with the 3’ ends generated in the SALA demo (the file `Neuron_series_demo.end3.bed` in the [resources](../../resources/PolyA_classifier/)folder). The classifier trained using a curated database (hereon the "reference" dataset) of 3’ ends identified by FLAM-seq and 3p-seq of iPS and neuron organoids (Legnini et al., 2019 and Alfonso-Gonzalez et al., 2023), given in the file `reference_3prime.bed` in the [resources](../../resources/PolyA_classifier/) folder.
+In order to call bona fide 3’ ends for the transcripts detected by CFC-seq, we use a random forest classifier. We give an example that can be ran with the datasets available in the [resources folder](../../resources/PolyA_classifier/). Specifically, we use a training set with the 3’ ends generated in the SALA demo (the file `Neuron_series_demo.end3.bed`). The classifier trained using a curated database (hereon the "reference" dataset) of 3’ ends identified by FLAM-seq and 3p-seq of iPS and neuron organoids (Legnini et al., 2019 and Alfonso-Gonzalez et al., 2023), given in the file `reference_3prime.bed`.
 
 The  script used to train and evaluate the model is [`RunForest.R`](RunForest.R), and it relies on functions defined in the the file [`code/rf_helpers.R`](code/rf_helpers.R). The libraries used by the script can be installed with the script [`code/install_packages.R`](code/install_packages.R).
 
