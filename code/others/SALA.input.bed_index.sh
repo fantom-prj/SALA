@@ -1,28 +1,27 @@
 #!/bin/bash
 
 # Check if the correct number of arguments is provided
-if [ "$#" -ne 4 ]; then
-    echo "Usage: $0 <scafe_path> <n3_cluster_path> <tag> <resource_directory>"
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <results_path> <tag>"
     exit 1
 fi
 
 # Assign input parameters
-scafe_path="$1"
-n3_cluster_path="$2"
-tag="$3"
-resource_directory="$4"
+results_path="$1"
+tag="$2"
 
 # Define file paths
-file1="${scafe_path}/aggregate/run_full/out/annotate/${tag}/bed/${tag}.cluster.coord.bed.gz"
-file2="${scafe_path}/aggregate/run_full/out/aggregate/${tag}/bed/${tag}.aggregate.collapse.ctss.bed.gz"
-file3="${n3_cluster_path}/scafe/cluster/${tag}.CTES.s3_n3_c5/bed/${tag}.CTES.s3_n3_c5.tssCluster.bed.gz"
-file4="${n3_cluster_path}/end3_bed_bigwig/${tag}.end3.bed"
-file5="${n3_cluster_path}/end3_bed_bigwig/${tag}.end5.bed"
-file6="${n3_cluster_path}/end3_bed_bigwig/${tag}.end3.bed.gz"
-file7="${n3_cluster_path}/end3_bed_bigwig/${tag}.end5.bed.gz"
 
-tabix_bin="${resource_directory}/bin/tabix/tabix"
-bgzip_bin="${resource_directory}/bin/bgzip/bgzip"
+file1="${results_path}/annotate/${tag}/bed/${tag}.cluster.coord.bed.gz"
+file2="${results_path}/aggregate/${tag}/bed/${tag}.aggregate.collapse.ctss.bed.gz"
+file3="${results_path}/ctes_cluster/${tag}/bed/${tag}.tssCluster.bed.gz"
+file4="${results_path}/ctes_signal/${tag}/${tag}.end3.bed"
+file5="${results_path}/ctes_signal/${tag}/${tag}.end5.bed"
+file6="${file4}.gz"
+file7="${file5}.gz"
+
+tabix_bin="tabix"
+bgzip_bin="bgzip"
 
 # Function to compress and index BED files
 compress_and_index() {

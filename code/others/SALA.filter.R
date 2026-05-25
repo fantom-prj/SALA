@@ -91,10 +91,10 @@ path3 <- paste0(SALA_directory, "/tmp/")
 SALA_gene_info <- paste0(SALA_gene_path,"/log/",out_prefix,".model.info.tsv.gz")
 SALA_gene_bed <- paste0(SALA_gene_path,"/bed/",out_prefix,".gene.bed.bgz")
 
-bedtools_bin <- "/usr/bin/bedtools"
-samtools_bin <- "/usr/bin/samtools"
-tabix_bin <- "/usr/bin/tabix"
-bgzip_bin <- "/usr/bin/bgzip"
+bedtools_bin <- "bedtools"
+samtools_bin <- "samtools"
+tabix_bin <- "tabix"
+bgzip_bin <- "bgzip"
 
 #===========
 #prepare 3'end and 5' end bed6 bed file from transcript models
@@ -524,13 +524,8 @@ transcript_info_finalb=transcript_info1[which(transcript_info1$isoform_filter=="
 transcript_info_finalc=transcript_info1[which(transcript_info1$novel_gene_Tx_filter=="standard" & transcript_info1$gene_novelty == "Novel"),]
 transcript_info_final=rbind(transcript_info_finala,transcript_info_finalb,transcript_info_finalc)
 
-if (keep_internal_prime == "No") {
-  write.table(transcript_info_final, gzfile(paste0(path2,out_prefix,".table4_filtered.noIP.All_Ref.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
-  print(paste0(out_prefix,".table4_filtered.noIP.All_Ref.tsv.gz exported to ",path2))
-} else {
-  write.table(transcript_info_final, gzfile(paste0(path2,out_prefix,".table4_filtered.All_Ref.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
-  print(paste0(out_prefix,".table4_filtered.All_Ref.tsv.gz exported to ",path2))
-}
+write.table(transcript_info_final, gzfile(paste0(path2,out_prefix,".table4_filtered.All_Ref.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
+print(paste0(out_prefix,".table4_filtered.All_Ref.tsv.gz exported to ",path2))
 
 #bed12 for filtered table
 table0.bed12=read.delim(paste0(path1,out_prefix,".model.bed.bgz"), header=F, stringsAsFactors = F, check.names = F)
@@ -540,12 +535,3 @@ system(paste0("gunzip -c ",path1,out_prefix,".table4.bed12.bed.gz | ",bgzip_bin,
 system(paste0(tabix_bin," -p bed ",path1,out_prefix,".table4.bed12.bed.bgz"))
 
 print(paste0(out_prefix,".table4.bed12.bed.bgz exported to ",path1,". It is used for gene annotation."))
-
-
-
-
-
-
-
-
-

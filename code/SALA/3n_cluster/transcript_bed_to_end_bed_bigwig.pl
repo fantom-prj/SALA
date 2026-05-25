@@ -2,7 +2,7 @@
 use strict;
 use File::Basename;
 use File::Spec::Functions qw(rel2abs abs2rel);
-my ($transcript_bed, $chrom_size_path, $outPrefix, $outDir, $bedGraphToBigWig_bin) = @ARGV;
+my ($transcript_bed, $chrom_size_path, $outPrefix, $outDir) = @ARGV;
 
 system "mkdir -pm 755 $outDir";
 if ($transcript_bed =~ m/gz$/) {
@@ -63,7 +63,7 @@ foreach my $end (keys %{$end_info_hsh_ref}) {
 		my $bigwig_path = $end_info_hsh_ref->{$end}{'bigwig'}{$strand};
 		my $tmp_bed = "$outDir/tmp.bed";
 		my $awk_cmd = "awk -F'\\t' -v OFS='\\t' '\$6 == \"$strand\" {print \$1, \$2, \$3, \$5}' $bed >$tmp_bed";
-		my $bedGraphToBigWig_cmd = "$bedGraphToBigWig_bin $tmp_bed $chrom_size_path $bigwig_path";
+		my $bedGraphToBigWig_cmd = "bedGraphToBigWig $tmp_bed $chrom_size_path $bigwig_path";
 		system $awk_cmd;
 		system $bedGraphToBigWig_cmd;
 		system "rm $tmp_bed";

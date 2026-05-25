@@ -74,7 +74,7 @@ print("Start running...")
 #=====
 #add gene model
 ref_info <- fread(ref_in, header = FALSE, stringsAsFactors = FALSE)
-transcript_info_final <- read.delim(paste0(path2,out_prefix,".table4_filtered.noIP.All_Ref.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
+transcript_info_final <- read.delim(paste0(path2,out_prefix,".table4_filtered.All_Ref.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
 t4gene <- read.delim(SALA_gene_info, header=T, stringsAsFactors = F, check.names = F)
 colnames(t4gene)[c(7,8)] <- c("T4_gene_ID","T4_gene_name")
 transcript_info_final <- left_join(transcript_info_final,t4gene[,c(1,7,8)], by="model_ID", copy=F)
@@ -152,9 +152,9 @@ gencode_tran2 <- gencode_tran2%>%group_by(V4)%>%dplyr::summarise(Ref_transcript_
 gencode_tran1 <- left_join(gencode_tran1,gencode_tran2, by="V4", copy=F)
 gencode_tran1$Ref_transcript_adjust[is.na(gencode_tran1$Ref_transcript_adjust)] <- "No"
 transcript_info_final <- left_join(transcript_info_final,gencode_tran1[,c(4,14)], by=c("model_ID" = "V4"), copy=F)
-write.table(transcript_info_final, gzfile(paste0(path2,out_prefix,".table4_filtered.noIP.All_Ref_updated.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
+write.table(transcript_info_final, gzfile(paste0(path2,out_prefix,".table4_filtered.All_Ref_updated.tsv.gz")), col.names=T, row.names=F, sep="\t", quote=F)
 rm(gene_model,gencode_gene,transcript_model,gencode_tran)
-print(paste0(out_prefix,".table4_filtered.noIP.All_Ref_updated.tsv.gz exported to ",path2))
+print(paste0(out_prefix,".table4_filtered.All_Ref_updated.tsv.gz exported to ",path2))
 
 #===============
 # pie chart
@@ -391,8 +391,3 @@ print(paste0("table4.Detected_Fulllength_Ref.gtf.gz exported to ",path2))
 #validate the gtf
 #gzip -d -c table4.Detected_Fulllength_Ref.gtf.gz | bedparse gtf2bed | gzip > table4.Detected_Fulllength_Ref.bed12.bed.gz
 #==========================================================================================
-
-
-
-
-
