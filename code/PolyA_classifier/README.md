@@ -1,18 +1,18 @@
-# Random Forest classification and sequence analysis of transcriptome assemblies 3’ ends
+# Random Forest classification of 3’ ends
 
 Authors: Rodrigo Pracana, Carlos Alfonso-Gonzalez, Ivano Legnini
 
-In order to call bona fide 3’ ends for the transcripts detected by CFC-seq, we use a random forest classifier. We give an example that can be ran with the datasets available [here](../../resources/tx_end_model/). Specifically, we use a training set with the 3’ ends generated in the SALA demo (the file [Neuron_series_demo.end3.bed](../../resources/tx_end_model/Neuron_series_demo.end3.bed.gz)). The classifier trained using a curated database (hereon the "reference" dataset) of 3’ ends identified by FLAM-seq and 3p-seq of iPS and neuron organoids (Legnini et al., 2019 and Alfonso-Gonzalez et al., 2023), given in the file [`reference_3prime.bed`](../../resources/tx_end_model/reference_3prime.bed).
+In order to call bona fide 3’ ends for the transcripts detected by CFC-seq, we use a random forest classifier. We give an example that can be ran with the datasets available [here](../../resources/PolyA_classifier/). Specifically, we use a training set with the 3’ ends generated in the SALA demo (the file `Neuron_series_demo.end3.bed` in the [resources](../../resources/PolyA_classifier/)folder). The classifier trained using a curated database (hereon the "reference" dataset) of 3’ ends identified by FLAM-seq and 3p-seq of iPS and neuron organoids (Legnini et al., 2019 and Alfonso-Gonzalez et al., 2023), given in the file `reference_3prime.bed` in the [resources](../../resources/PolyA_classifier/) folder.
 
 The  script used to train and evaluate the model is [`RunForest.R`](RunForest.R), and it relies on functions defined in the the file [`code/rf_helpers.R`](code/rf_helpers.R). The libraries used by the script can be installed with the script [`code/install_packages.R`](code/install_packages.R).
 
 ## Model training and useage
 
-We use the genome assembly [GRCh38 GCA_000001405.15](https://www.encodeproject.org/files/GRCh38_no_alt_analysis_set_GCA_000001405.15/), which we subset to the standard chromosomes using [seqtk](https://github.com/lh3/seqtk):
+We use the genome assembly GRCh38 GCA_000001405.15, which can be downloaded from Encode [here](https://www.encodeproject.org/files/GRCh38_no_alt_analysis_set_GCA_000001405.15/), and which we subset to the standard chromosomes (file `cht.txt` in the [resources](../../resources/PolyA_classifier/) folder) using [seqtk](https://github.com/lh3/seqtk):
 
 ```sh
 
-seqtk subseq -l 80 GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz dataset/chr.txt \
+seqtk subseq -l 80 GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz chr.txt \
   | bgzip -c > GRCh38_no_alt_analysis_set_GCA_000001405.std_chr.fa.gz
 
 ```
@@ -46,4 +46,4 @@ The main output of this script is a GTF file (set in `--output_gtf`) with the an
 
 The script also outputs a directory (set in `--output_figure`) with figures exploring the features of the 3' ends and the accuracy of the model.
 
-The model is itself saved as an RDS file (set in `--output_model`). If a file of the chosen name already exists, the script will simply load it instead of re-running the training step. 
+The model is itself saved as an RDS file (set in `--output_model`). **Note:** If a file of the chosen name already exists, the script will simply load it instead of re-running the training step. 
