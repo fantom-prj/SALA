@@ -44,8 +44,8 @@ write.table(data2[order(data2$V1,data2$V2), c("V1", "V2", "V3", "count", "count"
             quote = FALSE)
 
 #index bed file
-tabix_bin <- paste0(resource_directory,"/bin/tabix/tabix")
-bgzip_bin <- paste0(resource_directory,"/bin/bgzip/bgzip")
+tabix_bin <- "tabix"
+bgzip_bin <- "bgzip"
 system(paste0("zcat ",output_file_path, "| ",bgzip_bin, " > ",bgz_path))
 system(paste0(tabix_bin," -p bed ",bgz_path))
 

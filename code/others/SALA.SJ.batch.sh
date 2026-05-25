@@ -18,9 +18,5 @@ while IFS=$'\t' read -r SAMPLE_ID BAM_PATH; do
     --out_dir="$OUT_DIR" \
     --max_thread=1 \
     --min_nt_qual=10 \
-    --min_MAPQ=20 \
-    --samtools_bin=./resources/bin/samtools/samtools \
-    --bedtools_bin=./resources/bin/bedtools/bedtools \
-    --tabix_bin=./resources/bin/tabix/tabix \
-    --bgzip_bin=./resources/bin/bgzip/bgzip
+    --min_MAPQ=20
 done < "$SAMPLE_LIST"
