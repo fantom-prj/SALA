@@ -1,0 +1,5 @@
+THP1_D24_size_r1	D2S1	/analysisdata/fantom6/Interactome/CFC_THP1new/qscore10/THP1_D24_size_r1/THP1_D24_size_r1_filtered.fastq
+THP1_P24_size_r1	P2S1	/analysisdata/fantom6/Interactome/CFC_THP1new/qscore10/THP1_P24_size_r1/THP1_P24_size_r1_filtered.fastq
+THP1_D96_size_r1	D9S1	/analysisdata/fantom6/Interactome/CFC_THP1new/qscore10/THP1_D96_size_r1/THP1_D96_size_r1_filtered.fastq
+THP1_P96_size_r1	P9S1	/analysisdata/fantom6/Interactome/CFC_THP1new/qscore10/THP1_P96_size_r1/THP1_P96_size_r1_filtered.fastq
+
