@@ -1,0 +1,69 @@
+executor: slurm
+
+default-resources:
+  runtime: "3d"
+  mem_mb: 4000
+  slurm_partition: "cpuq"
+
+latency-wait: 60
+rerun-incomplete: true
+printshellcmds: true
+use-conda: true
+
+set-resources:
+  assemble_gene_model:
+    mem_mb: "attempt * 80000"
+  assemble_transcript_model:
+    mem_mb: "attempt * 128000"
+  bam2ctss:
+    mem_mb: "attempt * 4000"
+  bam_to_bed:
+    mem_mb: "attempt * 24000"
+  bed_to_bigwig:
+    mem_mb: "attempt * 500"
+  build_gtf_annotation:
+    mem_mb: "attempt * 16000"
+  compute_count_matrix:
+    mem_mb: "attempt * 32000"
+  copy_glm_folder:
+    mem_mb: "attempt * 500"  
+  copy_gtf:
+    mem_mb: "attempt * 500"
+  ctss_aggregate:
+    mem_mb: "attempt * 1000"
+  ctss_annotate_cre:
+    mem_mb: "attempt * 6000"
+  ctss_cluster:
+    mem_mb: "attempt * 1000"
+  ctss_cluster_filter:
+    mem_mb: "attempt * 6000"
+  ctss_cre_directionality:
+    mem_mb: "attempt * 4000"
+  ctss_file_list:
+    mem_mb: "attempt * 500"
+  extract_ctes_signal:
+    mem_mb: "attempt * 8000"
+  extract_junctions:
+    mem_mb: "attempt * 2000"
+  extract_transcriptome_junctions:
+    mem_mb: "attempt * 500"
+  extract_transcript_to_gene:
+    mem_mb: "attempt * 3000"
+  filter_transcript_model:
+    mem_mb: "attempt * 32000"
+  gtf_to_bed12:
+    mem_mb: "attempt * 1024"
+  group_library_bams:
+    mem_mb: "attempt * 500"
+  handle_ext_tss_cluster:
+    mem_mb: "attempt * 500"
+  index_bed_files:
+    mem_mb: "attempt * 1024"
+  pool_junctions:
+    mem_mb: "attempt * 500"
+  post_filter_assemble_gene_model:
+    mem_mb: "attempt * 80000" 
+  prepare_genome:
+    mem_mb: "attempt * 6000"
+  tes_cluster:
+    mem_mb: "attempt * 2048"

@@ -1,0 +1,6 @@
+ipsc11	iPSC_rep1_run1	test/input/iPSC_rep1_run1_subset.sorted.bam
+ipsc21	iPSC_rep2_run1	test/input/iPSC_rep2_run1_subset.sorted.bam
+nsc11	NSC_rep1_run1	test/input/NSC_rep1_run1_subset.sorted.bam
+nsc21	NSC_rep2_run1	test/input/NSC_rep2_run1_subset.sorted.bam
+neu11	Neuron_rep1_run1	test/input/Neuron_rep1_run1_subset.sorted.bam
+neu21	Neuron_rep2_run1	test/input/Neuron_rep2_run1_subset.sorted.bam

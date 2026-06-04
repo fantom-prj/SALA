@@ -1,0 +1,2 @@
+library_id,bam_list,rep_list
+all,test/config/all_runs.tsv,test/config/all_replicates.tsv

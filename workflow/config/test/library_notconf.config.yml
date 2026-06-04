@@ -1,0 +1,5 @@
+# Internal priming
+internal_priming: false
+# 5' end confidence
+5pr_confident: false
+5pr_cluster: test/resources/hg38_chr20_cluster.bed.gz

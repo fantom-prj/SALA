@@ -1,0 +1,7 @@
+library_prefix	sample_ID	sample_rep
+ipsc11	iPSC	iPSC_rep1
+ipsc21	iPSC	iPSC_rep2
+nsc11	NSC	NSC_rep1
+nsc21	NSC	NSC_rep2
+neu11	Neuron	Neuron_rep1
+neu21	Neuron	Neuron_rep2
