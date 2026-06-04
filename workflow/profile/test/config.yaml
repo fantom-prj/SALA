@@ -1,0 +1,21 @@
+executor: slurm
+
+default-resources:
+  runtime: "2d"
+  mem_mb: 4000
+  slurm_partition: "cpuq"
+
+latency-wait: 60
+rerun-incomplete: true
+printshellcmds: true
+use-conda: true
+
+set-resources:
+  prepare_genome:
+    mem_mb: "attempt * 6000"
+  assemble_gene_model:
+    mem_mb: "attempt * 6000"
+  post_filter_assemble_gene_model:
+    mem_mb: "attempt * 6000"
+  build_gtf_annotation:
+    mem_mb: "attempt * 6000"

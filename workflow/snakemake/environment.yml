@@ -1,0 +1,9 @@
+name: snakemake-slurm
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12.8
+  - snakemake=8.27.1
+

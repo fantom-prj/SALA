@@ -1,0 +1,120 @@
+import pandas as pd
+import os
+import sys
+import yaml
+from pathlib import Path
+from contextlib import redirect_stdout, redirect_stderr
+
+os.environ.pop("R_HOME", None)
+
+SNAKEMAKE_DIR = Path(workflow.basedir)
+SALA_ROOT = SNAKEMAKE_DIR.parents[1]
+RESOURCES = f"{SALA_ROOT}/resources"
+SCRIPTS = f"{SALA_ROOT}/code"
+SCAFE_RESOURCES = f"{SCRIPTS}/SCAFEv1.0.1/resources"
+
+SALA_SCRIPTS = f"{SCRIPTS}/SALA"
+OTHER_SCRIPTS = f"{SCRIPTS}/others"
+
+
+
+LIB_CONFIG_FILE = config["library_config"]
+PARAM_SET_FILE = config["params_set_file"]
+SCAFE_PATH = "share/scafe"
+
+#Read SCAFE and SALA params (general)
+params_df = pd.read_csv(PARAM_SET_FILE)
+params_set_choice = config["params_set"]
+params_set = params_df[["param", params_set_choice]] #TODO handle error
+PARAMS = dict(zip(params_set["param"], params_set[params_set_choice]))
+
+with open(LIB_CONFIG_FILE, "r") as f:
+    lib_config = yaml.safe_load(f)
+
+print("Parameters:")
+print(PARAMS)
+
+DF = pd.read_csv(config["samplesheet"])
+LIBRARIES = DF["library_id"].unique()
+
+LIBRARY_TO_BAM = {
+    row.library_id: row.bam_list
+    for _, row in DF.iterrows()
+}
+
+LIBRARY_TO_REP = {
+    row.library_id: row.rep_list
+    for _, row in DF.iterrows()
+}
+
+LIB_BAMS = {}
+
+print("Reading input libraries...")
+for lib, bam_list_file in LIBRARY_TO_BAM.items():
+    if not os.path.exists(bam_list_file):
+        raise ValueError(f"[ERROR] BAM list file not found for {sample}: {bam}")
+    else:
+        print(f"[OK] {lib} -> {bam_list_file}")
+        with open(bam_list_file) as f:
+            bams = [(line.strip().split("\t")[1], line.strip().split("\t")[2]) for line in f if line.strip()]
+        LIB_BAMS[lib] = bams
+
+for sample, bam_list in LIB_BAMS.items():
+    for bam in bam_list:
+        if not os.path.exists(bam[1]):
+            raise ValueError(f"[ERROR] BAM list file not found for {sample}: {bam[1]}")
+        else:
+            print(f"[OK] {sample} -> {bam[1]}")
+
+BAM_TO_PATH = {
+    bam[0]: bam[1]
+    for lib, bams in LIB_BAMS.items()
+    for bam in bams
+}
+
+REFERENCE = f"{config["reference_dir"]}/{config["genome_anno_id"]}"
+RESULTS = config["results_dir"]
+LOGS    = config["logs_dir"]
+
+os.makedirs(REFERENCE, exist_ok=True)
+os.makedirs(RESULTS, exist_ok=True)
+os.makedirs(LOGS, exist_ok=True)
+
+confident_5pr = lib_config["5pr_confident"]
+if not confident_5pr:
+    if not "5pr_cluster" in lib_config or not os.path.exists(lib_config["5pr_cluster"]):
+        raise ValueError("Clusters not found for not 5' confident libraries")
+    else:
+        print("5' end clusters provided")
+else:
+    print("5' confident libraries")
+
+print(f"[INFO] Loaded {len(LIBRARIES)} libraries")
+
+rule all:
+    input:
+        # Transcript model
+        expand(f"{RESULTS}/transcript_model/{{library}}/log/table4.All_Ref.gtf.gz", library=LIBRARIES),
+        expand(f"{RESULTS}/transcript_model/{{library}}/log/table4.Detected_Ref.gtf.gz", library=LIBRARIES),
+        # Gene model
+        expand(f"{RESULTS}/gene_model_filtered/{{library}}/bed/{{library}}.model.bed.bgz", library=LIBRARIES),
+        expand(f"{RESULTS}/gene_model_filtered/{{library}}/log/{{library}}.model.info.tsv.gz", library=LIBRARIES),
+        # CTSS aggregate to bigwig and directionality
+        [
+            expand(f"{RESULTS}/aggregate_bigwig/{{library}}.all/wig/{{library}}.all.count.fwd.bw", library=LIBRARIES),
+            expand(f"{RESULTS}/aggregate_bigwig/{{library}}.all/wig/{{library}}.all.count.rev.bw", library=LIBRARIES),
+            expand(f"{RESULTS}/aggregate_bigwig/{{library}}.ung/wig/{{library}}.ung.count.fwd.bw", library=LIBRARIES),
+            expand(f"{RESULTS}/aggregate_bigwig/{{library}}.ung/wig/{{library}}.ung.count.rev.bw", library=LIBRARIES),
+            expand(f"{RESULTS}/directionality/{{library}}/bed/{{library}}.CRE.directionality.summit_center.bed.gz", library=LIBRARIES),
+            expand(f"{RESULTS}/directionality/{{library}}/log/{{library}}.directionality.log.tsv.gz", library=LIBRARIES)
+        ] if confident_5pr else []
+
+include: "rules/prepare_genome.smk"
+include: "rules/prepare_transcriptome.smk"
+if confident_5pr:
+    include: "rules/tss_cluster_annotate.smk"
+else:
+    include: "rules/ext_tss_cluster.smk"
+include: "rules/tes_cluster.smk"
+include: "rules/extract_junctions.smk"
+include: "rules/build_transcript_model.smk"

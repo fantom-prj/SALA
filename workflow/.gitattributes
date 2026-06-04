@@ -1,0 +1,4 @@
+test/resources/GRCh38-cCREs.bed filter=lfs diff=lfs merge=lfs -text
+test/resources/GRCh38_no_alt_analysis_set_GCA_000001405.15.fa.gz filter=lfs diff=lfs merge=lfs -text
+test/resources/gencode.v47.annotation.gtf.gz filter=lfs diff=lfs merge=lfs -text
+test/resources/hg38_chr20_cluster.bed.gz filter=lfs diff=lfs merge=lfs -text
