@@ -4,13 +4,13 @@ This workflow integrates SCAFE[^scafe] (v1.0.2) and SALA in a SLURM-ready snakem
 This workflow allows to process independent libraries in parallel, through separated jobs orchestrated by snakemake. For each library, independent sub-jobs can be run in parallel as well. This is also handled by snakemake, depending on the available resources on your cluster.
 
 ## Dependencies
-The workflow is designed to be executed on a SLURM HPC environment.
-The only requirement is the installation of conda[^conda]. The workflow will then handle the download and installation of all the necessary packages for the launcher (specified in environment.yml) and for the steps execution (specified in workflow/envs/sala_wf_env.yml), inside the ad-hoc environment created by snakemake.
+The workflow is designed to run on a SLURM-based HPC environment. The only prerequisite is a Conda-compatible package manager[^conda]. We recommend using Conda ≥ 23.0. All required channels and package dependencies are specified in the workflow environment files (see below).
 
-## General configuration
-The configuration files needed for the workflow are found in the config folder:
-* <b>config/config.yaml</b>
-This is the entrypoint for all information regarding the location of input, results, library configuration and parameters. 
+## Configuration
+
+### General config
+
+The configuration files needed for the workflow are found in the config folder. the ```config.yaml``` file is the entrypoint for all information regarding the location of input, results, library configuration and parameters. 
 
 ```yaml
 samplesheet: Path of the library table (see below)
@@ -28,7 +28,7 @@ params_set_file: Path of the parameters set file
 params_set: Choice of parameters set (must be column in params_set_file)
 ```
 
-A basic set of resources, based on GRCh38 and GENCODE 47, can be found in the test/resources folder.
+A basic set of resources, based on GRCh38 and GENCODE 47, can be found in the ```test/resources``` folder.
 Other genome-transcript annotation sets, including cCRE annotation from SCREEN, are available for human and mouse and can be downloaded at the following URLs:
 
 | Genome | Transcript model | Mask BED | Download |
@@ -40,16 +40,12 @@ Other genome-transcript annotation sets, including cCRE annotation from SCREEN, 
 
 You may also use ```gdown --fuzzy```[^gdown] to download these files.
 
-* <b>config/params.csv</b>
-This file contains pre-defined parameters set (default and sensitive) for the various steps of the workflow. To define your own set of parameters, it is possible to add an additional column to the csv, and to change the parameters set choice accordingly in the config.yml.
+The ```params.csv``` file contains pre-defined parameters set (default and sensitive) for the various steps of the workflow. To define your own set of parameters, it is possible to add an additional column to the csv, and to change the parameters set choice accordingly in the config.yml.
 
-The resources configuration is found in the profile folder:
-* <b>profile/config.yml</b> here it is possible to specify appropriate RAM requirements for the various steps. To handle out of memory issues, by default, the workflow will perform two retries for each step, each time doubling the allocated memory. The mem_mb default values have been defined according to tests on libraries with 60 to 250 million reads. We recommend to change them accordingly to your library size needs.
+The ```profile/config.yml``` file is related to resources configuration. Here it is possible to specify appropriate RAM requirements for the various steps. To handle out of memory issues, by default, the workflow will perform two retries for each step, each time doubling the allocated memory. The mem_mb default values have been defined according to tests on libraries with 60 to 250 million reads. We recommend to change them accordingly to your library size needs.
 
-## Library configuration
-Input data and features have to be specified in the following files.
-<b>sample_table.csv</b>
-A list of all libraries to be processed in parallel has to be provided in the sample table specified in the configuration (samplesheet), in this format (header included):
+### Data config
+The ```sample_table.csv``` contains the list of all libraries to be processed in parallel, and has to be provided in the sample table specified in the configuration (samplesheet), in this format (header included):
 ```csv
 library_id,bam_list,rep_list
 neuronset_id,/path/of/neuset/run/file.tsv,/path/of/neuset/replicates/file.tsv
@@ -59,7 +55,7 @@ The granularity of the sample set can be decided according to the user needs. In
 
 For each library in the samplesheet, a replicate file and a run file are needed, both in TSV format.
 
-<b>replicates.tsv</b>
+```replicates.tsv```
 The replicate file contains information on how to group the replicates in the library. The format is as follows (header included): 
 ```tsv
 # library_prefix: prefix for the replicate, not containing underscores ("_")
@@ -74,7 +70,7 @@ neu11	Neuron	Neuron_rep1
 neu21	Neuron	Neuron_rep2
 ```
 
-<b>runs.tsv</b>
+```runs.tsv```
 The run file contains information on where the BAM files are stored, for each replicate in the library defined in the replicates table. It has to be headerless, and contain the following columns:
 ```tsv
 # col1: prefix for the replicate
@@ -89,7 +85,7 @@ neu21	Neuron_rep2_run1	test/Neuron_rep2_run1_subset.sorted.bam
 ```
 For more details, refer to the SALA wiki.
 
-<b>library.config.yml</b>
+```library.config.yml```
 In this file, the following information about the libraries have to be specified:
 * `internal_priming`: true if reads could be subjected to internal priming due to library preparation, false otherwise
 * `5pr_confident`: true if the reads have confident 5' ends, false otherwise. In this latter case, external TSS clusters need to be provided as a .bed.gz file. Pre-set cluster coordinates for human (hg38) and mouse (mm10) can be found in the workflow/resources/CTSS_cluster folder.
@@ -98,7 +94,8 @@ In this file, the following information about the libraries have to be specified
 An example of a config file for a not confident 5' library can be found under config/test.
 
 ## How to run
-Setup steps:
+
+### 1. Environment setup
 * Make sure SALA scripts are executable
 ```sh
 chmod 755 -R ./code/
@@ -107,26 +104,68 @@ chmod 755 -R ./code/
 ```sh
 cd workflow
 ```
-* Prepare the library tables (library_table.csv, replicates.tsv, runs.tsv)
-* Set up the location of the required files and the parameter set in the configuration file (config.yml)
-* Set up library 5' confidence and internal priming details in the libraries configuration file (library.config.yml)
-
-To launch the workflow, execute the launchscript as follows:
+* Create the snakemake-slurm environment from the environment.yml file in the snakemake folder. This is the minimal environment that is needed for snakemake to run (with the slurm plugin) and to independently create and manage the actual environment needed for the run (in snakemake/envs/sala_wf_env.yml).
 ```sh
-sbatch --time=8:00:00 --mem=4GB launchscripts/launch_snakemake.sh <config_file> <profile_dir> <n_jobs> <n_threads>
+conda env create -f snakemake/environment.yml
 ```
-Example:
-```sh
-sbatch --time=24:00:00 --mem=4GB launchscripts/launch_snakemake.sh config/config.yml profile 24 32
-```
-4GB is a sufficient amount of RAM for the launcher to handle all the packages installation and manage the rule dependency tree. 
 
-An appropriate time limit has to be set depending on your libraries' size.
+### 2. File setup
+You may copy the test files and fill the fields according to your resources and data.
+
+* Prepare the library tables (sample_table.csv, replicates.tsv, runs.tsv)
+```sh
+cp config/test/all_replicates.tsv config/replicates.tsv 
+# Edit your replicates.tsv
+
+cp config/test/all_runs.tsv config/runs.tsv 
+# Edit your runs.tsv
+
+cp config/test/sample_table_all.csv config/sample_table.csv 
+# Edit your sample_table.csv
+```
+
+* Set up library 5' confidence and internal priming details in the libraries configuration file (library.config.yml). 
+```sh
+# In case your libraries are 5' confident
+cp config/test/library.config.yml config/library.config.yml
+
+# In case your libraries are not 5' confident
+cp config/test/library_notconf.config.yml config/library.config.yml
+
+# Edit your library.config.yml
+```
+
+* Set up the configuration file (config.yml)
+```sh
+cp config/test/config.test.yml config/config.yml
+# Edit your config.yml
+```
+
+### 3. Launch the workflow
+* Activate the snakemake-slurm environment
+```sh
+conda activate snakemake-slurm
+```
+
+* Launch the workflow as follows, by setting appropriate number of jobs and cores depending on your libraries' replicates. We recommend as many jobs as the total number of replicates, and 4 cores per library. Note that these are the max resources that snakemake will be able to allocate as needed by the workflow steps; resources will be optimized to use the minimum number of jobs and cores as possible, depending on the required parallelization.
+```sh
+snakemake --executor slurm \
+    --snakefile snakemake/Snakefile \
+    --workflow-profile profile \
+    --configfile config/config.yml \
+    --jobs 12 --cores 16 --keep-going \
+    --retries 2 --rerun-incomplete
+```
 
 ### Test run
-An example dataset is provided in the test folder. The set of configuration files can be found under config/test and profile/test. To make a test run:
+An example dataset is provided in the test folder. The set of configuration files can be found under config/test and profile/test. A test run can be launched as follows:
 ```sh
-sbatch --time=8:00:00 --mem=4GB launchscripts/launch_snakemake.sh config/test/config.test.yml profile/test
+snakemake --executor slurm \
+    --snakefile snakemake/Snakefile \
+    --workflow-profile profile/test \
+    --configfile config/test/config.test.yml \
+    --jobs 6 --cores 12 --keep-going \
+    --retries 2 --rerun-incomplete
 ```
 
 [^scafe]: https://github.com/chung-lab/scafe

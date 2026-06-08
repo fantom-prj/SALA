@@ -14,6 +14,7 @@ rule bam2ctss:
         f"{LOGS}/bam2ctss/{{library}}.log"
     conda:
         f"{workflow.basedir}/envs/sala_wf_env.yml"
+    threads: 5
     shell:
         """
         scafe_bam2ctss="$CONDA_PREFIX/{params.scafe_path}/scripts/scafe.tool.bk.bam_to_ctss"
@@ -62,6 +63,7 @@ rule ctss_aggregate:
         f"{LOGS}/ctss_aggregate/{{library}}.log"
     conda:
         f"{workflow.basedir}/envs/sala_wf_env.yml"
+    threads: 5
     shell:
         """
         scafe.tool.cm.aggregate \

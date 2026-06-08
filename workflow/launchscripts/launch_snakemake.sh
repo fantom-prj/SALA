@@ -29,17 +29,13 @@ if [[ $# -lt 1 || $# -gt 4 ]]; then
     exit 1
 fi
 
-# Load and activate conda
-source ~/miniconda3/etc/profile.d/conda.sh
-export CONDA_CHANNEL_PRIORITY=flexible
+
 conda activate snakemake-slurm
 
 config_file=$1
 profile=${2-"profile"}
 jobs=${3-8}
 cores=${4-16}
-
-echo "$(date): Snakemake installs conda enviroments if needed"
 
 logs_dir=logs/snakemake
 mkdir -p $logs_dir

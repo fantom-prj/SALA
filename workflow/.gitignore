@@ -3,7 +3,14 @@ test/results/
 test/reference/
 test/logs/
 config/config.local.yml
+config/config.yml
+config/library.config.yml
+config/replicates.tsv
+config/runs.tsv
+config/sample_table.csv
 config/test/config.test2.yml
+sala_wf_test.out
+launchscripts
 logs
 slurm*
 *.fai
