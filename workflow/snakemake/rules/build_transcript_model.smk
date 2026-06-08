@@ -65,6 +65,7 @@ rule assemble_transcript_model:
         f"{LOGS}/assemble_tx_model_{{library}}.log"  
     conda:
         f"{workflow.basedir}/envs/sala_wf_env.yml"
+    threads: 2
     shell: 
         """
         perl {SALA_SCRIPTS}/end5_guided_assembler.pl \
@@ -120,6 +121,7 @@ rule assemble_gene_model:
         f"{LOGS}/assemble_gene_model_{{library}}.log"
     conda:
         f"{workflow.basedir}/envs/sala_wf_env.yml"
+    threads: 2
     shell:
         """
         perl {SALA_SCRIPTS}/assemble_gene_annotator.pl \
@@ -228,6 +230,7 @@ rule post_filter_assemble_gene_model:
         f"{LOGS}/assemble_gene_model_filtered_{{library}}.log"
     conda:
         f"{workflow.basedir}/envs/sala_wf_env.yml"
+    threads: 2
     shell:
         """
         perl {SALA_SCRIPTS}/assemble_gene_annotator.pl \
