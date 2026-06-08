@@ -1,2 +1,2 @@
 library_id,bam_list,rep_list
-lib1,lib1_run_table.tsv,lib1_rep_table.tsv
+all,config/runs.tsv,config/replicates.tsv

@@ -16,8 +16,6 @@ SCAFE_RESOURCES = f"{SCRIPTS}/SCAFEv1.0.1/resources"
 SALA_SCRIPTS = f"{SCRIPTS}/SALA"
 OTHER_SCRIPTS = f"{SCRIPTS}/others"
 
-
-
 LIB_CONFIG_FILE = config["library_config"]
 PARAM_SET_FILE = config["params_set_file"]
 SCAFE_PATH = "share/scafe"
