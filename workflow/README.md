@@ -95,7 +95,7 @@ An example of a config file for a not confident 5' library can be found under co
 
 ## How to run
 
-### Environment setup
+### 1. Environment setup
 * Make sure SALA scripts are executable
 ```sh
 chmod 755 -R ./code/
@@ -109,7 +109,7 @@ cd workflow
 conda env create -f snakemake/environment.yml
 ```
 
-### File setup
+### 2. File setup
 You may copy the test files and fill the fields according to your resources and data.
 
 * Prepare the library tables (sample_table.csv, replicates.tsv, runs.tsv)
@@ -141,7 +141,7 @@ cp config/test/config.test.yml config/config.yml
 # Edit your config.yml
 ```
 
-### Launch the workflow
+### 3. Launch the workflow
 * Activate the snakemake-slurm environment
 ```sh
 conda activate snakemake-slurm
