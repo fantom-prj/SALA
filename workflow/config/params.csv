@@ -35,3 +35,5 @@ filter_tx_model_read_per_rep_ref_novel_tx,5,5
 filter_tx_model_read_per_rep_noref_novel_tx,1,0
 filter_tx_model_isoform_ratio,0.1,0.1
 filter_tx_model_require_5pr_confidence,Yes,Yes
+filter_tx_model_n3_confid_ref_novel_tx,Yes,Yes
+filter_tx_model_n3_confid_noref_novel_tx,No,No

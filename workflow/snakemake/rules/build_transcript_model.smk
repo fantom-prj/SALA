@@ -183,6 +183,8 @@ rule filter_transcript_model:
         read_per_rep_noref_novel_tx=PARAMS["filter_tx_model_read_per_rep_noref_novel_tx"],
         isoform_ratio=PARAMS["filter_tx_model_isoform_ratio"],
         require_5pr_confidence=PARAMS["filter_tx_model_require_5pr_confidence"],
+        require_3pr_confidence_ref_novel_tx=PARAMS["filter_tx_model_n3_confid_ref_novel_tx"],
+        require_3pr_confidence_noref_novel_tx=PARAMS["filter_tx_model_n3_confid_noref_novel_tx"],
         scafe_dir=RESULTS if lib_config["5pr_confident"] else "NA"
     conda:
         f"{workflow.basedir}/envs/sala_wf_env.yml"
@@ -206,6 +208,8 @@ rule filter_transcript_model:
             {params.scafe_dir} \
             {params.genome_code} \
             {params.keep_IP} \
+            {params.require_3pr_confidence_ref_novel_tx} \
+            {params.require_3pr_confidence_noref_novel_tx} \
             {RESULTS}/transcript_model/{wildcards.library}/cpat \
             > {resources.retry_log} 2>&1
         """
