@@ -1,7 +1,7 @@
 param,default,sensitive
 bamtoctss_TSS_mode,softclip,softclip
 bamtoctss_unencoded_G_upstrm_nt,3,3
-bamtoctss_max_softclip_length,3,30
+bamtoctss_max_softclip_length,3,3
 ctss_cluster_min_summit_count,0,0
 ctss_cluster_min_cluster_count,1,1
 ctss_annotate_cre_min_cre_count,3,3
