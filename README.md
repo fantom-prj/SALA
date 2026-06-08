@@ -258,6 +258,8 @@ Usage: Rscript SALA.filter.R <SALA_directory> <out_prefix> <resource_directory> 
 	SCAFE_directory               <required>	path of the folder of SCAFE output (NA if SCAFE is skipped)
 	genome                        <required>    genome name: hg38, mm10, mm39 or NA, control promoter typing
 	keep_internal_prime           <required>    Yes or No (designed by poly-dT internal priming potential, set Yes if poly-dT priming is not used)
+	n3_confid_ref.novel.Tx        <required>	Yes or No (filter for transcripts that are supported by ex3_cluster for novel isoform of known gene)
+	n3_confid_non-ref.novel.Tx    <required>	Yes or No (filter for transcripts that are supported by ex3_cluster for novel transcript of novel gene)
 	CPAT_path                     <optional>	path of the folder expected for CPAT result
 ```
 
@@ -327,9 +329,9 @@ max_T_ratio                     maximum transcript ratio of all the samples
 n_exon                          number of exon 
 transcript_length               transcript length (exclude intron)
 n3_string                       ID of end3 cluster
-internal_priming                Yes if transcript model 3' end hit internal priming site 
+internal_priming                Yes if transcript model 3' end hit internal priming site but not a Reference annotated 3' end 
 n3_Reference                    Yes if end3 cluster intersect with any Reference 3' end
-n3_support                      a collection of support by Reference 3' end, end3 cluster is confident; labeled as internal priming if the 3'end of transcript model hit internal priming site but not a Reference annotated 3' end
+n3_support                      a collection of support by Reference 3' end, end3 cluster is confident
 TES                             ID assigned to each transcription end site, chr_start(0-base)_end_strand according to hg38
 PAS                             PAS motif sequence. Serach from the order of "AATAAA", "ATTAAA", "TATAAA", "AGTAAA", "AATATA", "CATAAA", "GATAAA", "AAAAAA", "TTTAAA", "ACTAAA", "AATACA", "AATAGA", "AAGAAA", "AATAAG", "AATAAT", "AATGAA", "AATTAA", "ATTATA"
 PAS_score                       the motif score of the PAS motif

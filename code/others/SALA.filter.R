@@ -43,6 +43,8 @@ suppressPackageStartupMessages(library(tidyr))
 #SCAFE_directory="/analysisdata/fantom6/Interactome/ONT.CAGE.satellite/dorado_run/git_folder/demo_output_local/scafe/aggregate/run_full/out"
 #isoform_ratio=0.1
 #keep_internal_prime="No"
+#n3_confid_isoform="Yes"
+#n3_confid_novel="No"
 #cpat_path="/analysisdata/fantom6/Interactome/ONT.CAGE.satellite/dorado_run/git_folder/demo_output_local/sala/transcript/Neuron_series_demo/cpat"
 #===========
 
@@ -65,6 +67,8 @@ if (length(args) < 14) {
 	"SCAFE_directory               <required>	path of the folder of SCAFE output (NA if SCAFE is skipped)\n",
 	"genome                        <required>   genome name: hg38, mm10, mm39 or NA",
 	"keep_internal_prime           <required>   Yes or No (designed by poly-dT internal priming potential, set Yes if poly-dT priming is not used)",
+	"n3_confid_ref.novel.Tx        <required>	Yes or No (filter for transcripts that are supported by ex3_cluster for novel isoform of known gene)\n",
+	"n3_confid_non-ref.novel.Tx    <required>	Yes or No (filter for transcripts that are supported by ex3_cluster for novel transcript of novel gene)\n",
 	"CPAT_path                     <optional>	path of the folder expected for CPAT result")}
 
 # Assign arguments to variables
@@ -82,7 +86,11 @@ sample_info <- args[11]
 SCAFE_directory <- args[12]
 genome <- args[13]
 keep_internal_prime <- args[14]
-#cpat_path <- args[15]
+keep_internal_prime <- args[14]
+n3_confid_isoform <- args[15]
+n3_confid_novel <- args[16]
+
+#cpat_path <- args[17]
 
 #path
 path1 <- paste0(SALA_directory, "/bed/")
@@ -376,7 +384,7 @@ transcript_info <- transcript_info[,-which(colnames(transcript_info) == "n3_supp
 
 transcript_info <- left_join(transcript_info, data01, by="model_ID", copy=F)
 transcript_info$n3_support[which(is.na(transcript_info$n3_support))] <- "no_support"
-transcript_info$n3_support[which(transcript_info$internal_priming == "Yes")] <- "internal_priming"
+#transcript_info$n3_support[which(transcript_info$internal_priming == "Yes")] <- "internal_priming"
 transcript_info%>%group_by(n3_support)%>%dplyr::summarise(count=n(), .groups="drop_last")
 
 table0_model3n <- read.delim(paste0(path1,out_prefix,".model.3n.bed.gz"), header=F, stringsAsFactors = F, check.names = F)
@@ -478,8 +486,8 @@ transcript_info%>%group_by(n5_support)%>%dplyr::summarise(count=n(), .groups="dr
 
 #==================
 #coding potential by CPAT
-if (length(args) >= 15 && nchar(args[15]) > 0) {
-  cpat_path <- args[15]
+if (length(args) >= 17 && nchar(args[17]) > 0) {
+  cpat_path <- args[17]
   
   if (!file.exists(paste0(cpat_path,"/output.ORF_prob.best.tsv"))) {
     print("Running CPAT...")
@@ -507,7 +515,7 @@ write.table(transcript_info, gzfile(paste0(path2,out_prefix,".table0_raw.tsv.gz"
 print(paste0(out_prefix,".table0_raw.tsv.gz exported to ",path2))
 #remove internal priming
 if (keep_internal_prime == "No") {
-  transcript_info1 <- transcript_info[-which(transcript_info$n3_support == "internal_priming" & transcript_info$ref_source == "novel_transcript"),]
+  transcript_info1 <- transcript_info[-which(transcript_info$internal_priming == "Yes" & transcript_info$ref_source == "novel_transcript"),]
   print("potential internal primed transcrpts are removed")
 } else {
   transcript_info1=transcript_info
@@ -516,6 +524,11 @@ if (keep_internal_prime == "No") {
 
 #n5_confid 
 if (n5_confid=="Yes"){transcript_info1=transcript_info1[which(transcript_info1$n5_support != "no_support"),]}
+
+#n3_confid
+if (n3_confid_isoform=="Yes"){transcript_info1=transcript_info1[-which(transcript_info1$n3_support == "no_support" & transcript_info1$gene_novelty == "Ref" & transcript_info1$ref_source == "novel_transcript"),]}
+if (n3_confid_novel=="Yes"){transcript_info1=transcript_info1[-which(transcript_info1$n3_support == "no_support" & transcript_info1$gene_novelty == "Novel" & transcript_info1$ref_source == "novel_transcript"),]}
+
 
 #filter table by read count
 transcript_info_finala=transcript_info1[which(transcript_info1$ref_source!="novel_transcript"),]
