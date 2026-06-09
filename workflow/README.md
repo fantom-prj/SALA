@@ -20,21 +20,33 @@ conda env create -f snakemake/environment.yml
 ### 2. Test run
 * Activate the snakemake-slurm environment, download fasta / gtf for test run to test/resources
 * Run the demo with the name of your slurm partition, you may identify it with sinfo
-* The set of configuration files can be found under config/test and profile/test.
-* Test results located in test/results
+
 ```sh
 conda activate snakemake-slurm
 cd /your/SALA/directory/workflow/test/resources
 wget https://www.encodeproject.org/files/GRCh38_no_alt_analysis_set_GCA_000001405.15/@@download/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz
+gunzip GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz
+
+```
+
+* Update partition name of SLURM [slurm_partition: "cpuq" -> your partition name], you can identify it by sinfo
+```sh
+nano /your/SALA/directory/workflow/profile/test/config.yaml
+```
+
+* The set of configuration files can be found under config/test and profile/test.
+* Test results located in test/results
+```sh
+conda activate snakemake-slurm
 
 cd /your/SALA/directory/workflow
+
 snakemake --executor slurm \
     --snakefile snakemake/Snakefile \
     --workflow-profile profile/test \
     --configfile config/test/config.test.yml \
     --jobs 6 --cores 12 --keep-going \
     --retries 2 --rerun-incomplete \
-    --default-resources slurm_partition=[YOUR_PARTITION] #name of your slurm partition
 ```
 
 ### 3. Run your sample 
