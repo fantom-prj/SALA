@@ -22,7 +22,6 @@ conda env create -f snakemake/environment.yml
 * Run the demo with the name of your slurm partition, you may identify it with sinfo
 
 ```sh
-conda activate snakemake-slurm
 cd /your/SALA/directory/workflow/test/resources
 wget https://www.encodeproject.org/files/GRCh38_no_alt_analysis_set_GCA_000001405.15/@@download/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz
 gunzip GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz
@@ -46,7 +45,7 @@ snakemake --executor slurm \
     --workflow-profile profile/test \
     --configfile config/test/config.test.yml \
     --jobs 6 --cores 12 --keep-going \
-    --retries 2 --rerun-incomplete \
+    --retries 2 --rerun-incomplete
 ```
 
 ### 3. Run your sample 
@@ -82,6 +81,11 @@ cp config/test/config.test.yml config/config.yml
 # Edit your config.yml
 ```
 
+* Update partition name of SLURM [slurm_partition: "cpuq" -> your partition name], you can identify it by sinfo
+```sh
+nano /your/SALA/directory/workflow/profile/config.yaml
+```
+
 * Launch the workflow as follows, by setting appropriate number of jobs and cores depending on your libraries' replicates. We recommend as many jobs as the total number of replicates, and 4 cores per library. Note that these are the max resources that snakemake will be able to allocate as needed by the workflow steps; resources will be optimized to use the minimum number of jobs and cores as possible, depending on the required parallelization.
 ```sh
 conda activate snakemake-slurm
@@ -92,8 +96,7 @@ snakemake --executor slurm \
     --workflow-profile profile \
     --configfile config/config.yml \
     --jobs 12 --cores 16 --keep-going \
-    --retries 2 --rerun-incomplete \
-    --default-resources slurm_partition=[YOUR_PARTITION] #name of your slurm partition
+    --retries 2 --rerun-incomplete
 ```
 
 ## Configuration
@@ -103,38 +106,21 @@ snakemake --executor slurm \
 The configuration files needed for the workflow are found in the config folder. the ```config.yaml``` file is the entrypoint for all information regarding the location of input, results, library configuration and parameters. 
 
 ```yaml
-samplesheet: Path of the library table (see below)
-results_dir: Path to the folder where results will be stored
-reference_dir: Path where processed files from reference annotation will be stored
-logs_dir: Path to the folder where logs will be stored
-fasta_genome: Path of the reference genome (.fa.gz). It needs to be the same the BAM reads are aligned to.
-mask_bed: Path of the promoter/enhancer annotation on the reference genome (.bed)
-chr_sizes: Path of a tab-separated file containing the chromsome size in format of chrom\tsize (see example in test/resources/chrom.sizes_major.tsv)
-gtf_annotation: Path of the reference transcriptome annotation (.gtf.gz)
-genome_anno_id: Id for the genome+annotation folder (for SCAFE and SALA internal usage)
-genome_code: Code name for the genome (for SALA internal usage)
-library_config: Path of the library configuration file (see below)
-params_set_file: Path of the parameters set file
-params_set: Choice of parameters set (must be column in params_set_file)
+samplesheet: config/test/sample_table_all.csv [Path of the library table (see below), *need update]
+results_dir: test/results [Path to the folder where results will be stored, *need update]
+reference_dir: test/reference [Path where processed files from reference annotation will be stored, *need update]
+logs_dir: test/logs [Path to the folder where logs will be stored, *need update]
+fasta_genome: test/resources/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta [Path of the reference genome (.fasta). It needs to be unzipped and the same the BAM reads are aligned to]
+mask_bed: test/resources/GRCh38-cCREs.sorted.bed [For SCAFE alone Path of the promoter/enhancer annotation on the reference genome (.bed)]
+chr_sizes: test/resources/chrom.sizes_major.tsv
+gtf_annotation: test/resources/gencode.v47.annotation.gtf.gz [Path of the reference transcriptome annotation (.gtf.gz)]
+genome_anno_id: hg38_gencode47 [ Id for the genome+annotation folder (for SCAFE and SALA internal usage)]
+genome_code: hg38 [Code name for the genome (for SALA internal usage)]
+library_config: config/test/library.config.yml [Path of the library configuration file (see below), *need update]
+params_set_file: config/params.csv [Path of the parameters set file]
+params_set: default [Choice of parameters set (must be column in params_set_file), can be customized by adding column in config/params.csv]
 ```
 
-A basic set of resources, based on GRCh38 and GENCODE 47, can be found in the ```test/resources``` folder.
-Other genome-transcript annotation sets, including cCRE annotation from SCREEN, are available for human and mouse and can be downloaded at the following URLs:
-
-| Genome | Transcript model | Mask BED | Download |
-|----------|------------------|----------|----------|
-| hg38 | GENCODE_v39 | SCREEN cCRE hg38 | [hg38.gencode_v39](https://drive.google.com/file/d/1Dx77UntpJZCZpffapQ33nXksXVivbMMX/view?usp=drive_link) |
-| hg38 | GENCODE_v47 | SCREEN cCRE hg38 | [hg38.gencode_v47](https://drive.google.com/file/d/1QTOvFqD_yPMZtur5EP3pNrteFKudTjrc/view?usp=drive_link) |
-| mm10 | GENCODE_vM25 | SCREEN cCRE mm10 | [mm10.gencode_vM25](https://drive.google.com/file/d/1WLF4cCQTcKbI8JzjhMcwI92daGQYzSBn/view?usp=drive_link) |
-| mm39 | GENCODE_vM36 | SCREEN cCRE mm10_liftover_to_mm39 | [mm39.gencode_vM36](https://drive.google.com/file/d/1WOO3Sx33VqfqMU5_6C3-uvLzTQ7xTqAa/view?usp=drive_link) |
-
-You may also use ```gdown --fuzzy```[^gdown] to download these files.
-for example 
-```sh
-cd /your/SALA/directory/workflow/test/reference
-gdown 1QTOvFqD_yPMZtur5EP3pNrteFKudTjrc
-tar -xvzf hg38.gencode_v47.tar.gz
-```
 
 The ```params.csv``` file contains pre-defined parameters set (default and sensitive) for the various steps of the workflow. To define your own set of parameters, it is possible to add an additional column to the csv, and to change the parameters set choice accordingly in the config.yml.
 
@@ -190,6 +176,15 @@ In this file, the following information about the libraries have to be specified
 An example of a config file for a not confident 5' library can be found under config/test.
 
 
+A basic set of resources, based on hg38 and GENCODE 47, can be found in the ```test/resources``` folder.
+Other genome-transcript annotation sets, including cCRE annotation from SCREEN, can be applied as followings
+
+| Genome | Transcript model | Mask BED |
+|----------|------------------|----------|
+| hg38 | GENCODE_v39 | SCREEN cCRE hg38 |
+| hg38 | GENCODE_v47 | SCREEN cCRE hg38 |
+| mm10 | GENCODE_vM25 | SCREEN cCRE mm10 |
+| mm39 | GENCODE_vM36 | SCREEN cCRE mm10_liftover_to_mm39 |
 
 [^scafe]: https://github.com/chung-lab/scafe
 [^sala-wiki]: https://github.com/fantom-prj/SALA/wiki
