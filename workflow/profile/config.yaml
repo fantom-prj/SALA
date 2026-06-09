@@ -48,7 +48,7 @@ set-resources:
   extract_transcriptome_junctions:
     mem_mb: "attempt * 500"
   extract_transcript_to_gene:
-    mem_mb: "attempt * 3000"
+    mem_mb: "attempt * 16000"
   filter_transcript_model:
     mem_mb: "attempt * 32000"
   gtf_to_bed12:

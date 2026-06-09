@@ -2,8 +2,8 @@ samplesheet: config/test/sample_table_all.csv
 results_dir: test/results
 reference_dir: test/reference
 logs_dir: test/logs
-fasta_genome: test/resources/GRCh38_no_alt_analysis_set_GCA_000001405.15.fa.gz
-mask_bed: test/resources/GRCh38-cCREs.bed
+fasta_genome: test/resources/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz
+mask_bed: test/resources/GRCh38-cCREs.sorted.bed
 chr_sizes: test/resources/chrom.sizes_major.tsv
 gtf_annotation: test/resources/gencode.v47.annotation.gtf.gz
 genome_anno_id: hg38_gencode47

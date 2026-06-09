@@ -6,6 +6,84 @@ This workflow allows to process independent libraries in parallel, through separ
 ## Dependencies
 The workflow is designed to run on a SLURM-based HPC environment. The only prerequisite is a Conda-compatible package manager[^conda]. We recommend using Conda ≥ 23.0. All required channels and package dependencies are specified in the workflow environment files (see below).
 
+## How to run
+
+### 1. Environment setup
+* Make sure SALA scripts are executable
+* for snakemake pipeline, go to workflow directory and create snakemake environment with conda
+```sh
+chmod 755 -R ./code/
+cd /your/SALA/directory/workflow
+conda env create -f snakemake/environment.yml
+```
+
+### 2. Test run
+* Activate the snakemake-slurm environment, download fasta / gtf for test run to test/resources
+* Run the demo with the name of your slurm partition, you may identify it with sinfo
+* The set of configuration files can be found under config/test and profile/test.
+* Test results located in test/results
+```sh
+conda activate snakemake-slurm
+cd /your/SALA/directory/workflow/test/resources
+wget https://www.encodeproject.org/files/GRCh38_no_alt_analysis_set_GCA_000001405.15/@@download/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz
+
+cd /your/SALA/directory/workflow
+snakemake --executor slurm \
+    --snakefile snakemake/Snakefile \
+    --workflow-profile profile/test \
+    --configfile config/test/config.test.yml \
+    --jobs 6 --cores 12 --keep-going \
+    --retries 2 --rerun-incomplete \
+    --default-resources slurm_partition=[YOUR_PARTITION] #name of your slurm partition
+```
+
+### 3. Run your sample 
+#### File setup
+You may copy the test files and fill the fields according to your resources and data.
+
+* Prepare the library tables (sample_table.csv, replicates.tsv, runs.tsv)
+```sh
+cp config/test/all_replicates.tsv config/replicates.tsv 
+# Edit your replicates.tsv
+
+cp config/test/all_runs.tsv config/runs.tsv 
+# Edit your runs.tsv
+
+cp config/test/sample_table_all.csv config/sample_table.csv 
+# Edit your sample_table.csv
+```
+
+* Set up library 5' confidence and internal priming details in the libraries configuration file (library.config.yml). 
+```sh
+# In case your libraries are 5' confident
+cp config/test/library.config.yml config/library.config.yml
+
+# In case your libraries are not 5' confident
+cp config/test/library_notconf.config.yml config/library.config.yml
+
+# Edit your library.config.yml
+```
+
+* Set up the configuration file (config.yml)
+```sh
+cp config/test/config.test.yml config/config.yml
+# Edit your config.yml
+```
+
+* Launch the workflow as follows, by setting appropriate number of jobs and cores depending on your libraries' replicates. We recommend as many jobs as the total number of replicates, and 4 cores per library. Note that these are the max resources that snakemake will be able to allocate as needed by the workflow steps; resources will be optimized to use the minimum number of jobs and cores as possible, depending on the required parallelization.
+```sh
+conda activate snakemake-slurm
+cd /your/SALA/directory/workflow
+
+snakemake --executor slurm \
+    --snakefile snakemake/Snakefile \
+    --workflow-profile profile \
+    --configfile config/config.yml \
+    --jobs 12 --cores 16 --keep-going \
+    --retries 2 --rerun-incomplete \
+    --default-resources slurm_partition=[YOUR_PARTITION] #name of your slurm partition
+```
+
 ## Configuration
 
 ### General config
@@ -39,6 +117,12 @@ Other genome-transcript annotation sets, including cCRE annotation from SCREEN, 
 | mm39 | GENCODE_vM36 | SCREEN cCRE mm10_liftover_to_mm39 | [mm39.gencode_vM36](https://drive.google.com/file/d/1WOO3Sx33VqfqMU5_6C3-uvLzTQ7xTqAa/view?usp=drive_link) |
 
 You may also use ```gdown --fuzzy```[^gdown] to download these files.
+for example 
+```sh
+cd /your/SALA/directory/workflow/test/reference
+gdown 1QTOvFqD_yPMZtur5EP3pNrteFKudTjrc
+tar -xvzf hg38.gencode_v47.tar.gz
+```
 
 The ```params.csv``` file contains pre-defined parameters set (default and sensitive) for the various steps of the workflow. To define your own set of parameters, it is possible to add an additional column to the csv, and to change the parameters set choice accordingly in the config.yml.
 
@@ -93,80 +177,7 @@ In this file, the following information about the libraries have to be specified
 
 An example of a config file for a not confident 5' library can be found under config/test.
 
-## How to run
 
-### 1. Environment setup
-* Make sure SALA scripts are executable
-```sh
-chmod 755 -R ./code/
-```
-* Move into the workflow directory
-```sh
-cd workflow
-```
-* Create the snakemake-slurm environment from the environment.yml file in the snakemake folder. This is the minimal environment that is needed for snakemake to run (with the slurm plugin) and to independently create and manage the actual environment needed for the run (in snakemake/envs/sala_wf_env.yml).
-```sh
-conda env create -f snakemake/environment.yml
-```
-
-### 2. File setup
-You may copy the test files and fill the fields according to your resources and data.
-
-* Prepare the library tables (sample_table.csv, replicates.tsv, runs.tsv)
-```sh
-cp config/test/all_replicates.tsv config/replicates.tsv 
-# Edit your replicates.tsv
-
-cp config/test/all_runs.tsv config/runs.tsv 
-# Edit your runs.tsv
-
-cp config/test/sample_table_all.csv config/sample_table.csv 
-# Edit your sample_table.csv
-```
-
-* Set up library 5' confidence and internal priming details in the libraries configuration file (library.config.yml). 
-```sh
-# In case your libraries are 5' confident
-cp config/test/library.config.yml config/library.config.yml
-
-# In case your libraries are not 5' confident
-cp config/test/library_notconf.config.yml config/library.config.yml
-
-# Edit your library.config.yml
-```
-
-* Set up the configuration file (config.yml)
-```sh
-cp config/test/config.test.yml config/config.yml
-# Edit your config.yml
-```
-
-### 3. Launch the workflow
-* Activate the snakemake-slurm environment
-```sh
-conda activate snakemake-slurm
-```
-
-* Launch the workflow as follows, by setting appropriate number of jobs and cores depending on your libraries' replicates. We recommend as many jobs as the total number of replicates, and 4 cores per library. Note that these are the max resources that snakemake will be able to allocate as needed by the workflow steps; resources will be optimized to use the minimum number of jobs and cores as possible, depending on the required parallelization.
-```sh
-snakemake --executor slurm \
-    --snakefile snakemake/Snakefile \
-    --workflow-profile profile \
-    --configfile config/config.yml \
-    --jobs 12 --cores 16 --keep-going \
-    --retries 2 --rerun-incomplete
-```
-
-### Test run
-An example dataset is provided in the test folder. The set of configuration files can be found under config/test and profile/test. A test run can be launched as follows:
-```sh
-snakemake --executor slurm \
-    --snakefile snakemake/Snakefile \
-    --workflow-profile profile/test \
-    --configfile config/test/config.test.yml \
-    --jobs 6 --cores 12 --keep-going \
-    --retries 2 --rerun-incomplete
-```
 
 [^scafe]: https://github.com/chung-lab/scafe
 [^sala-wiki]: https://github.com/fantom-prj/SALA/wiki
