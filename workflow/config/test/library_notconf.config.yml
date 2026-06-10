@@ -1,5 +1,3 @@
-# Internal priming
 internal_priming: false
-# 5' end confidence
 5pr_confident: false
-5pr_cluster: test/resources/hg38_chr20_cluster.bed.gz
+5pr_cluster: /your/SALA/directory/resources/CTSS_cluster/hg38_fair+new_CAGE_peaks_phase1and2.bed.bgz
