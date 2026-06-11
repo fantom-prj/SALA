@@ -112,7 +112,6 @@ reference_dir: test/reference [Path where processed files from reference annotat
 logs_dir: test/logs [Path to the folder where logs will be stored, *need update]
 fasta_genome: test/resources/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta [Path of the reference genome (.fasta). It needs to be unzipped and the same the BAM reads are aligned to]
 mask_bed: test/resources/GRCh38-cCREs.sorted.bed [For SCAFE alone Path of the promoter/enhancer annotation on the reference genome (.bed)]
-#chr_sizes: test/resources/chrom.sizes_major.tsv
 gtf_annotation: test/resources/gencode.v47.annotation.gtf.gz [Path of the reference transcriptome annotation (.gtf.gz)]
 genome_anno_id: hg38_gencode47 [Id for the genome+annotation folder (for SCAFE and SALA internal usage)]
 genome_code: hg38 [Code name for the genome (for SALA internal usage)]

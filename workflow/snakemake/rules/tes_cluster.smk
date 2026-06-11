@@ -18,12 +18,11 @@ rule bam_to_bed:
 
 rule extract_ctes_signal:
     input:
-        combined_bed=f"{RESULTS}/bamtobed/{{library}}/combined.bed.bgz"
+        combined_bed=f"{RESULTS}/bamtobed/{{library}}/combined.bed.bgz",
+        chrom_sizes=CHR_SIZES
     output:
         f"{RESULTS}/ctes_signal/{{library}}/{{library}}.end3.bed",
-        f"{RESULTS}/ctes_signal/{{library}}/{{library}}.end5.bed"
-    params:
-        chrom_sizes=config["chr_sizes"]      
+        f"{RESULTS}/ctes_signal/{{library}}/{{library}}.end5.bed"          
     log:
         f"{LOGS}/ctes_signal/{{library}}.log"
     conda:
@@ -33,7 +32,7 @@ rule extract_ctes_signal:
         """
         perl {SALA_SCRIPTS}/3n_cluster/transcript_bed_to_end_bed_bigwig.pl \
         {input.combined_bed} \
-        {params.chrom_sizes} \
+        {input.chrom_sizes} \
         {wildcards.library} \
         {RESULTS}/ctes_signal/{wildcards.library} \
         > {log} 2>&1

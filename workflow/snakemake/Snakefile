@@ -71,6 +71,8 @@ BAM_TO_PATH = {
 }
 
 REFERENCE = f"{config["reference_dir"]}/{config["genome_anno_id"]}"
+GENOME_DIR = Path(config["fasta_genome"]).parent
+CHR_SIZES = f"{GENOME_DIR}/chrom.sizes_major.tsv"
 RESULTS = config["results_dir"]
 LOGS    = config["logs_dir"]
 

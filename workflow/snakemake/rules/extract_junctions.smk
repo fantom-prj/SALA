@@ -1,11 +1,11 @@
 rule extract_junctions:
     input:
+        chrom_sizes=CHR_SIZES,
         bam_file=lambda wc: BAM_TO_PATH[wc.bam]
     output:
         f"{RESULTS}/junction_extractor/tmp/{{bam}}/log/{{bam}}.junct.info.tsv.gz"
     params:
         genome=config["fasta_genome"],
-        chrom_sizes=config["chr_sizes"],
         min_nt_qual=PARAMS["extract_junctions_min_nt_qual"],
         min_mapq=PARAMS["extract_junctions_min_mapq"] 
     log:
@@ -16,7 +16,7 @@ rule extract_junctions:
         """
         perl {SALA_SCRIPTS}/junction_extractor/junction_extractor.pl \
         --in_bam={input.bam_file} \
-        --chrom_size_path={params.chrom_sizes} \
+        --chrom_size_path={input.chrom_sizes} \
         --chrom_fasta_path={params.genome} \
         --out_prefix={wildcards.bam} \
         --out_dir={RESULTS}/junction_extractor/tmp \
