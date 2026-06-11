@@ -35,42 +35,57 @@ print(PARAMS)
 DF = pd.read_csv(config["samplesheet"])
 LIBRARIES = DF["library_id"].unique()
 
-LIBRARY_TO_BAM = {
+#BAMs for splicing junction extraction
+print("Reading input libraries for SJ extraction...")
+LIBRARY_TO_BAM_SJ = {
     row.library_id: row.bam_list
     for _, row in DF.iterrows()
 }
+LIB_BAMS_SJ = {}
 
-LIBRARY_TO_REP = {
-    row.library_id: row.rep_list
-    for _, row in DF.iterrows()
-}
-
-LIB_BAMS = {}
-
-print("Reading input libraries...")
-for lib, bam_list_file in LIBRARY_TO_BAM.items():
+for lib, bam_list_file in LIBRARY_TO_BAM_SJ.items():
     if not os.path.exists(bam_list_file):
         raise ValueError(f"[ERROR] BAM list file not found for {sample}: {bam}")
     else:
         print(f"[OK] {lib} -> {bam_list_file}")
         with open(bam_list_file) as f:
             bams = [(line.strip().split("\t")[1], line.strip().split("\t")[2]) for line in f if line.strip()]
-        LIB_BAMS[lib] = bams
+        LIB_BAMS_SJ[lib] = bams
 
-for sample, bam_list in LIB_BAMS.items():
+for sample, bam_list in LIB_BAMS_SJ.items():
     for bam in bam_list:
         if not os.path.exists(bam[1]):
             raise ValueError(f"[ERROR] BAM list file not found for {sample}: {bam[1]}")
         else:
             print(f"[OK] {sample} -> {bam[1]}")
 
-BAM_TO_PATH = {
+SJ_BAM_TO_PATH = {
     bam[0]: bam[1]
-    for lib, bams in LIB_BAMS.items()
+    for lib, bams in LIB_BAMS_SJ.items()
     for bam in bams
 }
 
+#BAMs for CTSS and CTES
+print("Reading input libraries for CTSS and CTES...")
+LIBRARY_TO_BAM = {
+    row.library_id: row.bam_tc_list if pd.notna(row.bam_tc_list) and row.bam_tc_list else row.bam_list
+    for _, row in DF.iterrows()
+}
+
+for lib, bam_list_file in LIBRARY_TO_BAM.items():
+    if not os.path.exists(bam_list_file):
+        raise ValueError(f"[ERROR] BAM list file not found for {sample}: {bam}")
+    else:
+        print(f"[OK] {lib} -> {bam_list_file}")
+
+LIBRARY_TO_REP = {
+    row.library_id: row.rep_list
+    for _, row in DF.iterrows()
+}
+
 REFERENCE = f"{config["reference_dir"]}/{config["genome_anno_id"]}"
+GENOME_DIR = Path(config["fasta_genome"]).parent
+CHR_SIZES = f"{GENOME_DIR}/chrom.sizes_major.tsv"
 RESULTS = config["results_dir"]
 LOGS    = config["logs_dir"]
 
@@ -88,6 +103,7 @@ else:
     print("5' confident libraries")
 
 print(f"[INFO] Loaded {len(LIBRARIES)} libraries")
+sys.stdout.flush()
 
 rule all:
     input:

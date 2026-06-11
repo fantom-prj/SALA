@@ -55,7 +55,8 @@ rule extract_transcript_to_gene:
         genome=config["fasta_genome"],
         transcriptome_gtf=config["gtf_annotation"]
     output:
-        f"{REFERENCE}/transcript_to_gene.tsv"
+        f"{REFERENCE}/transcript_to_gene.tsv",
+        CHR_SIZES
     log:
         f"{LOGS}/tx_to_gene.log"
     conda:

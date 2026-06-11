@@ -1,11 +1,11 @@
 rule extract_junctions:
     input:
-        bam_file=lambda wc: BAM_TO_PATH[wc.bam]
+        chrom_sizes=CHR_SIZES,
+        bam_file=lambda wc: SJ_BAM_TO_PATH[wc.bam]
     output:
         f"{RESULTS}/junction_extractor/tmp/{{bam}}/log/{{bam}}.junct.info.tsv.gz"
     params:
         genome=config["fasta_genome"],
-        chrom_sizes=config["chr_sizes"],
         min_nt_qual=PARAMS["extract_junctions_min_nt_qual"],
         min_mapq=PARAMS["extract_junctions_min_mapq"] 
     log:
@@ -16,7 +16,7 @@ rule extract_junctions:
         """
         perl {SALA_SCRIPTS}/junction_extractor/junction_extractor.pl \
         --in_bam={input.bam_file} \
-        --chrom_size_path={params.chrom_sizes} \
+        --chrom_size_path={input.chrom_sizes} \
         --chrom_fasta_path={params.genome} \
         --out_prefix={wildcards.bam} \
         --out_dir={RESULTS}/junction_extractor/tmp \
@@ -30,9 +30,9 @@ rule group_library_bams:
     input:
         lambda wc: [
             f"{RESULTS}/junction_extractor/tmp/{bam[0]}/log/{bam[0]}.junct.info.tsv.gz"
-            for bam in LIB_BAMS[wc.library]
+            for bam in LIB_BAMS_SJ[wc.library]
         ],
-        lib_runs=lambda wc: LIBRARY_TO_BAM[wc.library]
+        lib_runs=lambda wc: LIBRARY_TO_BAM_SJ[wc.library]
     output:
         touch(f"{RESULTS}/junction_extractor/{{library}}_group.done")      
     params:
