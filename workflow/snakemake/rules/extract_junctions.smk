@@ -1,7 +1,7 @@
 rule extract_junctions:
     input:
         chrom_sizes=CHR_SIZES,
-        bam_file=lambda wc: BAM_TO_PATH[wc.bam]
+        bam_file=lambda wc: SJ_BAM_TO_PATH[wc.bam]
     output:
         f"{RESULTS}/junction_extractor/tmp/{{bam}}/log/{{bam}}.junct.info.tsv.gz"
     params:
@@ -30,9 +30,9 @@ rule group_library_bams:
     input:
         lambda wc: [
             f"{RESULTS}/junction_extractor/tmp/{bam[0]}/log/{bam[0]}.junct.info.tsv.gz"
-            for bam in LIB_BAMS[wc.library]
+            for bam in LIB_BAMS_SJ[wc.library]
         ],
-        lib_runs=lambda wc: LIBRARY_TO_BAM[wc.library]
+        lib_runs=lambda wc: LIBRARY_TO_BAM_SJ[wc.library]
     output:
         touch(f"{RESULTS}/junction_extractor/{{library}}_group.done")      
     params:

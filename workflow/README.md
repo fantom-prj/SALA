@@ -120,7 +120,6 @@ params_set_file: config/params.csv [Path of the parameters set file]
 params_set: default [Choice of parameters set (must be column in params_set_file), can be customized by adding column in config/params.csv]
 ```
 
-
 The ```params.csv``` file contains pre-defined parameters set (default and sensitive) for the various steps of the workflow. To define your own set of parameters, it is possible to add an additional column to the csv, and to change the parameters set choice accordingly in the config.yml.
 
 The ```profile/config.yml``` file is related to resources configuration. Here it is possible to specify appropriate RAM requirements for the various steps. To handle out of memory issues, by default, the workflow will perform two retries for each step, each time doubling the allocated memory. The mem_mb default values have been defined according to tests on libraries with 60 to 250 million reads. We recommend to change them accordingly to your library size needs.
@@ -128,10 +127,12 @@ The ```profile/config.yml``` file is related to resources configuration. Here it
 ### Data config
 The ```sample_table.csv``` contains the list of all libraries to be processed in parallel, and has to be provided in the sample table specified in the configuration (samplesheet), in this format (header included):
 ```csv
-library_id,bam_list,rep_list
-neuronset_id,/path/of/neuset/run/file.tsv,/path/of/neuset/replicates/file.tsv
-thp1_id,/path/of/thp1/run/file.tsv,/path/of/thp1/replicates/file.tsv
+library_id,bam_list,bam_tc_list,rep_list
+neuronset_id,/path/of/neuset/run/file.tsv,/path/of/neuset/run_tc/file.tsv,/path/of/neuset/replicates/file.tsv
+thp1_id,/path/of/thp1/run/file.tsv,/path/of/thp1/run_tc/file.tsv,/path/of/thp1/replicates/file.tsv
 ```
+The second column, ```bam_list```, must contain the path of the runs file of the BAMs prior to running TranscriptClean[^tc], that are needed specifically for splicing junctions extraction. The third column, ```bam_tc_list```, can optionally contain a path for the runs file for the splicing-corrected BAMs (if TranscriptClean has been run for the library), or be left empty otherwise. In this case, the run file in bam_list will be used for all the steps. You can refer to the SALA wiki for more details about running TranscriptClean[^sala-wiki-tc] and splicing junction extraction[^sala-wiki-sj].
+
 The granularity of the sample set can be decided according to the user needs. Independent transcript and gene models will be produced for each of the libraries listed in the samplesheet.
 
 For each library in the samplesheet, a replicate file and a run file are needed, both in TSV format.
@@ -164,7 +165,7 @@ nsc21	NSC_rep2_run1	test/NSC_rep2_run1_subset.sorted.bam
 neu11	Neuron_rep1_run1	test/Neuron_rep1_run1_subset.sorted.bam
 neu21	Neuron_rep2_run1	test/Neuron_rep2_run1_subset.sorted.bam
 ```
-For more details, refer to the SALA wiki.
+As explained in the sample table specification, in case you want to use TranscriptClean BAMs, two run files in this format must be produced: one with the paths of the pre-TranscriptClean BAMs and one with the paths of the post-TranscriptClean BAMs. For more details, refer to the SALA wiki.
 
 ```library.config.yml```
 In this file, the following information about the libraries have to be specified:
@@ -187,8 +188,11 @@ SCREEN v3 human and mouse cCRE files were stored in /your/SALA/directory/workflo
 
 [^scafe]: https://github.com/chung-lab/scafe
 [^sala-wiki]: https://github.com/fantom-prj/SALA/wiki
+[^tc]: https://github.com/mortazavilab/TranscriptClean
+[^sala-wiki-tc]: https://github.com/fantom-prj/SALA/wiki/1.-TranscriptClean
+[^sala-wiki-sj]: https://github.com/fantom-prj/SALA/wiki/3.-Features-preparation#34-splicing-junction-collection
 [^conda]: https://www.anaconda.com/download
 [^gdown]: https://github.com/wkentaro/gdown
 
 ## Rule diagram
-![Snakemake rule graph](rulegraph.png)
+![Snakemake rule graph](rulegraph.png) <!--TODO generate again -->
