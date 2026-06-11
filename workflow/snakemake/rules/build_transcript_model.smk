@@ -31,8 +31,7 @@ rule index_bed_files:
 
 rule assemble_transcript_model:
     input:
-        chr_sizes=config["chr_sizes"],
-        genome=config["fasta_genome"],
+        chr_sizes=CHR_SIZES,
         reads_bed=f"{RESULTS}/bamtobed/{{library}}/combined.bed.bgz",
         transcr_ref=f"{REFERENCE}/transcript.bed.bgz",
         end5_cluster=f"{RESULTS}/5pr_data/{{library}}/5pr_cluster.bed.bgz",
@@ -45,6 +44,7 @@ rule assemble_transcript_model:
         f"{RESULTS}/transcript_model/{{library}}/bed/{{library}}.model.bed.bgz",
         f"{RESULTS}/transcript_model/{{library}}/log/{{library}}.model.info.tsv.gz"
     params:
+        genome=config["fasta_genome"],
         min_output_qry_count=PARAMS["assemble_tx_model_min_output_qry_count"],
         conf_end3_merge_flank=PARAMS["assemble_tx_model_conf_end3_merge_flank"],
         conf_end5_merge_flank=PARAMS["assemble_tx_model_conf_end5_merge_flank"],
@@ -73,7 +73,7 @@ rule assemble_transcript_model:
         --ref_bed_bgz={input.transcr_ref} \
         --out_dir={RESULTS}/transcript_model \
         --chrom_size_path={input.chr_sizes} \
-        --chrom_fasta_path={input.genome} \
+        --chrom_fasta_path={params.genome} \
         --conf_end5_bed_bgz={input.end5_cluster} \
         --conf_end3_bed_bgz={input.end3_cluster} \
         --signal_end5_bed_bgz={input.end5_signal} \
@@ -103,7 +103,7 @@ rule assemble_transcript_model:
 
 rule assemble_gene_model:
     input:
-        chr_sizes=config["chr_sizes"],
+        chr_sizes=CHR_SIZES,
         transcr_model=f"{RESULTS}/transcript_model/{{library}}/bed/{{library}}.model.bed.bgz",
         transcr_model_info=f"{RESULTS}/transcript_model/{{library}}/log/{{library}}.model.info.tsv.gz",
         transcr_ref=f"{REFERENCE}/transcript.bed.bgz",
@@ -216,7 +216,7 @@ rule filter_transcript_model:
 
 rule post_filter_assemble_gene_model:
     input:
-        chr_sizes=config["chr_sizes"],
+        chr_sizes=CHR_SIZES,
         transcr_model=f"{RESULTS}/transcript_model/{{library}}/bed/{{library}}.table4.bed12.bed.bgz",
         transcr_model_info=f"{RESULTS}/transcript_model/{{library}}/log/{{library}}.table4_filtered.All_Ref.tsv.gz", #here too
         transcr_ref=f"{REFERENCE}/transcript.bed.bgz",

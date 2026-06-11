@@ -9,10 +9,8 @@ config/replicates.tsv
 config/runs.tsv
 config/sample_table.csv
 config/test/config.test2.yml
+config/test/config.test3.yml
 sala_wf_test.out
 launchscripts
 logs
 slurm*
-*.fai
-*.gzi
-chrom.sizes.tsv
