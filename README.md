@@ -1,4 +1,4 @@
-# SALA
+# SALA (v1.0)
 <div style="text-align:center"><img src="figs/SALA.png" width="500"></div>
 
 The transcript Start-site Aware Long-read Assembler (SALA) is developed for de novo assembling long-read into transcript and gene models, considering support from confident transcription start site. SALA incorporates confident TSS clusters de novo identified from the long-read data or pre-defined confident TSS clusters.
@@ -7,6 +7,7 @@ The transcript Start-site Aware Long-read Assembler (SALA) is developed for de n
 * [Dependencies](#depend)
 * [Installation](#installation)
 * [Running SALA](#how_to_run)
+  * [Workflow](#workflow)
   * [Assembling into transcript models](#transcript_model)
   * [Grouping into initial gene models](#gene_group)
   * [Count matrix per transcript model](#transcript_count)
@@ -63,6 +64,10 @@ This package itself does not require installation. Essential binary files for Li
 
 # <a name="how_to_run"></a>How to run
 Please refer to the [wiki page](https://github.com/fantom-prj/SALA/wiki) to run a demo
+
+## <a name="workflow"></a>Workflow
+We have integrated several steps of SALA into a workflow. These include the core steps (SCAFE, Feature preparation and assembling) from SALA wiki. For details for running the workflow, please refer to [workflow](https://github.com/fantom-prj/SALA/tree/main/workflow)
+
 
 ## <a name="transcript_model"></a>Assembling into transcript models
 This tool assigns long-read sequencing data (as query) to a set of reference transcripts (e.g. GENCODE) using a 5' end centric approach. Several reference transcript annotation sets are available: [GENCODE_V39](https://drive.google.com/file/d/14Wd4vab7_8LZi3Z_qyXYbYnTBEoq6Rau/view?usp=drive_link), [GENCODE_V47](https://drive.google.com/file/d/1n2tl-ejmeQwIwgBRDpflyuSNukrAWTtw/view?usp=drive_link), [GENCODE_VM25](https://drive.google.com/file/d/1kI2pL8ZwIQ7b-4D-8O5ZlNUUKYzMAP2J/view?usp=drive_link), [GENCODE_VM36](https://drive.google.com/file/d/1vURkydNDW27Qlxo6hSC-lMAVs9KZjgWJ/view?usp=drive_link). This code will take a set of user-defined confident 5' end clusters (or de novo defined by SCAFE clustering) and 3' end clusters (or de novo defined by clustering) and assign the query reads to the reference transcripts with the following step:

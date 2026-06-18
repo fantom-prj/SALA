@@ -1,6 +1,6 @@
 # SALA SLURM-Snakemake workflow
 
-This workflow integrates SCAFE[^scafe] (v1.0.2) and SALA in a SLURM-ready snakemake pipeline to assemble a transcript and gene model starting from long-read alignments in BAM format. In particular, it goes through the steps 3., 4. and 5. of the SALA wiki[^sala-wiki]. 
+This workflow integrates core steps of SALA in a SLURM-ready snakemake pipeline to assemble a transcript and gene model starting from long-read alignments in BAM format. In particular, it goes through the steps 2, 3 and 4 of the SALA wiki[^sala-wiki]. 
 This workflow allows to process independent libraries in parallel, through separated jobs orchestrated by snakemake. For each library, independent sub-jobs can be run in parallel as well. This is also handled by snakemake, depending on the available resources on your cluster.
 
 ## Dependencies
@@ -121,6 +121,14 @@ params_set: default [Choice of parameters set (must be column in params_set_file
 ```
 
 The ```params.csv``` file contains pre-defined parameters set (default and sensitive) for the various steps of the workflow. To define your own set of parameters, it is possible to add an additional column to the csv, and to change the parameters set choice accordingly in the config.yml.
+```
+
+
+
+
+```
+
+
 
 The ```profile/config.yml``` file is related to resources configuration. Here it is possible to specify appropriate RAM requirements for the various steps. To handle out of memory issues, by default, the workflow will perform two retries for each step, each time doubling the allocated memory. The mem_mb default values have been defined according to tests on libraries with 60 to 250 million reads. We recommend to change them accordingly to your library size needs.
 
@@ -186,7 +194,6 @@ Specifically for SCAFE prepare genome, besides providing fasta files, cCRE annot
 SCREEN v3 human and mouse cCRE files were stored in /your/SALA/directory/workflow/test/resources/
 
 
-[^scafe]: https://github.com/chung-lab/scafe
 [^sala-wiki]: https://github.com/fantom-prj/SALA/wiki
 [^tc]: https://github.com/mortazavilab/TranscriptClean
 [^sala-wiki-tc]: https://github.com/fantom-prj/SALA/wiki/1.-TranscriptClean
