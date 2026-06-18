@@ -26,7 +26,6 @@ assemble_tx_model_retain_no_qry_ref_bound_set,no,no
 assemble_tx_model_min_size_split,100,100
 assemble_tx_model_min_frac_split,0.2,0.2
 assemble_tx_model_min_qry_score,0,0
-assemble_gene_model_disable_ref_chain_bound_gene_anno,yes,yes
 assemble_gene_model_min_ref_exon_overlap_pct,10,10
 assemble_gene_model_exon_overlap_dist,-1,-1
 assemble_gene_model_locus_merge_dist,100000,100000

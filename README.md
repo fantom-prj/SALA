@@ -6,6 +6,7 @@ The transcript Start-site Aware Long-read Assembler (SALA) is developed for de n
 ## Table of contents
 * [Dependencies](#depend)
 * [Installation](#installation)
+* [Update from V1.0 (2026June)](#update)
 * [Running SALA](#how_to_run)
   * [Workflow](#workflow)
   * [Assembling into transcript models](#transcript_model)
@@ -60,13 +61,23 @@ chmod 755 -R ./code/
 chmod 755 -R ./resources/bin/
 ```
 
-This package itself does not require installation. Essential binary files for Linux platform are included in ./resources/bin (for SALA) and ./code/SCAFEv1.0.1/resources/bin (for SCAFE). If other platform is used, the binary files need to be replaced by the ones from your system. Alternative bin set for Mac OS can be downloaded [here](https://drive.google.com/drive/folders/13SqjSH0eGSH5xnKH4RE43yXtIinvCZet?usp=drive_link). Please replace the downloaded bin folder with the bin folder for SALA and SCAFE.
+This package itself does not require installation. Essential binary files for Linux platform are included in ./resources/bin (for SALA) and ./code/SCAFEv1.0.1/resources/bin (for SCAFE). If other platform is used, please download and install the tools in the dependency accordingly. 
+
+# <a name="update"></a>Update from V1.0 (2026June)
+* [workflow](https://github.com/fantom-prj/SALA/tree/main/workflow) is incorporated
+* Sensitive and Default modes are incorporated when running from workflow
+* Allow to run with/without poly-dT derived internal priming removal (for long-read protocol using 3' adaptor)
+* Allow additional filter on 3' end confidence
+* Incorporate PAS motif for each transcript model into the result table
+* [Random forest poly(A) classifier](https://github.com/fantom-prj/SALA/tree/main/code/PolyA_classifier) ([Wiki](https://github.com/fantom-prj/SALA/wiki/6.-PolyA-classifier:-Random-Forest-classification-of-3%E2%80%99-ends))is added as an independent tool 
+* [Tail trimmer](https://github.com/fantom-prj/SALA/tree/main/code/Tail_trimmerv1.4) is added an an independent tool
+
 
 # <a name="how_to_run"></a>How to run
 Please refer to the [wiki page](https://github.com/fantom-prj/SALA/wiki) to run a demo
 
 ## <a name="workflow"></a>Workflow
-We have integrated several steps of SALA into a workflow. These include the core steps (SCAFE, Feature preparation and assembling) from SALA wiki. For details for running the workflow, please refer to [workflow](https://github.com/fantom-prj/SALA/tree/main/workflow)
+We have integrated several steps of SALA into a workflow. These include the core steps (SCAFE, Feature preparation and assembling) from SALA wiki. For details in running the workflow, please refer to [workflow](https://github.com/fantom-prj/SALA/tree/main/workflow)
 
 
 ## <a name="transcript_model"></a>Assembling into transcript models

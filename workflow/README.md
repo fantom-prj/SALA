@@ -122,10 +122,61 @@ params_set: default [Choice of parameters set (must be column in params_set_file
 
 The ```params.csv``` file contains pre-defined parameters set (default and sensitive) for the various steps of the workflow. To define your own set of parameters, it is possible to add an additional column to the csv, and to change the parameters set choice accordingly in the config.yml.
 ```
-
-
-
-
+bamtoctss_TSS_mode[softclip] Softclip or first_match. if 'softclip', TSS will be determined by 
+                                                    softclip postiion, if 'first_match', TSS will be determined by 
+                                                    the first nt that match to genome.
+bamtoctss_unencoded_G_upstrm_nt[3] The number of nucleotide used to cound the nunber of 
+                                                    unencoded G, if set to 2, the maximum number of unencoded
+                                                    G in a read will be 2 (default=2)
+                                                    softclip postiion, if 'first_match', TSS will be determined by 
+bamtoctss_max_softclip_length[3] Maximum length of allowed softclip at 5'end of the read to be
+                                                    considered as valid (default=10)
+                                                    softclip postiion, if 'first_match', TSS will be determined by 
+                                                    the first nt that match to genome. (default=first_match)
+ctss_cluster_min_summit_count[0] Minimum submit count of the 5'end cluster to be considered as confident
+ctss_cluster_min_cluster_count[1] Minimum read count of the 5'end cluster to be considered as confident
+ctss_annotate_cre_min_cre_count[3] Minimum read count of the tCRE to be considered as confident
+tes_cluster_min_summit_count[3] Minimum submit count of the 3'end cluster to be considered as confident
+tes_cluster_min_cluster_count[5] Minimum read count of the 3'end cluster to be considered as confident
+tes_cluster_min_nt_count[3] Minimum length of the 3'end cluster to be considered as confident
+extract_junctions_min_nt_qual[10] The minimum quality score of a base pair to be considered as high quality.
+                                                    A junction on a read is considered to be high quality if all its six flanking
+                                                    nucleotide (-3,-2,-1 upstream of donor site and 1,2,3 downstream of acceptor site) 
+                                                    has quality greater than or equal to min_nt_qual
+extract_junctions_min_mapq[20] The minimum MAPQ of the reads to be considered high quality.
+assemble_tx_model_min_output_qry_count[1] Output all the transcipt models with at least this number of count.
+assemble_tx_model_conf_end3_merge_flank[150] The flanking distance (on each side) of the 3'end clusters used to merge as a end3 region. Use '-1' to turn off.
+assemble_tx_model_conf_end5_merge_flank[75] The flanking distance (on each side) of the 5'end clusters used to merge as a end5 region. Use '-1' to turn off.
+assemble_tx_model_conf_end3_add_ref[yes] To add reference 3'end into the user defined confident 3'end clusters or not. if yes, the ref 3'end will bed extended by conf_end3_merge_flank nt and merged with confident 3'end clusters.
+assemble_tx_model_conf_end5_add_ref[yes]To add reference 5'end into the user defined confident 5'end clusters or not. if yes, the ref 5'end will bed extended by conf_end5_merge_flank nt and merged with confident 5'end clusters.
+assemble_tx_model_min_exon_length[1] Minimum length of an exon in a transcript to be considered as valid. If a transcript contains an exon shorter than min_exon_length, the transcript will be discarded.
+assemble_tx_model_min_transcript_length[15] Minimum length of a transcript (including intron) to be considered as valid. If a transcript is shorter than min_transcript_length, the transcript will be discarded.
+assemble_tx_model_print_trnscrptID[no] Print out the transcript ID or not 
+assemble_tx_model_trnscpt_set_end_priority[summit:commonest:longest] Priority of methods to determine the ends of transcript set? 
+                                                     1) based on "summit" : the signal summit in confident end3/end5 clusters, in signal_end*_bed_bgz
+                                                     2) based on "commonest" : the observed position that is the most frequent in transcripts of the set
+                                                     3) based on "longest": the observed position that is the furtherest in transcripts of the set
+                                                     for (1) and (2), there is chances of causing conflicts in the transcript set ranges (e.g. 3'end is
+                                                     more downstream than the 5'end in the transcript set). (3) is guranteed to be conflict free.
+                                                     use a colon (:) delimited string to indiciate priority e.g. "summit:commonest:longest"
+                                                     [default=summit:commonest:longest]
+assemble_tx_model_doubtful_end_merge_dist[150] Distance to merge incomplete ends as groups
+assemble_tx_model_doubtful_end_avoid_summit[yes] Overrides --trnscpt_set_end_priority from using "summit" 
+assemble_tx_model_min_summit_dist_split[50] When splitting an end cluster into two, the minimum distance between two summits
+assemble_tx_model_retain_no_qry_ref_bound_set[no] Report the bound set or not if the bound set is not detected from the query reads
+assemble_tx_model_min_size_split[100] When splitting an end cluster into two, the minimum size of the cluster
+assemble_tx_model_min_frac_split[0.2] When splitting an end cluster into two, the minimum fraction of signal from the two summits
+assemble_tx_model_min_qry_score[0] The minimum score in the query bed file (assumes MAPQ) to be taken for assembly
+assemble_gene_model_min_ref_exon_overlap_pct[10] Percentage of exon overlap to consider as the same gene
+assemble_gene_model_exon_overlap_dist[-1] Minimum exon overlap distance, can be applied together with assemble_gene_model_min_ref_exon_overlap_pct
+assemble_gene_model_locus_merge_dist[set as 100000] For dividing the serach window in gene assembling
+assemble_gene_model_exclude_t_type[retained_intron] Transcript type that is excluded from gene assembling
+filter_tx_model_read_per_rep_ref_novel_tx[integer] Number of full-length read from each replicate for novel isoforms of reference genes
+filter_tx_model_read_per_rep_noref_novel_tx[integer] Number of full-length read from each replicate for novel transcripts of novel genes
+filter_tx_model_isoform_ratio[0-1] For novel isoforms of reference genes alone, ratio of full-length count of the transcript among all the transcripts in the same gene has to be above this number
+filter_tx_model_require_5pr_confidence[Yes/No] if Yes, all novel models without 5' ends support (by confident regions or reference 5' end) will be excluded during filter
+filter_tx_model_n3_confid_ref_novel_tx[Yes/No] if Yes, novel isoforms of reference genes without 3' end support (by confident regions or reference 3' end) will be excluded during filter
+filter_tx_model_n3_confid_noref_novel_tx[Yes/No] if Yes, novel models of novel genes without 3' end support (by confident regions or reference 3' end) will be excluded during filter
 ```
 
 

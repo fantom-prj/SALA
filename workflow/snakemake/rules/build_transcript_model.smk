@@ -112,7 +112,6 @@ rule assemble_gene_model:
         f"{RESULTS}/gene_model/{{library}}/bed/{{library}}.model.bed.bgz",
         f"{RESULTS}/gene_model/{{library}}/log/{{library}}.model.info.tsv.gz"
     params:
-        disable_ref_chain_bound_gene_anno=PARAMS["assemble_gene_model_disable_ref_chain_bound_gene_anno"],
         min_ref_exon_overlap_pct=PARAMS["assemble_gene_model_min_ref_exon_overlap_pct"],
         exon_overlap_dist=PARAMS["assemble_gene_model_exon_overlap_dist"],
         locus_merge_dist=PARAMS["assemble_gene_model_locus_merge_dist"],
@@ -133,7 +132,7 @@ rule assemble_gene_model:
         --out_prefix={wildcards.library} \
         --out_dir={RESULTS}/gene_model \
         --novel_gene_prefix=NOVG \
-        --disable_ref_chain_bound_gene_anno={params.disable_ref_chain_bound_gene_anno} \
+        --disable_ref_chain_bound_gene_anno=yes \
         --min_ref_exon_overlap_pct={params.min_ref_exon_overlap_pct} \
         --exon_overlap_dist={params.exon_overlap_dist} \
         --locus_merge_dist={params.locus_merge_dist} \
@@ -225,7 +224,6 @@ rule post_filter_assemble_gene_model:
         f"{RESULTS}/gene_model_filtered/{{library}}/bed/{{library}}.model.bed.bgz",
         f"{RESULTS}/gene_model_filtered/{{library}}/log/{{library}}.model.info.tsv.gz"
     params:
-        disable_ref_chain_bound_gene_anno=PARAMS["assemble_gene_model_disable_ref_chain_bound_gene_anno"],
         min_ref_exon_overlap_pct=PARAMS["assemble_gene_model_min_ref_exon_overlap_pct"],
         exon_overlap_dist=PARAMS["assemble_gene_model_exon_overlap_dist"],
         locus_merge_dist=PARAMS["assemble_gene_model_locus_merge_dist"],
@@ -246,7 +244,7 @@ rule post_filter_assemble_gene_model:
         --out_prefix={wildcards.library} \
         --out_dir={RESULTS}/gene_model_filtered \
         --novel_gene_prefix=NOVG \
-        --disable_ref_chain_bound_gene_anno={params.disable_ref_chain_bound_gene_anno} \
+        --disable_ref_chain_bound_gene_anno=no \
         --min_ref_exon_overlap_pct={params.min_ref_exon_overlap_pct} \
         --exon_overlap_dist={params.exon_overlap_dist} \
         --locus_merge_dist={params.locus_merge_dist} \
