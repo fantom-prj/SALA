@@ -66,13 +66,6 @@ cp config/test/sample_table_all.csv config/sample_table.csv
 # Edit your sample_table.csv
 ```
 
-##### sample_table.csv
-
-| library_id | bam_list | bam_tc_list | rep_list |
-|------------|----------|---------------|----------|
-| all | `path to bam without transcriptClean` | `path to bam with transcriptClean (if you dont have it use the same file from bam_list)` | `config/test/all_replicates.tsv` |
-
-
 
 
 * Set up library 5' confidence and internal priming details in the libraries configuration file (library.config.yml). 
@@ -131,9 +124,9 @@ params_set_file: config/params.csv [Path of the parameters set file]
 params_set: default [Choice of parameters set (must be column in params_set_file), can be customized by adding column in config/params.csv]
 ```
 
-The ```params.csv``` file contains pre-defined parameters set (default and sensitive) for the various steps of the workflow. To define your own set of parameters, it is possible to add an additional column to the csv, and to change the parameters set choice accordingly in the config.yml. Below is the list of parameter you can update and those you may update freely to suit your need.
 
 ### Parameter description
+The ```params.csv``` file contains pre-defined parameters set (default and sensitive) for the various steps of the workflow. To define your own set of parameters, it is possible to add an additional column to the csv, and to change the parameters set choice accordingly in the config.yml. Below is the list of parameter you can update and those you may update freely to suit your need.
 
 | Parameter | Default | Consider | Description |
 |------------|---------|--------------|-------------|
@@ -178,17 +171,17 @@ The ```params.csv``` file contains pre-defined parameters set (default and sensi
 | `filter_tx_model_n3_confid_noref_novel_tx` | `No` | Y | If enabled, transcripts from novel genes without supported 3′ ends are removed. |
 
 
-
+### Resources config
 
 The ```profile/config.yml``` file is related to resources configuration. Here it is possible to specify appropriate RAM requirements for the various steps. To handle out of memory issues, by default, the workflow will perform two retries for each step, each time doubling the allocated memory. The mem_mb default values have been defined according to tests on libraries with 60 to 250 million reads. We recommend to change them accordingly to your library size needs.
 
 ### Data config
 The ```sample_table.csv``` contains the list of all libraries to be processed in parallel, and has to be provided in the sample table specified in the configuration (samplesheet), in this format (header included):
-```csv
-library_id,bam_list,bam_tc_list,rep_list
-neuronset_id,/path/of/neuset/run/file.tsv,/path/of/neuset/run_tc/file.tsv,/path/of/neuset/replicates/file.tsv
-thp1_id,/path/of/thp1/run/file.tsv,/path/of/thp1/run_tc/file.tsv,/path/of/thp1/replicates/file.tsv
-```
+| library_id | bam_list | bam_tc_list | rep_list |
+|------------|----------|---------------|----------|
+| Neuron_series | `path to bam without transcriptClean` | `path to bam with transcriptClean` | `config/test/all_replicates.tsv` |
+| THP1_series | `path to bam without transcriptClean` | `path to bam with transcriptClean` | `config/test/all_replicates.tsv` |
+
 The second column, ```bam_list```, must contain the path of the runs file of the BAMs prior to running TranscriptClean[^tc], that are needed specifically for splicing junctions extraction. The third column, ```bam_tc_list```, can optionally contain a path for the runs file for the splicing-corrected BAMs (if TranscriptClean has been run for the library), or be left empty otherwise. In this case, the run file in bam_list will be used for all the steps. You can refer to the SALA wiki for more details about running TranscriptClean[^sala-wiki-tc] and splicing junction extraction[^sala-wiki-sj].
 
 The granularity of the sample set can be decided according to the user needs. Independent transcript and gene models will be produced for each of the libraries listed in the samplesheet.
