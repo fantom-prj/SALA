@@ -125,57 +125,58 @@ fasta_genome: test/resources/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta [
 mask_bed: test/resources/GRCh38-cCREs.sorted.bed [For SCAFE alone Path of the promoter/enhancer annotation on the reference genome (.bed)]
 gtf_annotation: test/resources/gencode.v47.annotation.gtf.gz [Path of the reference transcriptome annotation (.gtf.gz)]
 genome_anno_id: hg38_gencode47 [Id for the genome+annotation folder (for SCAFE and SALA internal usage)]
-genome_code: hg38 [Code name for the genome (for SALA internal usage)]
+genome_code: hg38 [Code name for the genome (other options: mm10, mm39), used for promoter typing]
 library_config: config/test/library.config.yml [Path of the library configuration file (see below), *need update]
 params_set_file: config/params.csv [Path of the parameters set file]
 params_set: default [Choice of parameters set (must be column in params_set_file), can be customized by adding column in config/params.csv]
 ```
 
-The ```params.csv``` file contains pre-defined parameters set (default and sensitive) for the various steps of the workflow. To define your own set of parameters, it is possible to add an additional column to the csv, and to change the parameters set choice accordingly in the config.yml.
+The ```params.csv``` file contains pre-defined parameters set (default and sensitive) for the various steps of the workflow. To define your own set of parameters, it is possible to add an additional column to the csv, and to change the parameters set choice accordingly in the config.yml. Below is the list of parameter you can update and those you may update freely to suit your need.
 
-##Parameter description
+### Parameter description
 
-| Parameter | Default | Description |
-|------------|---------|-------------|
-| `bamtoctss_TSS_mode` | `softclip` | Method used to define the transcription start site (TSS). `softclip`: TSS is defined by the 5′ soft-clipped position. `first_match`: TSS is defined by the first nucleotide aligned to the genome. |
-| `bamtoctss_unencoded_G_upstrm_nt` | `3` | Number of upstream nucleotides examined for unencoded G residues. If set to `2`, a maximum of two unencoded Gs can be detected per read. |
-| `bamtoctss_max_softclip_length` | `3` | Maximum allowed 5′ soft-clip length for a read to be considered a valid TSS. |
-| `ctss_cluster_min_summit_count` | `0` | Minimum summit read count required for a CTSS cluster to be considered confident. |
-| `ctss_cluster_min_cluster_count` | `1` | Minimum total read count required for a CTSS cluster to be considered confident. |
-| `ctss_annotate_cre_min_cre_count` | `3` | Minimum read count required for a transcribed CRE (tCRE) to be considered confident. |
-| `tes_cluster_min_summit_count` | `3` | Minimum summit read count required for a TES cluster to be considered confident. |
-| `tes_cluster_min_cluster_count` | `5` | Minimum total read count required for a TES cluster to be considered confident. |
-| `tes_cluster_min_nt_count` | `3` | Minimum cluster width (nt) required for a TES cluster to be considered confident. |
-| `extract_junctions_min_nt_qual` | `10` | Minimum base quality required at all six splice junction flanking positions (-3,-2,-1,+1,+2,+3) for a junction to be considered high quality. |
-| `extract_junctions_min_mapq` | `20` | Minimum read MAPQ required for splice junction extraction. |
-| `assemble_tx_model_novel_model_prefix` | `NOVT` | Prefix for transcript models.  |
-| `assemble_tx_model_min_output_qry_count` | `1` | Output transcript models supported by at least this number of reads. |
-| `assemble_tx_model_conf_end3_merge_flank` | `150` | Flanking distance (bp) used to merge nearby confident 3′ end clusters. Use `-1` to disable merging. |
-| `assemble_tx_model_conf_end5_merge_flank` | `75` | Flanking distance (bp) used to merge nearby confident 5′ end clusters. Use `-1` to disable merging. |
-| `assemble_tx_model_conf_end3_add_ref` | `yes` | Include annotated reference 3′ ends when constructing confident 3′ end regions. |
-| `assemble_tx_model_conf_end5_add_ref` | `yes` | Include annotated reference 5′ ends when constructing confident 5′ end regions. |
-| `assemble_tx_model_min_exon_length` | `1` | Minimum exon length required for a transcript model to be retained. |
-| `assemble_tx_model_min_transcript_length` | `15` | Minimum transcript length required for a transcript model to be retained. |
-| `assemble_tx_model_print_trnscrptID` | `no` | Report transcript IDs in the output. |
-| `assemble_tx_model_trnscpt_set_end_priority` | `summit:commonest:longest` | Priority used to determine transcript set boundaries. `summit`: strongest end signal. `commonest`: most frequently observed end. `longest`: most distal observed end. |
-| `assemble_tx_model_doubtful_end_merge_dist` | `150` | Distance used to group incomplete transcript ends. |
-| `assemble_tx_model_doubtful_end_avoid_summit` | `yes` | Ignore summit-based end selection when resolving doubtful transcript ends. |
-| `assemble_tx_model_min_summit_dist_split` | `50` | Minimum distance between two summits when splitting an end cluster. |
-| `assemble_tx_model_retain_no_qry_ref_bound_set` | `no` | Retain transcript boundary sets supported only by the reference annotation. |
-| `assemble_tx_model_min_size_split` | `100` | Minimum cluster size required to split an end cluster. |
-| `assemble_tx_model_min_frac_split` | `0.2` | Minimum signal fraction required at both summits when splitting an end cluster. |
-| `assemble_tx_model_min_qry_score` | `0` | Minimum query score (typically MAPQ) required for transcript assembly. |
-| `assemble_gene_model_novel_gene_prefix` | `NOVG` | Prefix for final gene models.  |
-| `assemble_gene_model_min_ref_exon_overlap_pct` | `10` | Minimum exon overlap percentage required to assign transcripts to the same gene. |
-| `assemble_gene_model_exon_overlap_dist` | `-1` | Minimum exon overlap distance. Can be used together with `assemble_gene_model_min_ref_exon_overlap_pct`. |
-| `assemble_gene_model_locus_merge_dist` | `100000` | Genomic search window used during gene model assembly. |
-| `assemble_gene_model_exclude_t_type` | `retained_intron` | Transcript types excluded from gene model assembly. |
-| `filter_tx_model_read_per_rep_ref_novel_tx` | `5` | Minimum full-length reads per replicate required for novel isoforms of annotated genes. |
-| `filter_tx_model_read_per_rep_noref_novel_tx` | `1` | Minimum full-length reads per replicate required for transcripts from novel genes. |
-| `filter_tx_model_isoform_ratio` | `0.1` | Minimum isoform abundance ratio required for novel isoforms of annotated genes. |
-| `filter_tx_model_require_5pr_confidence` | `Yes` | If enabled, transcript models without supported 5′ ends are removed. |
-| `filter_tx_model_n3_confid_ref_novel_tx` | `Yes` | If enabled, novel isoforms of annotated genes without supported 3′ ends are removed. |
-| `filter_tx_model_n3_confid_noref_novel_tx` | `No` | If enabled, transcripts from novel genes without supported 3′ ends are removed. |
+| Parameter | Default | Consider | Description |
+|------------|---------|--------------|-------------|
+| `bamtoctss_TSS_mode` | `softclip` | N | Method used to define the transcription start site (TSS). `softclip`: TSS is defined by the 5′ soft-clipped position. `first_match`: TSS is defined by the first nucleotide aligned to the genome. |
+| `bamtoctss_unencoded_G_upstrm_nt` | `3` | N | Number of upstream nucleotides examined for unencoded G residues. If set to `2`, a maximum of two unencoded Gs can be detected per read. |
+| `bamtoctss_max_softclip_length` | `3` | N | Maximum allowed 5′ soft-clip length for a read to be considered a valid TSS. |
+| `ctss_cluster_min_summit_count` | `0` | Y | Minimum summit read count required for a CTSS cluster to be considered confident. |
+| `ctss_cluster_min_cluster_count` | `1` | Y | Minimum total read count required for a CTSS cluster to be considered confident. |
+| `ctss_annotate_cre_min_cre_count` | `3` | Y | Minimum read count required for a transcribed CRE (tCRE) to be considered confident. |
+| `tes_cluster_min_summit_count` | `3` | Y | Minimum summit read count required for a TES cluster to be considered confident. |
+| `tes_cluster_min_cluster_count` | `5` | Y | Minimum total read count required for a TES cluster to be considered confident. |
+| `tes_cluster_min_nt_count` | `3` | Y | Minimum cluster width (nt) required for a TES cluster to be considered confident. |
+| `extract_junctions_min_nt_qual` | `10` | N | Minimum base quality required at all six splice junction flanking positions (-3,-2,-1,+1,+2,+3) for a junction to be considered high quality. |
+| `extract_junctions_min_mapq` | `20` | N | Minimum read MAPQ required for splice junction extraction. |
+| `assemble_tx_model_novel_model_prefix` | `NOVT` | Y | Prefix for transcript models.  |
+| `assemble_tx_model_min_output_qry_count` | `1` | N | Output transcript models supported by at least this number of reads. |
+| `assemble_tx_model_conf_end3_merge_flank` | `150` | N | Flanking distance (bp) used to merge nearby confident 3′ end clusters. Use `-1` to disable merging. |
+| `assemble_tx_model_conf_end5_merge_flank` | `75` | N | Flanking distance (bp) used to merge nearby confident 5′ end clusters. Use `-1` to disable merging. |
+| `assemble_tx_model_conf_end3_add_ref` | `yes` | N | Include annotated reference 3′ ends when constructing confident 3′ end regions. |
+| `assemble_tx_model_conf_end5_add_ref` | `yes` | N | Include annotated reference 5′ ends when constructing confident 5′ end regions. |
+| `assemble_tx_model_min_exon_length` | `1` | N | Minimum exon length required for a transcript model to be retained. |
+| `assemble_tx_model_min_transcript_length` | `15` | N | Minimum transcript length required for a transcript model to be retained. |
+| `assemble_tx_model_print_trnscrptID` | `no` | N | Report transcript IDs in the output. |
+| `assemble_tx_model_trnscpt_set_end_priority` | `summit:commonest:longest` | N | Priority used to determine transcript set boundaries. `summit`: strongest end signal. `commonest`: most frequently observed end. `longest`: most distal observed end. |
+| `assemble_tx_model_doubtful_end_merge_dist` | `150` | N | Distance used to group incomplete transcript ends. |
+| `assemble_tx_model_doubtful_end_avoid_summit` | `yes` | N | Ignore summit-based end selection when resolving doubtful transcript ends. |
+| `assemble_tx_model_min_summit_dist_split` | `50` | N | Minimum distance between two summits when splitting an end cluster. |
+| `assemble_tx_model_retain_no_qry_ref_bound_set` | `no` | N | Retain transcript boundary sets supported only by the reference annotation. |
+| `assemble_tx_model_min_size_split` | `100` | N | Minimum cluster size required to split an end cluster. |
+| `assemble_tx_model_min_frac_split` | `0.2` | N | Minimum signal fraction required at both summits when splitting an end cluster. |
+| `assemble_tx_model_min_qry_score` | `0` | N | Minimum query score (typically MAPQ) required for transcript assembly. |
+| `assemble_gene_model_novel_gene_prefix` | `NOVG` | Y | Prefix for final gene models.  |
+| `assemble_gene_model_min_ref_exon_overlap_pct` | `10` | N | Minimum exon overlap percentage required to assign transcripts to the same gene. |
+| `assemble_gene_model_exon_overlap_dist` | `-1` | N | Minimum exon overlap distance. Can be used together with `assemble_gene_model_min_ref_exon_overlap_pct`. |
+| `assemble_gene_model_locus_merge_dist` | `100000` | N | Genomic search window used during gene model assembly. |
+| `assemble_gene_model_exclude_t_type` | `retained_intron` | N | Transcript types excluded from gene model assembly. |
+| `filter_tx_model_read_per_rep_ref_novel_tx` | `5` | Y | Minimum full-length reads per replicate required for novel isoforms of annotated genes. |
+| `filter_tx_model_read_per_rep_noref_novel_tx` | `1` | Y | Minimum full-length reads per replicate required for transcripts from novel genes. |
+| `filter_tx_model_isoform_ratio` | `0.1` | Y | Minimum isoform abundance ratio required for novel isoforms of annotated genes, according to full-length count. |
+| `filter_tx_model_require_5pr_confidence` | `Yes` | Y | If enabled, transcript models without supported 5′ ends are removed. |
+| `filter_tx_model_n3_confid_ref_novel_tx` | `Yes` | Y | If enabled, novel isoforms of annotated genes without supported 3′ ends are removed. |
+| `filter_tx_model_n3_confid_noref_novel_tx` | `No` | Y | If enabled, transcripts from novel genes without supported 3′ ends are removed. |
+
 
 
 
