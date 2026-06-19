@@ -67,11 +67,11 @@ cp config/test/sample_table_all.csv config/sample_table.csv
 ```
 
 ##### sample_table.csv
-```
+
 | library_id | bam_list | bam_tc_list | rep_list |
 |------------|----------|---------------|----------|
 | all | `path to bam without transcriptClean` | `path to bam with transcriptClean (if you dont have it use the same file from bam_list)` | `config/test/all_replicates.tsv` |
-```
+
 
 
 
