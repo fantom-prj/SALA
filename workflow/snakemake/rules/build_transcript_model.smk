@@ -31,7 +31,7 @@ rule index_bed_files:
 
 rule assemble_transcript_model:
     input:
-        chr_sizes=CHR_SIZES,
+        chr_sizes=f"{REFERENCE}/chrom.sizes_major.tsv",
         reads_bed=f"{RESULTS}/bamtobed/{{library}}/combined.bed.bgz",
         transcr_ref=f"{REFERENCE}/transcript.bed.bgz",
         end5_cluster=f"{RESULTS}/5pr_data/{{library}}/5pr_cluster.bed.bgz",
@@ -45,6 +45,7 @@ rule assemble_transcript_model:
         f"{RESULTS}/transcript_model/{{library}}/log/{{library}}.model.info.tsv.gz"
     params:
         genome=config["fasta_genome"],
+        novel_model_prefix=PARAMS["assemble_tx_model_novel_model_prefix"],
         min_output_qry_count=PARAMS["assemble_tx_model_min_output_qry_count"],
         conf_end3_merge_flank=PARAMS["assemble_tx_model_conf_end3_merge_flank"],
         conf_end5_merge_flank=PARAMS["assemble_tx_model_conf_end5_merge_flank"],
@@ -79,7 +80,7 @@ rule assemble_transcript_model:
         --signal_end5_bed_bgz={input.end5_signal} \
         --signal_end3_bed_bgz={input.end3_signal} \
         --out_prefix={wildcards.library} \
-        --novel_model_prefix=NOVT \
+        --novel_model_prefix={params.novel_model_prefix} \
         --min_output_qry_count={params.min_output_qry_count} \
         --conf_end3_merge_flank={params.conf_end3_merge_flank} \
         --conf_end5_merge_flank={params.conf_end5_merge_flank} \
@@ -103,7 +104,7 @@ rule assemble_transcript_model:
 
 rule assemble_gene_model:
     input:
-        chr_sizes=CHR_SIZES,
+        chr_sizes=f"{REFERENCE}/chrom.sizes_major.tsv",
         transcr_model=f"{RESULTS}/transcript_model/{{library}}/bed/{{library}}.model.bed.bgz",
         transcr_model_info=f"{RESULTS}/transcript_model/{{library}}/log/{{library}}.model.info.tsv.gz",
         transcr_ref=f"{REFERENCE}/transcript.bed.bgz",
@@ -131,7 +132,7 @@ rule assemble_gene_model:
         --ref_model_gene_link={input.transcr_to_gene} \
         --out_prefix={wildcards.library} \
         --out_dir={RESULTS}/gene_model \
-        --novel_gene_prefix=NOVG \
+        --novel_gene_prefix=IN1G \
         --disable_ref_chain_bound_gene_anno=yes \
         --min_ref_exon_overlap_pct={params.min_ref_exon_overlap_pct} \
         --exon_overlap_dist={params.exon_overlap_dist} \
@@ -215,7 +216,7 @@ rule filter_transcript_model:
 
 rule post_filter_assemble_gene_model:
     input:
-        chr_sizes=CHR_SIZES,
+        chr_sizes=f"{REFERENCE}/chrom.sizes_major.tsv",
         transcr_model=f"{RESULTS}/transcript_model/{{library}}/bed/{{library}}.table4.bed12.bed.bgz",
         transcr_model_info=f"{RESULTS}/transcript_model/{{library}}/log/{{library}}.table4_filtered.All_Ref.tsv.gz", #here too
         transcr_ref=f"{REFERENCE}/transcript.bed.bgz",
@@ -224,6 +225,7 @@ rule post_filter_assemble_gene_model:
         f"{RESULTS}/gene_model_filtered/{{library}}/bed/{{library}}.model.bed.bgz",
         f"{RESULTS}/gene_model_filtered/{{library}}/log/{{library}}.model.info.tsv.gz"
     params:
+        novel_gene_prefix=PARAMS["assemble_gene_model_novel_gene_prefix"],
         min_ref_exon_overlap_pct=PARAMS["assemble_gene_model_min_ref_exon_overlap_pct"],
         exon_overlap_dist=PARAMS["assemble_gene_model_exon_overlap_dist"],
         locus_merge_dist=PARAMS["assemble_gene_model_locus_merge_dist"],
@@ -243,7 +245,7 @@ rule post_filter_assemble_gene_model:
         --ref_model_gene_link={input.transcr_to_gene} \
         --out_prefix={wildcards.library} \
         --out_dir={RESULTS}/gene_model_filtered \
-        --novel_gene_prefix=NOVG \
+        --novel_gene_prefix={params.novel_gene_prefix} \
         --disable_ref_chain_bound_gene_anno=no \
         --min_ref_exon_overlap_pct={params.min_ref_exon_overlap_pct} \
         --exon_overlap_dist={params.exon_overlap_dist} \

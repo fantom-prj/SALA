@@ -2,8 +2,8 @@ executor: slurm
 
 default-resources:
   runtime: "2d"
-  mem_mb: 4000
-  slurm_partition: "cpuq"
+  mem_mb: "attempt * 4000"
+  slurm_partition: "batch"
 
 latency-wait: 60
 rerun-incomplete: true

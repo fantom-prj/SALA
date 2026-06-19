@@ -1,6 +1,6 @@
 rule extract_junctions:
     input:
-        chrom_sizes=CHR_SIZES,
+        chrom_sizes=f"{REFERENCE}/chrom.sizes_major.tsv",
         bam_file=lambda wc: SJ_BAM_TO_PATH[wc.bam]
     output:
         f"{RESULTS}/junction_extractor/tmp/{{bam}}/log/{{bam}}.junct.info.tsv.gz"

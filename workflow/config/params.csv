@@ -11,6 +11,7 @@ tes_cluster_min_nt_count,3,3
 extract_junctions_min_nt_qual,10,10
 extract_junctions_min_mapq,20,20
 assemble_tx_model_min_output_qry_count,1,1
+assemble_tx_model_novel_model_prefix,NOVT,NOVT
 assemble_tx_model_conf_end3_merge_flank,150,150
 assemble_tx_model_conf_end5_merge_flank,75,75
 assemble_tx_model_conf_end3_add_ref,yes,yes
@@ -26,6 +27,7 @@ assemble_tx_model_retain_no_qry_ref_bound_set,no,no
 assemble_tx_model_min_size_split,100,100
 assemble_tx_model_min_frac_split,0.2,0.2
 assemble_tx_model_min_qry_score,0,0
+assemble_gene_model_novel_gene_prefix,NOVG,NOVG
 assemble_gene_model_min_ref_exon_overlap_pct,10,10
 assemble_gene_model_exon_overlap_dist,-1,-1
 assemble_gene_model_locus_merge_dist,100000,100000

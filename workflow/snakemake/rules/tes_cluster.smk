@@ -19,7 +19,7 @@ rule bam_to_bed:
 rule extract_ctes_signal:
     input:
         combined_bed=f"{RESULTS}/bamtobed/{{library}}/combined.bed.bgz",
-        chrom_sizes=CHR_SIZES
+        chrom_sizes=f"{REFERENCE}/chrom.sizes_major.tsv"
     output:
         f"{RESULTS}/ctes_signal/{{library}}/{{library}}.end3.bed",
         f"{RESULTS}/ctes_signal/{{library}}/{{library}}.end5.bed"          

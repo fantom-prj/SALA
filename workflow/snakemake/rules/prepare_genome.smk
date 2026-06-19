@@ -2,7 +2,7 @@ rule prepare_genome:
     input:
         gtf=config["gtf_annotation"],
         fasta=config["fasta_genome"],
-        chr_sizes=CHR_SIZES,
+        chr_sizes=f"{REFERENCE}/chrom.sizes_major.tsv",
         mask=config["mask_bed"]
     output:
         touch(f"{RESULTS}/prep_genome.done")

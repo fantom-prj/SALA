@@ -18,9 +18,7 @@ conda env create -f snakemake/environment.yml
 ```
 
 ### 2. Test run
-* Activate the snakemake-slurm environment, download fasta / gtf for test run to test/resources
-* Run the demo with the name of your slurm partition, you may identify it with sinfo
-
+* Download fasta / gtf for test run to test/resources
 ```sh
 cd /your/SALA/directory/workflow/test/resources
 wget https://www.encodeproject.org/files/GRCh38_no_alt_analysis_set_GCA_000001405.15/@@download/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz
@@ -33,8 +31,9 @@ gunzip GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.gz
 nano /your/SALA/directory/workflow/profile/test/config.yaml
 ```
 
+* Activate the snakemake-slurm environment
 * The set of configuration files can be found under config/test and profile/test.
-* Test results located in test/results
+
 ```sh
 conda activate snakemake-slurm
 
@@ -47,6 +46,9 @@ snakemake --executor slurm \
     --jobs 6 --cores 12 --keep-going \
     --retries 2 --rerun-incomplete
 ```
+* Test results located in test/results
+* SALA transcriptome is located at test/results/transcript_model/all/log/all.table4_filtered.All_Ref_updated.tsv.gz
+
 
 ### 3. Run your sample 
 #### File setup
@@ -63,6 +65,15 @@ cp config/test/all_runs.tsv config/runs.tsv
 cp config/test/sample_table_all.csv config/sample_table.csv 
 # Edit your sample_table.csv
 ```
+
+##### sample_table.csv
+```
+| library_id | bam_list | bam_tc_list | rep_list |
+|------------|----------|---------------|----------|
+| all | `path to bam without transcriptClean` | `path to bam with transcriptClean (if you dont have it use the same file from bam_list)` | `config/test/all_replicates.tsv` |
+```
+
+
 
 * Set up library 5' confidence and internal priming details in the libraries configuration file (library.config.yml). 
 ```sh
@@ -137,6 +148,7 @@ The ```params.csv``` file contains pre-defined parameters set (default and sensi
 | `tes_cluster_min_nt_count` | `3` | Minimum cluster width (nt) required for a TES cluster to be considered confident. |
 | `extract_junctions_min_nt_qual` | `10` | Minimum base quality required at all six splice junction flanking positions (-3,-2,-1,+1,+2,+3) for a junction to be considered high quality. |
 | `extract_junctions_min_mapq` | `20` | Minimum read MAPQ required for splice junction extraction. |
+| `assemble_tx_model_novel_model_prefix` | `NOVT` | Prefix for transcript models.  |
 | `assemble_tx_model_min_output_qry_count` | `1` | Output transcript models supported by at least this number of reads. |
 | `assemble_tx_model_conf_end3_merge_flank` | `150` | Flanking distance (bp) used to merge nearby confident 3′ end clusters. Use `-1` to disable merging. |
 | `assemble_tx_model_conf_end5_merge_flank` | `75` | Flanking distance (bp) used to merge nearby confident 5′ end clusters. Use `-1` to disable merging. |
@@ -153,6 +165,7 @@ The ```params.csv``` file contains pre-defined parameters set (default and sensi
 | `assemble_tx_model_min_size_split` | `100` | Minimum cluster size required to split an end cluster. |
 | `assemble_tx_model_min_frac_split` | `0.2` | Minimum signal fraction required at both summits when splitting an end cluster. |
 | `assemble_tx_model_min_qry_score` | `0` | Minimum query score (typically MAPQ) required for transcript assembly. |
+| `assemble_gene_model_novel_gene_prefix` | `NOVG` | Prefix for final gene models.  |
 | `assemble_gene_model_min_ref_exon_overlap_pct` | `10` | Minimum exon overlap percentage required to assign transcripts to the same gene. |
 | `assemble_gene_model_exon_overlap_dist` | `-1` | Minimum exon overlap distance. Can be used together with `assemble_gene_model_min_ref_exon_overlap_pct`. |
 | `assemble_gene_model_locus_merge_dist` | `100000` | Genomic search window used during gene model assembly. |

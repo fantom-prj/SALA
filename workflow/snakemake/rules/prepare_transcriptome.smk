@@ -56,7 +56,7 @@ rule extract_transcript_to_gene:
         transcriptome_gtf=config["gtf_annotation"]
     output:
         f"{REFERENCE}/transcript_to_gene.tsv",
-        CHR_SIZES
+        f"{REFERENCE}/chrom.sizes_major.tsv"
     log:
         f"{LOGS}/tx_to_gene.log"
     conda:

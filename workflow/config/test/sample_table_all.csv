@@ -1,2 +1,2 @@
 library_id,bam_list,bam_tc_list,rep_list
-all,config/test/all_runs.tsv,,config/test/all_replicates.tsv
+all,config/test/all_b4tc_runs.tsv,config/test/all_runs.tsv,config/test/all_replicates.tsv
