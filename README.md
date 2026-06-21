@@ -33,11 +33,12 @@ The transcript Start-site Aware Long-read Assembler (SALA) is developed for de n
 * tabix (Li 2011) (tested with v1.15.1 , located at ./resources/bin/tabix/tabix)
 * bgzip (Li 2011) (tested with v1.15.1 , located at ./resources/bin/bgzip/bgzip)
 * bedGraphToBigWig (Yao et al. 2017) (tested with version 2.8, located at ./resources/bin/bedGraphToBigWig/bedGraphToBigWig)
+* bedparse (Leonardi 2019) (tested with v0.2.3, installed from https://github.com/tleonardi/bedparse). 
+* These are not needed if snakemake slurm in our workflow is used, Conda (≥ 23.0) will be needed instead. 
 
 ## The followings tools are recommended to install
 * TranscriptClean (Wyman and Mortazavi 2019) (tested with v2.0.3, installed from https://github.com/mortazavilab/TranscriptClean)
 * bambu (Chen et al. 2023) (tested with v3.2.4, installed from https://github.com/GoekeLab/bambu)
-* bedparse (Leonardi 2019) (tested with v0.2.3, installed from https://github.com/tleonardi/bedparse). 
 
 # <a name="installation"></a>Installation
 To obtain SALA:
@@ -61,7 +62,7 @@ chmod 755 -R ./code/
 chmod 755 -R ./resources/bin/
 ```
 
-This package itself does not require installation. Essential binary files for Linux platform are included in ./resources/bin (for SALA) and ./code/SCAFEv1.0.1/resources/bin (for SCAFE). If other platform is used, please download and install the tools in the dependency accordingly. 
+This package itself does not require installation. Essential binary files for Linux platform are included in ./resources/bin (for SALA) and ./code/SCAFEv1.0.1/resources/bin (for SCAFE). If other platform is used, please download and install the tools listed in the dependency accordingly. 
 
 # <a name="update"></a>Update from V1.0 (2026June)
 * [workflow](https://github.com/fantom-prj/SALA/tree/main/workflow) is incorporated
@@ -71,7 +72,7 @@ This package itself does not require installation. Essential binary files for Li
 * Incorporate PAS motif for each transcript model into the result table
 * [Random forest poly(A) classifier](https://github.com/fantom-prj/SALA/tree/main/code/PolyA_classifier) ([Wiki](https://github.com/fantom-prj/SALA/wiki/6.-PolyA-classifier:-Random-Forest-classification-of-3%E2%80%99-ends))is added as an independent tool 
 * [Tail trimmer](https://github.com/fantom-prj/SALA/tree/main/code/Tail_trimmerv1.4) is added an an independent tool
-
+* Flow of [SALA compare](https://github.com/fantom-prj/SALA/wiki/7.-SALA-compare) is added
 
 # <a name="how_to_run"></a>How to run
 Please refer to the [wiki page](https://github.com/fantom-prj/SALA/wiki) to run a demo
