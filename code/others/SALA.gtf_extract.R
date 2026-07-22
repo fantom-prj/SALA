@@ -41,7 +41,6 @@ if (length(args) < 2) {
 ref_gtf <- args[1]
 output_path <- args[2]
 fasta_file <- args[3]
-fasta_path <- dirname(fasta_file)
 
 #=====
 gencode.gtf <- fread(ref_gtf, header=F, stringsAsFactors = F)
@@ -92,7 +91,7 @@ open(genome)
 chrom_sizes <- seqlengths(genome)
 chrom_table <- data.frame(Chromosome = names(chrom_sizes), Length = as.numeric(chrom_sizes))
 chrom_table1 <- chrom_table[which(nchar(chrom_table$Chromosome)<=5),]
-write.table(chrom_table, paste0(fasta_path,"/chrom.sizes.tsv"), col.names=F, row.names=F, sep="\t", quote=F)
-write.table(chrom_table1, paste0(fasta_path,"/chrom.sizes_major.tsv"), col.names=F, row.names=F, sep="\t", quote=F)
-print(paste0("chrom.sizes.tsv & chrom.sizes_major.tsv are prepared in ",fasta_path))
+write.table(chrom_table, paste0(output_path,"/chrom.sizes.tsv"), col.names=F, row.names=F, sep="\t", quote=F)
+write.table(chrom_table1, paste0(output_path,"/chrom.sizes_major.tsv"), col.names=F, row.names=F, sep="\t", quote=F)
+print(paste0("chrom.sizes.tsv & chrom.sizes_major.tsv are prepared in ",output_path))
 

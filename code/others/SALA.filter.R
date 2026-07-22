@@ -120,29 +120,26 @@ write.table(table0_model3n[order(table0_model3n$V1,table0_model3n$V2),c(1:6)],gz
 rm(table0_model, table0_model3n, table0_model5n)
 
 #===========
-files=list.files(path=SCAFE_directory, pattern="CRE.coord.bed.gz", recursive=T)
-out_prefix2=sapply(strsplit(files[1],"\\/"),"[",2)
-
 system(paste0(bedtools_bin," bed12tobed6 -i ",path1,out_prefix,".model.bed.bgz | gzip > ", path1,out_prefix,".model.bed6.bed.gz"))
 system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end3.bed.bgz -b ",ref_directory,"/n3.bed.gz | gzip > ", path1,out_prefix,".end3.cluster.region.ref3n.bed.gz"))
 system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",ref_directory,"/n5.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.ref5n.bed.gz"))
 if (SCAFE_directory != "NA"){
-system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".cluster.coord.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.cluster.bed.gz"))
+system(paste0(bedtools_bin," intersect -s -wa -wb -a ",path1,out_prefix,".end5.bed.bgz -b ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".cluster.coord.bed.gz | gzip > ", path1,out_prefix,".end5.cluster.region.cluster.bed.gz"))
 
 if (genome == "hg38"){
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-ELS.all.enhancer.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.e.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-PLS.all.promoter.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.p.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.c.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/F5_enhancer/hg38_robust_enhancers.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.andersson.robust.e.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/F5_enhancer/hg38_permissive_enhancers.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.andersson.permissive.e.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-ELS.all.enhancer.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.e.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-PLS.all.promoter.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.p.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/GRCh38-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.c.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/F5_enhancer/hg38_robust_enhancers.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.andersson.robust.e.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/F5_enhancer/hg38_permissive_enhancers.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.andersson.permissive.e.bed"))
 }else if (genome == "mm10"){
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-ELS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.e.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-PLS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.p.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.c.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-ELS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.e.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-PLS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.p.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm10-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.c.bed"))
 }else if (genome == "mm39"){
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-ELS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.e.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-PLS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.p.bed"))
-system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.c.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-ELS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.e.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-PLS.all.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.p.bed"))
+system(paste0(bedtools_bin," closest -a ",SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.bed.gz -b  ",resource_directory,"/CRE.from.SCREEN.encodev3/mm39-CTCF.sort.bed -D a> ", SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.c.bed"))
 }else {print("promoter type intersection skipping due to unmatched genome")}}
 
 if (SCAFE_directory == "NA"){
@@ -396,12 +393,12 @@ rm(table0_model3n, df_long1)
 
 #===================================================================================================================
 if (SCAFE_directory != "NA"){
-CRE <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/log/",out_prefix2,".CRE.info.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
+CRE <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".CRE.info.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
 if (genome %in% c("hg38","mm10","mm39")){
 print("Perform SCAFE - SCREEN connection")
-CRE.p <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.p.bed"), header=F, stringsAsFactors = F, check.names = F)
-CRE.e <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.e.bed"), header=F, stringsAsFactors = F, check.names = F)
-CRE.ctcf <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.c.bed"), header=F, stringsAsFactors = F, check.names = F)
+CRE.p <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.p.bed"), header=F, stringsAsFactors = F, check.names = F)
+CRE.e <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.e.bed"), header=F, stringsAsFactors = F, check.names = F)
+CRE.ctcf <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.c.bed"), header=F, stringsAsFactors = F, check.names = F)
 
 CREp=unique(CRE.p$V4[which(CRE.p$V19 ==0)])
 CREe=unique(CRE.e$V4[which(CRE.e$V19 ==0)])
@@ -420,23 +417,23 @@ CRE$promoter_type[which(CRE$enhancer ==1)]="enhancer-like"
 CRE$promoter_type[which(CRE$promoter ==1)]="promoter-like"
 
 ###sample-specific bi-directional enhancer###
-CREdir=read.delim(paste0(SCAFE_directory,"/directionality/",out_prefix2,"/log/",out_prefix2,".directionality.log.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
+CREdir=read.delim(paste0(SCAFE_directory,"/directionality/",out_prefix,"/log/",out_prefix,".directionality.log.tsv.gz"), header=T, stringsAsFactors = F, check.names = F)
 CREdir$fwd_rev_count=CREdir$fwd_count+CREdir$rev_count
 CREdir$orientation[which(abs(CREdir$directionality)<=0.2)]="unidirectional"
 CREdir$orientation[which(CREdir$orientation == "divergent")]="bidirectional"
 CRE=left_join(CRE,CREdir[,c(1,4,5,7,8,13,10)],by="CREID",copy=F)
-write.table(CRE, paste0(SCAFE_directory,"/annotate/",out_prefix2,"/log/",out_prefix2,".CRE.info.p.e.se.tsv"), col.names=T, row.names=F, sep="\t", quote=F)}
+write.table(CRE, paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".CRE.info.p.e.se.tsv"), col.names=T, row.names=F, sep="\t", quote=F)}
 
 if (genome == "hg38"){
-re=read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.andersson.robust.e.bed"), header=F, stringsAsFactors = F, check.names = F)
-pe=read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/bed/",out_prefix2,".CRE.coord.andersson.permissive.e.bed"), header=F, stringsAsFactors = F, check.names = F)
+re=read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.andersson.robust.e.bed"), header=F, stringsAsFactors = F, check.names = F)
+pe=read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/bed/",out_prefix,".CRE.coord.andersson.permissive.e.bed"), header=F, stringsAsFactors = F, check.names = F)
 re_e=unique(re$V4[which(re$V25 ==0)])
 pe_e=unique(pe$V4[which(pe$V25 ==0)])
 CRE$Andersson_robust=0
 CRE$Andersson_robust[which(CRE$CREID %in% re_e)]=1
 CRE$Andersson_permissive=0
 CRE$Andersson_permissive[which(CRE$CREID %in% pe_e)]=1
-write.table(CRE, paste0(SCAFE_directory,"/annotate/",out_prefix2,"/log/",out_prefix2,".CRE.info.p.e.se.tsv"), col.names=T, row.names=F, sep="\t", quote=F)}}
+write.table(CRE, paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".CRE.info.p.e.se.tsv"), col.names=T, row.names=F, sep="\t", quote=F)}}
 
 #==================================================
 print("Add n5 cluster annotation & promoter-type")
@@ -447,7 +444,7 @@ table0_model4 <- read.delim(paste0(path1,out_prefix,".end5.cluster.region.cluste
 
 
 if (SCAFE_directory != "NA"){
-cluster <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix2,"/log/",out_prefix2,".cluster.info.tsv.gz"),header=T, stringsAsFactors = F, check.names = F)
+cluster <- read.delim(paste0(SCAFE_directory,"/annotate/",out_prefix,"/log/",out_prefix,".cluster.info.tsv.gz"),header=T, stringsAsFactors = F, check.names = F)
 table0_model4 <- left_join(table0_model4,cluster[,c(1,16)],by=c("V16"="clusterID"),copy=F)
 table0_model4a <- unique(table0_model4[,c(4,16,25)])%>%group_by(V4)%>%dplyr::summarise(TSScluster=paste(unique(V16), collapse=";"),
                                                                                     CREID=paste(unique(CREID), collapse=";"))
